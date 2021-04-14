@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddys.gemsell.mapper.UserMapper">
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="com.ddys.gemsell.entity.User">
+                    <id column="user_id" property="userId"/>
+                    <result column="username" property="username"/>
+                    <result column="password" property="password"/>
+                    <result column="role" property="role"/>
+                    <result column="name" property="name"/>
+                    <result column="gender" property="gender"/>
+                    <result column="birthday" property="birthday"/>
+                    <result column="phone" property="phone"/>
+                    <result column="email" property="email"/>
+                    <result column="address" property="address"/>
+                    <result column="idcard" property="idcard"/>
+                    <result column="remark" property="remark"/>
+        </resultMap>
+
+    <sql id="selectVo">
+        select
+        user_id, username, password, role, name, gender, birthday, phone, email, address, idcard, remark
+       from user a
+    </sql>
+    <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.User" resultMap="BaseResultMap">
+        <include refid="selectVo"></include>
+         where 1=1
+    </select>
+
+</mapper>
