@@ -2,8 +2,8 @@ package com.ddys.gemsell.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
+import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -26,8 +26,14 @@ public class User implements Serializable {
     /**
      * 用户名
      */
-    @TableField("username")
-    private String username;
+    @TableField("user_name")
+    private String userName;
+
+    /**
+     * 手机号
+     */
+    @TableField("phone")
+    private String phone;
 
     /**
      * 密码
@@ -36,58 +42,34 @@ public class User implements Serializable {
     private String password;
 
     /**
-     * 角色 0管理员 1用户
-     */
-    @TableField("role")
-    private String role;
-
-    /**
-     * 姓名
-     */
-    @TableField("name")
-    private String name;
-
-    /**
      * 性别
      */
-    @TableField("gender")
-    private String gender;
+    @TableField("sex")
+    private String sex;
 
     /**
-     * 生日
+     * 创建时间
      */
-    @TableField("birthday")
-    private LocalDate birthday;
+    @TableField("create_time")
+    private LocalDateTime createTime;
 
     /**
-     * 手机号码
+     * 创建人
      */
-    @TableField("phone")
-    private String phone;
+    @TableField("create_by")
+    private String createBy;
 
     /**
-     * 邮箱地址
+     * 更新人
      */
-    @TableField("email")
-    private String email;
+    @TableField("update_by")
+    private String updateBy;
 
     /**
-     * 地址
+     * 更新时间
      */
-    @TableField("address")
-    private String address;
-
-    /**
-     * 身份证号码
-     */
-    @TableField("idcard")
-    private String idcard;
-
-    /**
-     * 备注
-     */
-    @TableField("remark")
-    private String remark;
+    @TableField("update_time")
+    private LocalDateTime updateTime;
 
 
 }
