@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddys.gemsell.mapper.AddressMapper">
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="com.ddys.gemsell.entity.Address">
+                    <id column="address_id" property="addressId"/>
+                    <result column="province_id" property="provinceId"/>
+                    <result column="city_id" property="cityId"/>
+                    <result column="detailed" property="detailed"/>
+                    <result column="name" property="name"/>
+                    <result column="phone" property="phone"/>
+                    <result column="user_id" property="userId"/>
+        </resultMap>
+
+    <sql id="selectVo">
+        select
+        address_id, province_id, city_id, detailed, name, phone, user_id
+       from address a
+    </sql>
+    <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.Address" resultMap="BaseResultMap">
+        <include refid="selectVo"></include>
+         where 1=1
+    </select>
+
+</mapper>

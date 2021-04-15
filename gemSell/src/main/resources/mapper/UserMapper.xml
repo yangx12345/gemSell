@@ -4,22 +4,19 @@
         <!-- 通用查询映射结果 -->
         <resultMap id="BaseResultMap" type="com.ddys.gemsell.entity.User">
                     <id column="user_id" property="userId"/>
-                    <result column="username" property="username"/>
-                    <result column="password" property="password"/>
-                    <result column="role" property="role"/>
-                    <result column="name" property="name"/>
-                    <result column="gender" property="gender"/>
-                    <result column="birthday" property="birthday"/>
+                    <result column="user_name" property="userName"/>
                     <result column="phone" property="phone"/>
-                    <result column="email" property="email"/>
-                    <result column="address" property="address"/>
-                    <result column="idcard" property="idcard"/>
-                    <result column="remark" property="remark"/>
+                    <result column="password" property="password"/>
+                    <result column="sex" property="sex"/>
+                    <result column="create_time" property="createTime"/>
+                    <result column="create_by" property="createBy"/>
+                    <result column="update_by" property="updateBy"/>
+                    <result column="update_time" property="updateTime"/>
         </resultMap>
 
     <sql id="selectVo">
         select
-        user_id, username, password, role, name, gender, birthday, phone, email, address, idcard, remark
+        user_id, user_name, phone, password, sex, create_time, create_by, update_by, update_time
        from user a
     </sql>
     <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.User" resultMap="BaseResultMap">

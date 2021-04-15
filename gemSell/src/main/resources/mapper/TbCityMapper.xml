@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddys.gemsell.mapper.TbCityMapper">
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="com.ddys.gemsell.entity.TbCity">
+                    <id column="id" property="id"/>
+                    <result column="name" property="name"/>
+                    <result column="provinceid" property="provinceid"/>
+        </resultMap>
+
+    <sql id="selectVo">
+        select
+        id, name, provinceid
+       from tb_city a
+    </sql>
+    <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.TbCity" resultMap="BaseResultMap">
+        <include refid="selectVo"></include>
+         where 1=1
+    </select>
+
+</mapper>
