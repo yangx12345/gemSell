@@ -1,5 +1,7 @@
 package com.ddys.gemsell.config;
 
+import com.ddys.gemsell.common.Interceptor.AuthenticationInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -11,6 +13,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class GlobalCrosConfig {
+
+    @Autowired
+    private AuthenticationInterceptor authenticationInterceptor;
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
@@ -31,6 +37,12 @@ public class GlobalCrosConfig {
                         .exposedHeaders("Header1", "Header2");
             }
 
+            @Override
+            public void addInterceptors(InterceptorRegistry registry) {
+                registry.addInterceptor(authenticationInterceptor)
+                        .addPathPatterns("/**")
+                        .excludePathPatterns("/user/login");
+            }
         };
     }
 }

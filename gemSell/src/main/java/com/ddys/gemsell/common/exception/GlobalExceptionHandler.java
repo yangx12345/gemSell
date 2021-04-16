@@ -34,7 +34,6 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(BusinessException.class)
 	@ResponseBody
 	public Result handleBusinessException(BusinessException e){
-		LOGGER.error(e.getMessage(), e);
 		return ResultUtil.error(e.getCode(), e.getMsg());
 	}
 

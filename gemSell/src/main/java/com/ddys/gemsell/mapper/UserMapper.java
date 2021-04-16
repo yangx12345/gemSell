@@ -15,4 +15,5 @@ public interface UserMapper extends BaseMapper<User> {
      */
     List<User> getListByCondition(User condition);
 
+	String getPasswordByUserName(String userName);
 }
