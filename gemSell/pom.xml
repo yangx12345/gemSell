@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ddys</groupId>
-	<artifactId>carMaintain</artifactId>
+	<artifactId>gemSell</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>gemSell</name>
 	<description>gemSell</description>

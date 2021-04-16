@@ -30,16 +30,28 @@ public class User implements Serializable {
     private String userName;
 
     /**
-     * 手机号
-     */
-    @TableField("phone")
-    private String phone;
-
-    /**
      * 密码
      */
     @TableField("password")
     private String password;
+
+    /**
+     * 真实姓名
+     */
+    @TableField("name")
+    private String name;
+
+    /**
+     * 用户角色（0管理员，1鉴定人员，2普通用户）
+     */
+    @TableField("role")
+    private String role;
+
+    /**
+     * 手机号
+     */
+    @TableField("phone")
+    private String phone;
 
     /**
      * 性别
