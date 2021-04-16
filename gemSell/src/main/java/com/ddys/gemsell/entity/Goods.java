@@ -44,10 +44,8 @@ public class Goods implements Serializable {
     /**
      * 商品介绍
      */
-    @TableField("
-introduce")
-    private String 
-introduce;
+    @TableField("introduce")
+    private String introduce;
 
     /**
      * 图片地址
