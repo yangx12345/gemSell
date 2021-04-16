@@ -31,24 +31,6 @@ public class GlobalCrosConfig {
                         .exposedHeaders("Header1", "Header2");
             }
 
-//            @Override
-//            public void addInterceptors(InterceptorRegistry registry) {
-//                registry.addInterceptor(new SessionInterceptor())
-//                        .addPathPatterns("/**")
-//                        .excludePathPatterns("/hotel/**")
-//                        .excludePathPatterns("/login/**")
-//                        .excludePathPatterns("/user/foodMenu/getCurrentDateMenu")
-//                        .excludePathPatterns("/op/comment/getList")
-//                        .excludePathPatterns("/op/comment/add")
-//                        .excludePathPatterns("/user/forgetPassword")
-//                        .excludePathPatterns("/register/**");
-//                registry.addInterceptor(new OpInterceptor())
-//                        .addPathPatterns("/op/**")
-//                        .excludePathPatterns("/op/comment/add")
-//                        .excludePathPatterns("/op/comment/getList");
-//                registry.addInterceptor(new AdminInterceptor())
-//                        .addPathPatterns("/admin/**");
-//            }
         };
     }
 }
