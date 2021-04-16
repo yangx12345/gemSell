@@ -1,52 +1,36 @@
-import Vue from 'vue'
-import App from './App.vue'
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import Vue from "vue"
+import ElementUI from "element-ui"
+import App from "./App.vue"
+import router from "./router"
+import store from "./vuex"
+import i18n from "./i18n/i18n"
+import globalPlugin from "./utils/global"
+import permission from "./directive/permission/button"
+import NProgress from "nprogress"
 
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+import "nprogress/nprogress.css"
+import "element-ui/lib/theme-chalk/index.css"
+import "@/assets/iconfont/iconfont.css"
+import "font-awesome/css/font-awesome.css"
+import "@/router/permission"
 
-//导入放大镜的包
-import ProductZoomer from 'vue-product-zoomer';
-//导入iview
-import iView from 'iview';
-import 'iview/dist/styles/iview.css';
-//导入moment.js
-import moment from 'moment';
-
-// 导入 懒加载 vue插件
-import VueLazyload from 'vue-lazyload';
-Vue.use(VueLazyload,{
-    preLoad:1.3,
-    loading:require('../static/images/loading.gif'),
-      attempt: 1
-})
-
-//转换时间
-Vue.filter('filterDate', function(val) {
-    return moment(val).format('YYYY年MM月DD日');
-})
-
-//注册element
-Vue.use(ElementUI);
-
-Vue.use(iView);
-//注册productZoomer
-Vue.use(ProductZoomer);
 Vue.config.productionTip = false
+Vue.use(ElementUI)
+Vue.use(globalPlugin)
+Vue.use(permission)
 
-//导入vuex文件
-import { store } from './vuex/store';
-import router from './router'
+NProgress.inc(0.2)
+NProgress.configure({ easing: "ease", speed: 500, showSpinner: false })
 
-
+/* eslint-disable no-new */
 new Vue({
-    render: h => h(App),
-    router,
-    store,
-    beforeCreate(){
-    	this.$axios.get('/site/account/islogin').then(response=>{
-    		if (response.data.code == 'logined') {
-    			store.state.isLogin = true;
-    		}
-    	})
-    }
-}).$mount('#app')
+  el: "#app",
+  router,
+  store,
+  i18n,
+  render: h => h(App),
+  components: {App},
+  template: "<App/>"
+})

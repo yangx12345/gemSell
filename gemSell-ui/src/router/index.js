@@ -1,135 +1,138 @@
-import Vue from 'vue'
-//导入路由
-import Router from 'vue-router'
-//注册VueRouter
-Vue.use(Router);
-//导入单页面组件
-import Index from '../components/index';
-//导入详情页面
-import Detail from '../components/detail'
+import en from "../i18n/lang/en"
+import Vue from "vue"
+import Router from "vue-router"
+import Login from "@/views/login/index"
+import Layout from "@/views/layout/layout"
+import NotFound from "@/views/page404.vue"
 
-import Cart from '../components/shoppingCart'
-
-import Login from '../components/login'
-
-import Order from '../components/order'
-
-import Pay from '../components/pay'
-
-import paySuccess from '../components/paySuccess'
-
-import VipCenter from '../components/vipCenter'
-
-import OrderList from '../components/orderList'
-
-import OrderDetail from '../components/orderDetail'
-
-import axios from 'axios';
-//基础地址
-axios.defaults.baseURL = 'http://47.106.148.205:8899';
-//让ajax携带cookie
-// 跨域请求时 是否会携带 凭证(cookie)
-axios.defaults.withCredentials = true;
-//Vue原型对象存储axios
-Vue.prototype.$axios = axios;
-
-//定义路由规则
-let routes = [{
-    //首页
-    path: '/',
-    // component: Index,
-    redirect: '/index'
+/**
+ * 重写路由的push方法
+ */
+const routerPush = Router.prototype.push
+Router.prototype.push = function push (location) {
+  return routerPush.call(this, location).catch(error => error)
+}
+Vue.use(Router)
+let routeName = en.routeName
+let defaultRouter = [
+  { path: "/",
+    redirect: "/user",
+    hidden: true,
+    children: []
   },
   {
-    //首页
-    path: '/index',
-    component: Index
+    path: "/login",
+    component: Login,
+    name: "",
+    hidden: true,
+    children: []
   },
   {
-    //详情页
-    path: '/detail/:id',
-    component: Detail
+    path: "/404",
+    component: NotFound,
+    name: "",
+    hidden: true,
+    children: []
   },
   {
-    //购物车
-    path: '/cart',
-    component: Cart
+    path: "/user",
+    iconCls: "el-icon-user-solid", // 图标样式class
+    name: routeName.user,
+    component: Layout,
+    alone: true,
+    children: [
+      {
+        path: "/user",
+        iconCls: "el-icon-user-solid", // 图标样式class
+        name: "用户管理",
+        component: () => import("@/views/user/index"),
+        children: []
+      }
+    ]
   },
   {
-    //登录
-    path: '/login',
-    component: Login
+    path: "/type",
+    iconCls: "el-icon-set-up", // 图标样式class
+    name: routeName.type,
+    component: Layout,
+    alone: true,
+    children: [
+      {
+        path: "/type",
+        iconCls: "el-icon-set-up", // 图标样式class
+        name: "分类管理",
+        component:  () => import("@/views/type/index"),
+        children: []
+      }
+    ]
   },
   {
-    //订单
-    path: '/order/:id',
-    component: Order,
-    meta: {
-      checkLogin: true
-    }
+    path: "/goods",
+    iconCls: "el-icon-s-goods", // 图标样式class
+    name: routeName.goods,
+    component: Layout,
+    alone: true,
+    children: [
+      {
+        path: "/goods",
+        iconCls: "el-icon-s-goods", // 图标样式class
+        name: "商品管理",
+        component:  () => import("@/views/goods"),
+        children: []
+      }
+    ]
   },
   {
-    //订单详情
-    path: '/pay/:id',
-    component: Pay,
-    meta: {
-      checkLogin: true
-    }
+    path: "/order",
+    iconCls: "el-icon-s-finance", // 图标样式class
+    name: routeName.order,
+    component: Layout,
+    alone: true,
+    children: [
+      {
+        path: "/order",
+        iconCls: "el-icon-s-finance", // 图标样式class
+        name: "订单管理",
+        component:  () => import("@/views/order"),
+        children: []
+      }
+    ]
   },
   {
-    //订单成功
-    path: '/paySuccess/:id',
-    component: paySuccess,
-    meta: {
-      checkLogin: true
-    }
+    path: "/authenticate",
+    iconCls: "el-icon-s-cooperation", // 图标样式class
+    name: routeName.authenticate,
+    component: Layout,
+    alone: true,
+    children: [
+      {
+        path: "/authenticate",
+        iconCls: "el-icon-s-cooperation", // 图标样式class
+        name: "鉴定管理",
+        component:  () => import("@/views/authenticate"),
+        children: []
+      }
+    ]
   },
   {
-    //会员中心
-    path: '/vipCenter',
-    component: VipCenter,
-    meta: {
-      checkLogin: true
-    }
-  },
-  {
-    //订单列表
-    path: '/orderlist',
-    component: OrderList,
-    meta: {
-      checkLogin: true
-    }
-  },
-  {
-    //订单详情
-    path: '/orderDetail/:id',
-    component: OrderDetail,
-    meta: {
-      checkLogin: true
-    }
-  },
+    path: "/404",
+    component: NotFound,
+    name: "404",
+    hidden: true,
+    children: []
+  }
 ]
 
-//实例化路由对象
-let router = new Router({
-  routes: routes
-})
-
-// 增加 导航守卫(路由守卫),判断是否是登录状态,不是打回到登录
-router.beforeEach((to, from, next) => {
-  if (to.meta.checkLogin == true) {
-    axios.get("site/account/islogin")
-      .then(response => {
-        if (response.data.code != 'nologin') {
-          next();
-        } else {
-          next('/login');
-        }
-      })
-  } else {
-    next();
+let addRouter = [
+  
+  { path: "*",
+    redirect: "/404",
+    hidden: true,
+    children: []
   }
-})
+
+]
 export default new Router({
-  routes,
+  routes: defaultRouter
 })
+export {defaultRouter, addRouter}

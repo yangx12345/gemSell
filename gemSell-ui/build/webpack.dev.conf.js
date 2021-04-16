@@ -14,6 +14,7 @@ const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
 const devWebpackConfig = merge(baseWebpackConfig, {
+  mode: 'development',
   module: {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
   },
@@ -49,13 +50,21 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       'process.env': require('../config/dev.env')
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
-    new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',
-      inject: true
+      favicon: path.resolve(__dirname, '../static/images/favicon.ico'),
+      inject: true,
+      dll: (function () {
+        let max = 2
+        let res = []
+        for (let i = 0; i < max; i++) {
+          const dllName = require(path.resolve(__dirname, `../dllManifest/xuAdmin${i}-manifest.json`)).name.split('_')
+          res.push(`/static/dll/${dllName[0]}.${dllName[1]}.dll.js`)
+        }
+        return res
+      })()
     }),
     // copy custom static assets
     new CopyWebpackPlugin([
@@ -83,6 +92,16 @@ module.exports = new Promise((resolve, reject) => {
       devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
         compilationSuccessInfo: {
           messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
+//           notes: [`   _     _      _     _      _     _-     _     _      _     _      _     _      _     _      _     _      _     _      _     _
+//   (c).-.(c)    (c).-.(c)    (c).-.(c)    (c).-.(c)    (c).-.(c)    (c).-.(c)    (c).-.(c)    (c).-.(c)    (c).-.(c)    (c).-.(c)
+//    / ._. \\      / ._. \\      / ._. \\      / ._. \\      / ._. \\      / ._. \\      / ._. \\      / ._. \\      / ._. \\      / ._. \\
+//  __\\( N )/__  __\\( i )/__  __\\( - )/__  __\\( R )/__  __\\( o )/__  __\\( n )/__  __\\( g )/__  __\\( - )/__  __\\( X )/__  __\\( u )/__
+// (_.-/'-'\\-._)(_.-/'-'\\-._)(_.-/'-'\\-._)(_.-/'-'\\-._)(_.-/'-'\\-._)(_.-/'-'\\-._)(_.-/'-'\\-._)(_.-/'-'\\-._)(_.-/'-'\\-._)(_.-/'-'\\-._)
+//    || V ||      || u ||      || e ||      || x ||      || u ||      || A ||      || d ||      || m ||      || i ||      || n ||
+//  _.' \`-' '._  _.' \`-' '._  _.' \`-' '._  _.' \`-' '._  _.' \`-' '._  _.' \`-' '._  _.' \`-' '._  _.' \`-' '._  _.' \`-' '._  _.' \`-' '._
+// (.-./\`-'\\.-.)(.-./\`-'\\.-.)(.-./\`-'\\.-.)(.-./\`-'\\.-.)(.-./\`-'\\.-.)(.-./\`-'\\.-.)(.-./\`-'\\.-.)(.-./\`-'\\.-.)(.-./\`-'\\.-.)(.-./\`-'\\.-.)
+//  \`-'     \`-'  \`-'     \`-'  \`-'     \`-'  \`-'     \`-'  \`-'     \`-'  \`-'     \`-'  \`-'     \`-'  \`-'     \`-'  \`-'     \`-'  \`-'     \`-' `]
+          notes: [``]
         },
         onErrors: config.dev.notifyOnErrors
         ? utils.createNotifierCallback()
