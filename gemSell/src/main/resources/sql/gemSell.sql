@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 16/04/2021 13:04:31
+ Date: 16/04/2021 15:25:34
 */
 
 SET NAMES utf8mb4;
@@ -560,10 +560,11 @@ CREATE TABLE `user`  (
   `update_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
+INSERT INTO `user` VALUES (1, 'admin', '96e79218965eb72c92a549dd5a330112', 'admin', '0', '15133185689', '男', '2021-04-16 13:43:35', '', '', '2021-02-16 15:28:37');
 
 SET FOREIGN_KEY_CHECKS = 1;
