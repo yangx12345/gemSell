@@ -134,7 +134,7 @@ public class UserController {
         claimMap.put("userId",findUser.getUserId().toString());
         claimMap.put("userName",findUser.getUserName());
         String token = JwtUtils.sign(claimMap, SecureUtil.md5(user.getPassword()),null);
-        return ResultUtil.success(token);
+        return ResultUtil.success("登录成功",token);
     }
 
     @PostMapping("getUserInfoByToken")

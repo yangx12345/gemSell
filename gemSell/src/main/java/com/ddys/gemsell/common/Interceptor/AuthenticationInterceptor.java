@@ -26,6 +26,11 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		//通过浏览器预检查方法
+		if(request.getMethod().equals("OPTIONS")){
+			response.setStatus(HttpServletResponse.SC_OK);
+			return true;
+		}
 		String token = request.getHeader("token");
 		if (StringUtils.isEmpty(token))
 		{
