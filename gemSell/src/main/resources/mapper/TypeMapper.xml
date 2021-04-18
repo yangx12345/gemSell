@@ -13,7 +13,7 @@
         type_id, type_name, parent_id
        from type a
     </sql>
-    <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.Type" resultMap="BaseResultMap">
+    <select id="getListByCondition" resultMap="BaseResultMap">
         <include refid="selectVo"></include>
          where parent_id = '0'
     </select>

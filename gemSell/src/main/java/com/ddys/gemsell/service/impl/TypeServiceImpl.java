@@ -26,12 +26,12 @@ public class TypeServiceImpl extends ServiceImpl<TypeMapper, Type>implements Typ
     }
 
     @Override
-    public List<Type>getListByCondition(Type condition){
-		List<Type> list = baseMapper.getListByCondition(condition);
+    public List<Type>getListByCondition(){
+		List<Type> list = baseMapper.getListByCondition();
         for (Type type:list
              ) {
             QueryWrapper<Type> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("parent_id",type.getParentId());
+            queryWrapper.eq("parent_id",type.getTypeId());
             type.setChildren(baseMapper.selectList(queryWrapper));
         }
         return list;

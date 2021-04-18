@@ -13,6 +13,6 @@ public interface TypeMapper extends BaseMapper<Type> {
     /**
      * 根据查询条件查询实体列表
      */
-    List<Type> getListByCondition(Type condition);
+    List<Type> getListByCondition();
 
 }

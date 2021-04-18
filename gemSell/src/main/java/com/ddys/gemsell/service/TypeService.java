@@ -15,7 +15,7 @@ public interface TypeService extends IService<Type> {
     /**
      * 根据条件查询实体列表
      */
-    public List<Type> getListByCondition(Type condition);
+    public List<Type> getListByCondition();
 
     /**
      *  保存实体

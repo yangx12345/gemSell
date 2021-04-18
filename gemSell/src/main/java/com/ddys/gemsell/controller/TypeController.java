@@ -41,12 +41,9 @@ public class TypeController {
     * 根据条件查询实体列表
     */
     @PostMapping("getListByCondition")
-    public Result getListByCondition(@RequestBody Type condition,@RequestParam("pageIndex") Integer pageIndex,@RequestParam("pageSize") Integer pageSize)
+    public Result getListByCondition()
     {
-        if(condition==null || pageIndex==null || pageIndex< 1||pageSize==null||pageSize< 1){
-		 return ResultUtil.parameterError();
-        }
-        List<Type> list= typeService.getListByCondition(condition);
+        List<Type> list= typeService.getListByCondition();
         return ResultUtil.success(list);
     }
 
