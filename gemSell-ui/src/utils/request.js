@@ -21,7 +21,6 @@ service.interceptors.request.use(
       // please modify it according to the actual situation
         //将token放到请求头发送给服务器,将tokenkey放在请求头中
         config.headers['token'] = getToken();
-        config.headers['Accept'] = 'application/json';
     }
     return config
   },
