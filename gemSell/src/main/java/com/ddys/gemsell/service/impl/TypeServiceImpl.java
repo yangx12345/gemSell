@@ -1,5 +1,6 @@
 package com.ddys.gemsell.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ddys.gemsell.entity.Type;
 import com.ddys.gemsell.mapper.TypeMapper;
 import com.ddys.gemsell.service.TypeService;
@@ -26,7 +27,14 @@ public class TypeServiceImpl extends ServiceImpl<TypeMapper, Type>implements Typ
 
     @Override
     public List<Type>getListByCondition(Type condition){
-		return baseMapper.getListByCondition(condition);
+		List<Type> list = baseMapper.getListByCondition(condition);
+        for (Type type:list
+             ) {
+            QueryWrapper<Type> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("parent_id",type.getParentId());
+            type.setChildren(baseMapper.selectList(queryWrapper));
+        }
+        return list;
     }
 
     @Override

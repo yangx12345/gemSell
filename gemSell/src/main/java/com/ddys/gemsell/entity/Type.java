@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -33,6 +35,9 @@ public class Type implements Serializable {
      */
     @TableField("parent_id")
     private Integer parentId;
+
+    @TableField(exist = false)
+    private List<Type> children;
 
 
 }

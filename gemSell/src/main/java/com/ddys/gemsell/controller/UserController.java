@@ -145,5 +145,21 @@ public class UserController {
         return ResultUtil.success(userService.getEntityById(userId));
     }
 
+    @PostMapping("restPassword")
+    public Result changePassword(@RequestParam Integer userId)
+    {
+        if (userId == null)
+        {
+            return ResultUtil.parameterError();
+        }
+        User user  =  userService.getEntityById(userId);
+        if (user == null)
+        {
+            return ResultUtil.error("用户不存在");
+        }
+        user.setPassword(SecureUtil.md5("123456"));
+        return ResultUtil.judgmentResult(userService.updateEntity(user));
+    }
+
 }
 

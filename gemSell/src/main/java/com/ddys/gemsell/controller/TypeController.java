@@ -46,10 +46,8 @@ public class TypeController {
         if(condition==null || pageIndex==null || pageIndex< 1||pageSize==null||pageSize< 1){
 		 return ResultUtil.parameterError();
         }
-		PageHelper.startPage(pageIndex, pageSize);
         List<Type> list= typeService.getListByCondition(condition);
-		PageInfo<Type> result = new PageInfo<>(list);
-        return ResultUtil.success(result);
+        return ResultUtil.success(list);
     }
 
     /**
