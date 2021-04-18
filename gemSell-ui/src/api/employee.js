@@ -2,21 +2,21 @@ import request from '@/utils/request'
 
 export function getById(id) {
   return request({
-    url: `/employee/getById/${id}`,
+    url: `/user/getById/${id}`,
     method: 'get'
   })
 }
 
-export function getEmployeeByWordId(wordId) {
+export function getuserByWordId(wordId) {
   return request({
-    url: `/employee/getEmployeeByWordId/${wordId}`,
+    url: `/user/getuserByWordId/${wordId}`,
     method: 'get'
   })
 }
 
 export function getListByCondition(data, pageIndex, pageSize) {
   return request({
-    url: '/employee/getListByCondition',
+    url: '/user/getListByCondition',
     method: 'post',
     data: data,
     params:
@@ -29,7 +29,7 @@ export function getListByCondition(data, pageIndex, pageSize) {
 
 export function add(data) {
   return request({
-    url: '/employee/add',
+    url: '/user/add',
     method: 'post',
     data: data
   })
@@ -37,7 +37,7 @@ export function add(data) {
 
 export function update(data) {
   return request({
-    url: '/employee/update',
+    url: '/user/update',
     method: 'put',
     data: data
   })
@@ -45,14 +45,14 @@ export function update(data) {
 
 export function deleteById(id) {
   return request({
-    url: `/employee/delete/${id}`,
+    url: `/user/delete/${id}`,
     method: 'delete'
   })
 }
 
 export function batchDelete(ids) {
   return request({
-    url: '/employee/batchDelete',
+    url: '/user/batchDelete',
     method: 'delete',
     params: {
       ids: ids
@@ -62,7 +62,7 @@ export function batchDelete(ids) {
 
 export function login(data) {
   return request({
-    url: '/employee/login',
+    url: '/user/login',
     method: 'post',
     data: data
   })
@@ -70,7 +70,7 @@ export function login(data) {
 
 export function register(data) {
   return request({
-    url: '/employee/register',
+    url: '/user/register',
     method: 'post',
     data: data
   })
@@ -78,7 +78,7 @@ export function register(data) {
 
 export function changePassword(oldPassword, newPassword, userName) {
   return request({
-    url: '/employee/changePassword',
+    url: '/user/changePassword',
     method: 'post',
     params: { oldPassword: oldPassword, newPassword: newPassword, userName: userName }
   })
@@ -86,50 +86,50 @@ export function changePassword(oldPassword, newPassword, userName) {
 
 export function restPassword(id) {
   return request({
-    url: '/employee/restPassword',
+    url: '/user/restPassword',
     method: 'post',
-    params: { eid: id }
+    params: { userId: id }
   })
 }
 
-export function getEmployeeByCurrentDeptId(deptId) {
+export function getuserByCurrentDeptId(deptId) {
   return request({
-    url: '/employee/getEmployeeByCurrentDeptId/' + deptId,
+    url: '/user/getuserByCurrentDeptId/' + deptId,
     method: 'get'
   })
 }
 
 export function getWorkStateChartData() {
   return request({
-    url: '/employee/getWorkStateChartData',
+    url: '/user/getWorkStateChartData',
     method: 'get'
   })
 }
 
 export function getSexChartData() {
   return request({
-    url: '/employee/getSexChartData',
+    url: '/user/getSexChartData',
     method: 'get'
   })
 }
 
 export function getTiptopDegreeChartData() {
   return request({
-    url: '/employee/getTiptopDegreeChartData',
+    url: '/user/getTiptopDegreeChartData',
     method: 'get'
   })
 }
 
 export function getJobLevelChartData() {
   return request({
-    url: '/employee/getJobLevelChartData',
+    url: '/user/getJobLevelChartData',
     method: 'get'
   })
 }
 
 export function getPosChartData() {
   return request({
-    url: '/employee/getPosChartData',
+    url: '/user/getPosChartData',
     method: 'get'
   })
 }

@@ -2,26 +2,21 @@ import request from '@/utils/request'
 
 export function getById(id) {
   return request({
-    url: `/department/getById/${id}`,
+    url: `/type/getById/${id}`,
     method: 'get'
   })
 }
 
-export function getListByCondition(data, role) {
+export function getListByCondition() {
   return request({
-    url: '/department/getListByCondition',
-    method: 'post',
-    data: data,
-    params:
-    {
-      role: role
-    }
+    url: '/type/getListByCondition',
+    method: 'post'
   })
 }
 
 export function add(data) {
   return request({
-    url: '/department/add',
+    url: '/type/add',
     method: 'post',
     data: data
   })
@@ -29,7 +24,7 @@ export function add(data) {
 
 export function update(data) {
   return request({
-    url: '/department/update',
+    url: '/type/update',
     method: 'put',
     data: data
   })
@@ -37,14 +32,14 @@ export function update(data) {
 
 export function deleteById(id) {
   return request({
-    url: `/department/delete/${id}`,
+    url: `/type/delete/${id}`,
     method: 'delete'
   })
 }
 
 export function batchDelete(ids) {
   return request({
-    url: '/department/batchDelete',
+    url: '/type/batchDelete',
     method: 'delete',
     params: ids
   })
@@ -57,7 +52,7 @@ export function batchDelete(ids) {
  */
 export function getSelectTree(data, id) {
   return request({
-    url: '/department/getSelectTree',
+    url: '/type/getSelectTree',
     method: 'get',
     data: data,
     params: {
@@ -68,7 +63,7 @@ export function getSelectTree(data, id) {
 
 export function getDeptList() {
   return request({
-    url: '/department/getList',
+    url: '/type/getList',
     method: 'get'
   })
 }

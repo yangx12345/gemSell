@@ -1,14 +1,22 @@
 <template>
   <div class="container">
-    <el-form ref="form" :model="form" :inline="true" label-width="80px">
+    <el-form ref="form" :model="form" :inline="true" label-min-width="80px">
       <el-form-item label="用户姓名">
-        <el-input v-model="form.username" />
+        <el-input v-model="form.userName" />
+      </el-form-item>
+      <el-form-item label="用户手机号">
+        <el-input v-model="form.phone" />
       </el-form-item>
       <el-form-item label="用户角色">
-        <el-input v-model="form.cart" />
+          <el-select v-model="form.role" placeholder="请选择用户角色">
+            <el-option label="系统管理员" :value="'0'"></el-option>
+            <el-option label="鉴定人" :value="'1'"></el-option>
+            <el-option label="普通用户" :value="'2'"></el-option>
+          </el-select>
       </el-form-item>
       <el-button type="primary" @click="getList()">查询</el-button>
       <el-button @click="resetData">重置</el-button>
+      <el-button type="primary" @click="addUser">添加</el-button>
       <el-button type="danger" :disabled="ids.length === 0" @click="batchDelete"> 删除</el-button>
     </el-form>
     <el-table
@@ -18,37 +26,25 @@
     >
       <el-table-column
         type="selection"
-        width="55"
+        min-width="55"
         align="center"
       />
       <el-table-column
-        prop="id"
+        prop="userId"
         label="编号"
-        width="50"
+        min-width="50"
         align="center"
       />
       <el-table-column
-        prop="name"
+        prop="userName"
         label="姓名"
-        width="120"
+        min-width="120"
         align="center"
       />
       <el-table-column
-        prop="username"
-        label="登录名"
-        width="120"
-        align="center"
-      />
-      <el-table-column
-        prop="gender"
+        prop="sex"
         label="性别"
-        width="120"
-        align="center"
-      />
-      <el-table-column
-        prop="birthday"
-        label="出生日期"
-        width="120"
+        min-width="120"
         align="center"
       />
       <el-table-column
@@ -56,50 +52,18 @@
         prop="role"
         label="角色"
         align="center"
-        width="120"
-      />
-      <el-table-column
-        prop="idCard"
-        label="身份证号"
-        width="180"
-        align="center"
+        min-width="120"
       />
       <el-table-column
         prop="phone"
         label="电话号码"
-        width="120"
+        min-width="120"
         align="center"
       />
       <el-table-column
-        prop="address"
-        label="联系地址"
-        width="120"
-        align="center"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        prop="beginDate"
-        label="入职日期"
-        align="center"
-        width="120"
-      />
-      <el-table-column
-        prop="workState"
-        label="在职状态"
-        align="center"
-        width="120"
-      />
-      <el-table-column
-        prop="workID"
-        label="工号"
-        align="center"
-        width="120"
-      />
-      <el-table-column
-        fixed="right"
         label="操作"
         align="center"
-        width="220"
+        min-width="220"
       >
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="updateClick(scope.row)">编辑</el-button>
@@ -120,13 +84,18 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <addUser :dialogFormVisible.sync="dialogFormVisible" :currentUser="currentUser" @getList="getList"></addUser>
   </div>
 
 </template>
 
 <script>
 import { getListByCondition, batchDelete, restPassword, deleteById, update } from '@/api/employee'
+import addUser from './addUser'
 export default {
+  components: {
+    addUser
+  },
   data() {
     return {
       tableData: [],
@@ -136,22 +105,15 @@ export default {
       pageSize: 10,
       ids: [],
       total: 0,
-      roleStatus: [
-        {
-          value: 0,
-          label: '管理员'
-        },
-        {
-          value: 1,
-          label: '鉴定师'
-        },
-        {
-          value: 2,
-          label: '普通用户'
-        }
-      ],
       dialogFormVisible: false,
-      currentUser: {}
+      currentUser: {
+        userName: '',
+        password: '',
+        userId: '',
+        sex: '',
+        role: '',
+        phone: ''
+      }
     }
   },
   mounted() {
@@ -160,21 +122,21 @@ export default {
   methods: {
     // 角色翻译
     roleFormatter(row){
-      this.roleStatus.forEach(item=>{
-        if(item.value === row.cart) return item.label
-      })
+      if(row.role === '0') return '管理员'
+      if(row.role === '1') return '鉴定师'
+      if(row.role === '2') return '普通用户'
     },
     // 重置密码
     openMessage(row) {
-      this.$confirm('此操作将重置员工' + row.name + '的登录密码, 是否继续?', '提示', {
+      this.$confirm('此操作将重置员工' + row.userName + '的登录密码, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        restPassword(row.id).then(resp => {
+        restPassword(row.userId).then(resp => {
           if (resp.code === 1) {
             this.$message({
-              message: '已将' + row.name + '密码重置为123456',
+              message: '已将' + row.userName + '密码重置为123456',
               type: 'success'
             })
           } else {
@@ -205,7 +167,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteById(row.id).then(response => {
+        deleteById(row.userId).then(response => {
           const res = response
           if (res.code === 1) {
             this.$message({
@@ -222,17 +184,24 @@ export default {
         })
       })
     },
+    addUser(){
+      this.currentUser = {
+        userName: '',
+        password: '',
+        userId: '',
+        sex: '',
+        role: '',
+        phone: ''
+      }
+      this.dialogFormVisible = true
+    },
     updateClick(row) {
-      this.$router.push({
-        path: '/user/add',
-        query: {
-          id: row.id
-        }
-      })
+      this.currentUser = { ...row }
+      this.dialogFormVisible = true
     },
     // 重置
     resetData() {
-      this.$refs['form'].resetFields()
+      this.form = {}
       this.getList()
     },
     getList() {
@@ -243,7 +212,7 @@ export default {
       })
     },
     handleSelectionChange(val) {
-      this.ids = val.map(item => item.id)
+      this.ids = val.map(item => item.userId)
     },
     batchDelete() {
       this.$confirm('您确定要批量删除已选定的数据项?', '警告', {

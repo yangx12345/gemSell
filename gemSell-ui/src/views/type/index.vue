@@ -1,43 +1,42 @@
 <template>
   <div class="container">
-    <el-form v-if="role !==2" ref="form" :model="form" :inline="true" label-width="80px">
-      <el-form-item label="分类名称" prop="name">
-        <el-input v-model="form.name" clearable />
+    <el-form  ref="form" :model="form" :inline="true" label-width="80px">
+      <!-- <el-form-item label="分类名称" prop="typeName">
+        <el-input v-model="form.typeName" clearable />
       </el-form-item>
       <el-button type="primary" @click="getList()">查询</el-button>
-      <el-button @click="resetData()">重置</el-button>
+      <el-button @click="resetData()">重置</el-button> -->
+      <el-button type="primary" @click="add()">添加</el-button>
     </el-form>
+    
     <el-table
-      :data="tableData"
-      style="width: 100%;margin-top:10px"
-      row-key="id"
-    >
+    :data="tableData"
+    style="width: 100%;margin: 20px 0;"
+    row-key="typeId"
+    border
+    default-expand-all
+    :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
       <el-table-column
-        fixed
-        prop="id"
+        prop="typeId"
         label="编号"
       />
       <el-table-column
-        prop="name"
+        prop="typeName"
         label="分类名称"
       />
-      <el-table-column
-        v-if="role !==2"
-        fixed="right"
-        label="操作"
-      >
+      <el-table-column label="操作" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="add(scope.row)">增加</el-button>
+          <el-button v-if="scope.row.parentId === 0" type="text" size="small" @click="add(scope.row)">增加</el-button>
           <el-button type="text" size="small" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="text" size="small" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
-    </el-table>
+  </el-table>
     <div>
       <el-dialog :title="addOrupdate === 'add' ? '增加分类':'修改分类'" :visible.sync="dialogFormVisible" @close="cancale">
         <el-form ref="addForm" :model="entity" :rules="rules">
-          <el-form-item label="分类名称" :label-width="formLabelWidth" prop="name">
-            <el-input v-model="entity.name" autocomplete="off" />
+          <el-form-item label="分类名称" :label-width="formLabelWidth" prop="typeName">
+            <el-input v-model="entity.typeName" autocomplete="off" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -64,7 +63,7 @@ export default {
       },
       form: {
         id: null,
-        name: ''
+        typeName: ''
       },
       options: [{
         value: 1,
@@ -75,49 +74,28 @@ export default {
         label: '禁用'
       }],
       entity: {
-        id: null,
-        name: '',
-        parentId: null,
-        depPath: '',
-        enabled: true,
-        isParent: 0
-      },
+        typeId: null,
+        typeName: '',
+        parentId: null
+        },
       dialogFormVisible: false,
       formLabelWidth: '100px',
       rules: {
-        name: [{ required: true, message: '请输入职位名称', trigger: 'blur' }]
+        typeName: [{ required: true, message: '请输入分类名称', trigger: 'blur' }]
       },
       addOrupdate: ''
     }
-  },
-  computed: {
-    ...mapGetters([
-      'role',
-      'deptId'
-    ])
   },
   created() {
     this.getList()
   },
   methods: {
     resetEntity() {
-      this.entity.id = null
-      this.entity.name = ''
-      this.entity.parentId = null
-      this.entity.depPath = ''
-      this.entity.enabled = true
-      this.entity.isParent = 0
-    },
-    enalbleformatter(row) {
-      if (row.enabled) {
-        return '正常'
-      } else {
-        return '禁用'
-      }
+      this.entity.typeId = null
+      this.entity.typeName = ''
     },
     getList() {
-      this.form.id = this.deptId
-      getListByCondition(this.form, this.role).then(resp => {
+      getListByCondition().then(resp => {
         this.tableData = resp.data
       })
     },
@@ -126,9 +104,13 @@ export default {
       this.getList()
     },
     add(row) {
-      const { id, depPath } = row
-      this.entity.parentId = id
-      this.entity.depPath = depPath
+      if(row){
+        const { typeId } = row
+        this.entity.parentId = typeId
+      }
+      else {
+        this.entity.parentId = 0
+      }
       this.dialogFormVisible = true
       this.addOrupdate = 'add'
     },
@@ -138,28 +120,29 @@ export default {
       this.entity = { ...row }
     },
     submit() {
+      var _this = this
       this.$refs['addForm'].validate((valid) => {
         if (valid) {
-          if (this.addOrupdate === 'add') {
-            add(this.entity).then((result) => {
+          if (_this.addOrupdate === 'add') {
+            add(_this.entity).then((result) => {
               if (result.code === 1) {
-                this.$message({
+                _this.$message({
                   message: '增加成功',
                   type: 'success'
                 })
-                this.cancale()
-                this.getList()
+                _this.cancale()
+                _this.getList()
               }
             })
           } else {
-            update(this.entity).then((result) => {
+            update(_this.entity).then((result) => {
               if (result.code === 1) {
-                this.$message({
+                _this.$message({
                   message: '修改成功',
                   type: 'success'
                 })
-                this.cancale()
-                this.getList()
+                _this.cancale()
+                _this.getList()
               }
             })
           }
@@ -180,7 +163,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteById(row.id).then(response => {
+        deleteById(row.typeId).then(response => {
           const res = response
           if (res.code === 1) {
             this.$message({
