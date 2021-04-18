@@ -1,5 +1,8 @@
 package com.ddys.gemsell.service.impl;
 
+import cn.hutool.crypto.SecureUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ddys.gemsell.common.utils.StringUtils;
 import com.ddys.gemsell.entity.User;
 import com.ddys.gemsell.mapper.UserMapper;
 import com.ddys.gemsell.service.UserService;
@@ -48,10 +51,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>implements Use
     }
 
     @Override
+    public User getByUsernameAndPassword(String userName, String password) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("user_id","role").eq("user_name",userName).eq("password", SecureUtil.md5(password));
+        return baseMapper.selectOne(queryWrapper);
+    }
+
+    @Override
     @Transactional(readOnly=false,rollbackFor=Exception.class)
     public boolean deleteByIds(String ids){
         Integer[]Ids=Convert.toIntArray(ids);
         List<Integer>idList=Arrays.asList(Ids);
         return this.removeByIds(idList);
+    }
+
+    @Override
+    public String getPasswordByUserName(String userName)
+    {
+        if (StringUtils.isEmpty(userName))
+        {
+            return "";
+        }
+        return baseMapper.getPasswordByUserName(userName);
     }
 }

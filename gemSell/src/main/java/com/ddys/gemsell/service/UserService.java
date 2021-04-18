@@ -37,4 +37,12 @@ public interface UserService extends IService<User> {
      */
     public boolean deleteByIds(String ids);
 
+    /**
+     *
+     *根据用户名密码查询用户
+     *
+     **/
+	User getByUsernameAndPassword(String userName, String password);
+
+	String getPasswordByUserName(String userName);
 }

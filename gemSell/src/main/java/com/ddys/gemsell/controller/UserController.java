@@ -1,6 +1,9 @@
 package com.ddys.gemsell.controller;
 
 
+import cn.hutool.crypto.SecureUtil;
+import com.ddys.gemsell.common.utils.JwtUtils;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -15,7 +18,10 @@ import org.springframework.web.bind.annotation.*;
 import com.ddys.gemsell.service.UserService;
 import com.ddys.gemsell.entity.User;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -102,5 +108,42 @@ public class UserController {
         }
         return ResultUtil.judgmentResult(userService.deleteByIds(ids));
     }
+
+    /**
+     *
+     * 用户登录
+     *
+     * @date 2021-04-16 13:19
+     * @param user 登录信息
+     * @return com.ddys.gemsell.common.result.Result 返回结果
+     **/
+    @PostMapping("login")
+    public Result login(@RequestBody User user)
+    {
+        if (user == null || StringUtils.isBlank(user.getUserName()) || StringUtils.isBlank(user.getPassword()))
+        {
+            return ResultUtil.parameterError();
+        }
+        User findUser  =  userService.getByUsernameAndPassword(user.getUserName(),user.getPassword());
+        if (findUser == null)
+        {
+            return ResultUtil.error("账号密码错误或用户不存在");
+        }
+        Map<String,String> claimMap = new HashMap<>(4);
+        claimMap.put("role",findUser.getRole());
+        claimMap.put("userId",findUser.getUserId().toString());
+        claimMap.put("userName",findUser.getUserName());
+        String token = JwtUtils.sign(claimMap, SecureUtil.md5(user.getPassword()),null);
+        return ResultUtil.success(token);
+    }
+
+    @PostMapping("getUserInfoByToken")
+    public Result getUserInfoByToken(HttpServletRequest request)
+    {
+        String token = request.getHeader("token");
+        Integer userId = Integer.valueOf(JwtUtils.getClaimValueByToken(token,"userId"));
+        return ResultUtil.success(userService.getEntityById(userId));
+    }
+
 }
 
