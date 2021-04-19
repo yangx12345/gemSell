@@ -4,7 +4,7 @@
             <div class="location">
                 <span>当前位置：</span>
                 <a href="#/" class="router-link-active">首页</a> &gt;
-                <a href="#/site/goodslist" class="router-link-exact-active router-link-active">购物商城</a>
+                <a href="#/gemsell-api/goodslist" class="router-link-exact-active router-link-active">购物商城</a>
             </div>
         </div>
         <div class="section">
@@ -13,23 +13,23 @@
                     <div class="left-220" style="margin: 0px;">
                         <div class="banner-nav">
                             <ul>
-                                <li v-for="(item,index) in cateList" :key="item.id">
+                                <li v-for="(item,index) in cateList" :key="index">
                                     <h3>
                                         <i class="iconfont icon-arrow-right"></i>
-                                        <span>{{item.title}}</span>
-                                        <p>
+                                        <span>{{item.typeName}}</span>
+                                        <!-- <p>
                                             <span v-for="(itemVal,i) in item.subcates" :key="itemVal.id">
                                                 手机通讯&nbsp;
                                             </span>
-                                        </p>
+                                        </p> -->
                                     </h3>
                                     <div class="item-box">
                                         <dl>
                                             <dt>
-                                                <a href="/goods/40.html">{{item.title}}</a>
+                                                <a href="/goods/40.html">{{item.typeName}}</a>
                                             </dt>
                                             <dd>
-                                                <a href="/goods/43.html" v-for="(itemVal,i) in item.subcates" :key="itemVal.id">{{itemVal.title}}</a>
+                                                <a href="/goods/43.html" v-for="(itemVal,i) in item.children" :key="i">{{itemVal.typeName}}</a>
                                             </dd>
                                         </dl>
                                     </div>
@@ -40,7 +40,7 @@
                     <!--幻灯片-->
                     <div class="left-705">
                         <el-carousel trigger="click">
-                            <el-carousel-item v-for="item in sliderList" :key="sliderList.ids">
+                            <el-carousel-item v-for="(item, index) in sliderList" :key="index">
                                 <a href="#">
                                 <img :src="item.img_url" alt="" class="bannerImg">
                                 </a>
@@ -56,50 +56,12 @@
                                     <img :src="item.img_url">
                                 </div>
                                 <div class="txt-box">
-                                    <a href="/goods/show-98.html">{{item.title}}</a>
+                                    <a href="/goods/show-98.html">{{item.goodName}}</a>
                                     <span>{{item.add_time | filterDate}}</span>
                                 </div>
                             </li>
                         </ul>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="section" v-for="items in content" :key="items.id">
-            <div class="main-tit">
-                <h2>{{items.catetitle}}</h2>
-                <p>
-                    <a href="/goods/43.html" v-for="itemSon in items.level2catelist" :key="itemSon.subcateid">{{itemSon.subcatetitle}}</a>
-                    <a href="/goods/40.html">更多
-                        <i>+</i>
-                    </a>
-                </p>
-            </div>
-            <div class="wrapper clearfix">
-                <div class="wrap-box">
-                    <ul class="img-list">
-                        <li v-for="itemGoods in items.datas" :key="itemGoods.artID">
-                            <router-link :to="'./detail/'+itemGoods.artID">
-                                <a href="#/site/goodsinfo/87" class="">
-                                    <div class="img-box">
-                                        <!-- 使用懒加载属性 -->
-                                        <img v-lazy="itemGoods.img_url">
-                                    </div>
-                                    <div class="info">
-                                        <h3>{{itemGoods.artTitle}}</h3>
-                                        <p class="price">
-                                            <b>{{itemGoods.sell_price}}</b>元</p>
-                                        <p>
-                                            <strong>库存 {{itemGoods.stock_quantity}}</strong>
-                                            <span>市场价：
-                                            <s>{{itemGoods.market_price}}</s>
-                                        </span>
-                                        </p>
-                                    </div>
-                                </a>
-                            </router-link>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -126,24 +88,41 @@ export default {
         //     spinner: "el-icon-loading",
         //     background: "rgba(0, 0, 0, 0.7)"
         // });
-        this.$axios
-            .get("/site/goods/gettopdata/goods")
-            .then(response => {
-                this.cateList = response.data.message.catelist;
-                this.sliderList = response.data.message.sliderlist;
-                this.topList = response.data.message.toplist;
+        // this.$axios
+        //     .get("/gemsell-api/goods/gettopdata/goods")
+        //     .then(response => {
+        //         // this.cateList = response.data.message.catelist;
+        //         this.sliderList = response.data.message.sliderlist;
+        //         this.topList = response.data.message.toplist;
 
-            });
-        this.$axios
-            .get("/site/goods/getgoodsgroup")
+        //     });
+        // this.$axios
+        //     .get("/gemsell-api/goods/getgoodsgroup")
+        //     .then(response => {
+        //         this.content = response.data.message;
+        //         //关闭加载动画
+        //         // let loadingInstance = Loading.service({ text: false });
+        //         // this.$nextTick(() => {
+        //         //     // 以服务的方式调用的 Loading 需要异步关闭 
+        //         //     loadingInstance.close();
+        //         // });
+        //     });
+
+            this.$axios
+            .post("/gemsell-api/type/getListByCondition")
             .then(response => {
-                this.content = response.data.message;
-                //关闭加载动画
-                // let loadingInstance = Loading.service({ text: false });
-                // this.$nextTick(() => {
-                //     // 以服务的方式调用的 Loading 需要异步关闭 
-                //     loadingInstance.close();
-                // });
+                console.log(response.data.data);
+                this.cateList = response.data.data;
+                this.content = response.data.data;
+            });
+            var data= {
+                status: 1
+            }
+            this.$axios
+            .post("/gemsell-api/goods/getListByCondition?pageIndex="+1+"&pageSize="+10,data, 1,10)
+            .then(response => {
+                this.sliderList = response.data.data.list;
+                this.topList = response.data.data.list;
             });
     }
 };

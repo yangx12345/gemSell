@@ -18,15 +18,13 @@ import Pay from '../components/pay'
 
 import paySuccess from '../components/paySuccess'
 
-import VipCenter from '../components/vipCenter'
-
 import OrderList from '../components/orderList'
 
 import OrderDetail from '../components/orderDetail'
 
 import axios from 'axios';
 //基础地址
-axios.defaults.baseURL = 'http://47.106.148.205:8899';
+axios.defaults.baseURL = 'http://192.168.24.145:8088';
 //让ajax携带cookie
 // 跨域请求时 是否会携带 凭证(cookie)
 axios.defaults.withCredentials = true;
@@ -80,14 +78,6 @@ let routes = [{
     //订单成功
     path: '/paySuccess/:id',
     component: paySuccess,
-    meta: {
-      checkLogin: true
-    }
-  },
-  {
-    //会员中心
-    path: '/vipCenter',
-    component: VipCenter,
     meta: {
       checkLogin: true
     }

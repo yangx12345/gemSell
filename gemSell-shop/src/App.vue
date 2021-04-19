@@ -6,7 +6,7 @@
             <div class="head-top">
                 <div class="section">
                     <div class="left-box">
-                        <span>在线购物商城</span>
+                        <span>在线宝石商城</span>
                         <a target="_blank" href="#"></a>
                         <a target="_blank" href="#"></a>
                     </div>
@@ -70,14 +70,6 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="search-box">
-                        <div class="input-box">
-                            <input id="keywords" name="keywords" type="text" onkeydown="if(event.keyCode==13){};" placeholder="输入关健字" x-webkit-speech="">
-                        </div>
-                        <a href="javascript:;">
-                            <i class="iconfont icon-search"></i>
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -103,9 +95,9 @@
                 </div>
                 <div class="foot-box">
                     <div class="copyright">
-                        <p>版权所有 在线商城 </p>
-                        <p>公司地址： 联系电话：</p>
-                        <p class="gray">Copyright © 2016-2018 myshop Corporation,All Rights Reserved.</p>
+                        <p>版权所有 宝石商城 </p>
+                        <p>公司地址：xxx 联系电话：xxx</p>
+                        <p class="gray">Copyright © 2021 myshop Corporation,All Rights Reserved.</p>
                     </div>
                     <div class="service">
                         <p>周一至周日 9:00-24:00</p>

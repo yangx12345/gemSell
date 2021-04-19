@@ -18,39 +18,17 @@
                                 </ProductZoomer>
                             </div>
                             <div class="goods-spec">
-                                <h1>{{goodsInfo.title}}</h1>
-                                <p class="subtitle">{{goodsInfo.sub_title}}</p>
+                                <h1>{{goodsInfo.goodName}}</h1>
+                                <p class="subtitle">{{goodsInfo.typeName}}</p>
                                 <div class="spec-box">
-                                    <dl>
-                                        <dt>货号</dt>
-                                        <dd id="commodityGoodsNo">{{goodsInfo.goods_no}}</dd>
-                                    </dl>
-                                    <dl>
-                                        <dt>市场价</dt>
-                                        <dd>
-                                            <s id="commodityMarketPrice">¥{{goodsInfo.market_price}}</s>
-                                        </dd>
-                                    </dl>
                                     <dl>
                                         <dt>销售价</dt>
                                         <dd>
-                                            <em id="commoditySellPrice" class="price">¥{{goodsInfo.sell_price}}</em>
+                                            <em id="commoditySellPrice" class="price">¥{{goodsInfo.price}}</em>
                                         </dd>
                                     </dl>
                                 </div>
                                 <div class="spec-box">
-                                    <dl>
-                                        <dt>购买数量</dt>
-                                        <dd>
-                                            <div class="stock-box">
-                                                <el-input-number v-model="buyCount" :min="1" :max="goodsInfo.stock_quantity" label="描述文字" size="small"></el-input-number>
-                                            </div>
-                                            <span class="stock-txt">
-                                                库存
-                                                <em id="commodityStockNum">{{goodsInfo.stock_quantity}}</em>件
-                                            </span>
-                                        </dd>
-                                    </dl>
                                     <dl>
                                         <dd>
                                             <div id="buyButton" class="btn-buy">
@@ -69,52 +47,10 @@
                                         <li>
                                             <a href="javascript:;" :class="{selected:isSelected}" @click="isSelected=true">商品介绍</a>
                                         </li>
-                                        <li>
-                                            <a href="javascript:;" :class="{selected:!isSelected}" @click="isSelected=false">商品评论</a>
-                                        </li>
                                     </ul>
                                 </div>
                             </Affix>
-                            <div class="tab-content entry" v-show="isSelected" v-html="goodsInfo.content">
-                            </div>
-                            <div class="tab-content" v-show="!isSelected">
-                                <div class="comment-box">
-                                    <div id="commentForm" name="commentForm" class="form-box">
-                                        <div class="avatar-box">
-                                            <i class="iconfont icon-user-full"></i>
-                                        </div>
-                                        <div class="conn-box">
-                                            <div class="editor">
-                                                <textarea id="txtContent" name="txtContent" v-model.trim="commentInfo" sucmsg=" " datatype="*10-1000" nullmsg="请填写评论内容！"></textarea>
-                                                <span class="Validform_checktip"></span>
-                                            </div>
-                                            <div class="subcon">
-                                                <input id="btnSubmit" name="submit" type="submit" value="提交评论" class="submit" @click="submitInfo">
-                                                <span class="Validform_checktip"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <ul id="commentList" class="list-box">
-                                        <p style="margin: 5px 0px 15px 69px; line-height: 42px; text-align: center; border: 1px solid rgb(247, 247, 247);" v-show="comments.length==0">暂无评论，快来抢沙发吧！</p>
-                                        <li v-for="item in comments" :key="item.id">
-                                            <div class="avatar-box">
-                                                <i class="iconfont icon-user-full"></i>
-                                            </div>
-                                            <div class="inner-box">
-                                                <div class="info">
-                                                    <span>{{item.user_name}}</span>
-                                                    <span>{{item.add_time | filterDate}}</span>
-                                                </div>
-                                                <p>{{item.content}}</p>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <div class="page-box" style="margin: 5px 0px 0px 62px;">
-                                        <div id="pagination" class="digg">
-                                            <Page :total="totalCount" show-sizer show-elevator placement="top" :page-size="5" :page-size-opts="[5, 6, 10, 13]" @on-change="changePage" @on-page-size-change="changePageSize" />
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="tab-content entry" v-show="isSelected" v-html="goodsInfo.introduce">
                             </div>
                         </div>
                     </div>
@@ -123,17 +59,16 @@
                             <div class="sidebar-box">
                                 <h4>推荐商品</h4>
                                 <ul class="side-img-list">
-                                    <li v-for="items in hotList" :key="items.id">
+                                    <li v-for="items in hotList" :key="items.goodId">
                                         <div class="img-box">
                                             <!-- <a href="#/site/goodsinfo/90" class=""> -->
-                                            <router-link :to="'/detail/'+items.id">
+                                            <router-link :to="'/detail/'+items.goodId">
                                                 <img :src="items.img_url">
                                             </router-link>
                                             <!-- </a> -->
                                         </div>
                                         <div class="txt-box">
-                                            <a href="#/site/goodsinfo/90" class="">{{items.title}}</a>
-                                            <span>{{items.add_time | filterDate}}</span>
+                                            <a href="#/site/goodsinfo/90" class="">{{items.goodName}}</a>
                                         </div>
                                     </li>
                                 </ul>
@@ -188,11 +123,10 @@ export default {
             //获取Id
             this.productId = this.$route.params.id;
             //获取数据
-             this.$axios.get(`/site/goods/getgoodsinfo/${this.productId}`)
+             this.$axios.get(`/gemsell-api/goods/getById/${this.productId}`)
                 .then(response => {
-                    this.goodsInfo = response.data.message.goodsinfo;
-                    this.hotList = response.data.message.hotgoodslist;
-                    this.imgList = response.data.message.imglist;
+                    this.goodsInfo = response.data
+                    this.imgList = this.goodsInfo.imgAddress;
                     // 处理 放大镜数据
                     let temArr = [];
                     // 循环处理数据
@@ -206,46 +140,11 @@ export default {
                     this.images.normal_size = temArr;
                      this.buyCount = 1;
                 });
-        },
-        //获取评论信息
-        getCommentsInfo() {
-            this.$axios.get(`/site/comment/getbypage/goods/${this.productId}?pageIndex=${this.pageNum}&pageSize=${this.pageSize}`)
-                .then(response => {
-                    this.comments = response.data.message;
-                    this.totalCount = response.data.totalcount;
-                })
-        },
-        // 页码变化事件
-        changePage(page) {
-            this.pageNum = page;
-            this.getCommentsInfo();
-        },
-        // 页容量改变事件
-        changePageSize(size) {
-            this.pageSize = size;
-            if (this.pageNum == 1) {
-                this.getCommentsInfo();
-            }
-        },
-        //提交评论
-        submitInfo() {
-            if (this.commentInfo == "") {
-                this.$Message.error('内容为空');
-                return;
-            }
-            //提交数据
-            this.$axios.post(`/site/validate/comment/post/goods/${this.productId}`, {
-                "commenttxt": this.commentInfo
-            }).then(response => {
-                //状态status为0时判断为成功,提交评论
-                if (response.data.status == 0) {
-                    this.$Message.success(response.data.message);
-                    this.getCommentsInfo();
-                    this.commentInfo = '';
-                } else {
-                    this.$Message.success(response.data.message);
-                }
-            })
+                this.$axios
+                    .post("/gemsell-api/goods/getListByCondition",data, 1,10)
+                    .then(response => {
+                        this.hotList = response.data;
+                    });
         },
         //移动图片动画
         addGoods(){

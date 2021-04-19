@@ -103,10 +103,9 @@
                                         <tr>
                                             <th colspan="2" align="left">商品信息</th>
                                             <th width="84" align="left">单价</th>
-                                            <th width="84" align="center">购买数量</th>
                                             <th width="104" align="left">金额(元)</th>
                                         </tr>
-                                        <tr v-for="(item, index) in message" :key="item.id">
+                                        <tr v-for="(item, index) in message" :key="index">
                                             <td width="68">
                                                 <!-- <a target="_blank" href="/goods/show-89.html"> -->
                                                 <router-link :to="'/detail/'+item.id">
@@ -291,7 +290,7 @@ export default {
     },
     //提交订单
     sureOrder(){
-        this.$axios.post("site/validate/order/setorder",this.orderForm)
+        this.$axios.post("gemsell-api/validate/order/setorder",this.orderForm)
         .then(response=>{
             //获取订单
             let orderid = response.data.message.orderid;
@@ -306,7 +305,7 @@ export default {
   created(){
     //保存id
     this.orderForm.goodsids = this.$route.params.id;
-    this.$axios.get(`site/validate/order/getgoodslist/${this.$route.params.id}`)
+    this.$axios.get(`gemsell-api/validate/order/getgoodslist/${this.$route.params.id}`)
     .then(response=>{
         //定义总金额
         let total = 0;

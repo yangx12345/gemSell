@@ -58,7 +58,9 @@ public class Goods implements Serializable {
      */
     @TableField("price")
     private BigDecimal price;
-
+    /**
+     * 进价
+     */
     @TableField("purchase_price")
     private BigDecimal purchasePrice;
 

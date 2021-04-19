@@ -45,8 +45,6 @@
                                         <a>选择</a>
                                     </th>
                                     <th align="left" colspan="2">商品信息</th>
-                                    <th width="84" align="left">单价</th>
-                                    <th width="104" align="center">数量</th>
                                     <th width="104" align="left">金额(元)</th>
                                     <th width="54" align="center">操作</th>
                                 </tr>

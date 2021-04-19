@@ -134,7 +134,7 @@
                           <th width="10%">数量</th>
                           <th width="10%">金额</th>
                         </tr>
-                        <tr v-for="(item,index) in goodsList" :key="item.id">
+                        <tr v-for="(item,index) in goodsList" :key="index">
                           <td width="60">
                             <img :src="item.imgurl" class="img">
                           </td>
