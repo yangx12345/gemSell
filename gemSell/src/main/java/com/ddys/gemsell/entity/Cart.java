@@ -46,6 +46,11 @@ public class Cart implements Serializable {
      */
     @TableField("user_id")
     private Integer userId;
+    /**
+     * 商品数量
+     */
+    @TableField("number")
+    private Integer number;
 
 
 }

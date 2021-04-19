@@ -12,7 +12,7 @@
 
     <sql id="selectVo">
         select
-        cart_id, good_id, good_name, price, user_id
+        cart_id, good_id, good_name, price, user_id,number
        from cart a
     </sql>
     <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.Cart" resultMap="BaseResultMap">
