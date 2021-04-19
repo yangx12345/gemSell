@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 19/04/2021 19:51:46
+ Date: 19/04/2021 21:54:41
 */
 
 SET NAMES utf8mb4;
@@ -99,11 +99,12 @@ CREATE TABLE `goods`  (
   `total_number` int(11) NULL DEFAULT NULL COMMENT '商品总数量',
   `remain_number` int(11) NULL DEFAULT NULL COMMENT '商品剩余数量',
   PRIMARY KEY (`good_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of goods
 -- ----------------------------
+INSERT INTO `goods` VALUES (1, '南非钻石', 4, '钻石', '南非钻石的故事可以追溯到 1870 年当时一个名为阿德里安·范·维克 Adriann van Wyk的农夫在北开普省金伯利Kimberley附近拥有一个农场 当他发现自己的孩子正在玩弄几颗钻石时一切便从此开始了。', '12', 1000000.00, 100000.00, 1, 1, 1);
 
 -- ----------------------------
 -- Table structure for order
@@ -541,11 +542,68 @@ CREATE TABLE `type`  (
   `type_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名',
   `parent_id` int(11) NOT NULL DEFAULT 0 COMMENT '一级分类父id为0',
   PRIMARY KEY (`type_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品分类' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 61 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品分类' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of type
 -- ----------------------------
+INSERT INTO `type` VALUES (2, '精品红宝石', 1);
+INSERT INTO `type` VALUES (4, '钻石', 0);
+INSERT INTO `type` VALUES (5, '彩色宝石', 0);
+INSERT INTO `type` VALUES (6, '玉石', 0);
+INSERT INTO `type` VALUES (8, '玛瑙', 0);
+INSERT INTO `type` VALUES (9, '石', 0);
+INSERT INTO `type` VALUES (10, '晶', 0);
+INSERT INTO `type` VALUES (11, '珊瑚', 0);
+INSERT INTO `type` VALUES (12, '珠', 0);
+INSERT INTO `type` VALUES (13, '珍珠', 12);
+INSERT INTO `type` VALUES (14, '养珠', 12);
+INSERT INTO `type` VALUES (15, '红珊瑚', 11);
+INSERT INTO `type` VALUES (16, '白珊瑚', 11);
+INSERT INTO `type` VALUES (17, '白水晶', 10);
+INSERT INTO `type` VALUES (18, '紫水晶', 10);
+INSERT INTO `type` VALUES (19, '黄水晶', 10);
+INSERT INTO `type` VALUES (20, '紫黄晶', 10);
+INSERT INTO `type` VALUES (21, '红水晶', 10);
+INSERT INTO `type` VALUES (22, '蓝水晶', 10);
+INSERT INTO `type` VALUES (23, '粉晶', 10);
+INSERT INTO `type` VALUES (24, '钛晶', 10);
+INSERT INTO `type` VALUES (25, '墨晶', 10);
+INSERT INTO `type` VALUES (26, '幽灵晶', 10);
+INSERT INTO `type` VALUES (27, '茶晶', 10);
+INSERT INTO `type` VALUES (28, '寿山石', 9);
+INSERT INTO `type` VALUES (29, '蛇纹石', 9);
+INSERT INTO `type` VALUES (30, '绿松石', 9);
+INSERT INTO `type` VALUES (31, '绿帘石', 9);
+INSERT INTO `type` VALUES (32, '青金石', 9);
+INSERT INTO `type` VALUES (33, '芙蓉石', 9);
+INSERT INTO `type` VALUES (34, '木变石', 9);
+INSERT INTO `type` VALUES (35, '孔雀石', 9);
+INSERT INTO `type` VALUES (36, '东陵石', 9);
+INSERT INTO `type` VALUES (37, '白玛瑙', 8);
+INSERT INTO `type` VALUES (38, '灰玛瑙', 8);
+INSERT INTO `type` VALUES (39, '红玛瑙', 8);
+INSERT INTO `type` VALUES (40, '灯草', 8);
+INSERT INTO `type` VALUES (41, '缠丝', 8);
+INSERT INTO `type` VALUES (42, '藻草', 8);
+INSERT INTO `type` VALUES (43, '白玉', 6);
+INSERT INTO `type` VALUES (44, '碧玉', 6);
+INSERT INTO `type` VALUES (45, '青玉', 6);
+INSERT INTO `type` VALUES (46, '墨玉', 6);
+INSERT INTO `type` VALUES (47, '黄玉', 6);
+INSERT INTO `type` VALUES (48, '绿玉', 6);
+INSERT INTO `type` VALUES (49, '京白玉', 6);
+INSERT INTO `type` VALUES (50, '新疆玉', 6);
+INSERT INTO `type` VALUES (51, '河南玉', 6);
+INSERT INTO `type` VALUES (52, '翡翠', 6);
+INSERT INTO `type` VALUES (53, '红宝石', 5);
+INSERT INTO `type` VALUES (54, '蓝宝石', 5);
+INSERT INTO `type` VALUES (55, '祖母绿', 5);
+INSERT INTO `type` VALUES (56, '海蓝宝石', 5);
+INSERT INTO `type` VALUES (57, '金绿宝石', 5);
+INSERT INTO `type` VALUES (58, '碧玺', 5);
+INSERT INTO `type` VALUES (59, '金水菩提', 5);
+INSERT INTO `type` VALUES (60, '石榴石', 5);
 
 -- ----------------------------
 -- Table structure for user
@@ -564,7 +622,7 @@ CREATE TABLE `user`  (
   `update_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user

@@ -66,6 +66,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>implements Use
     }
 
     @Override
+    public User getByUsername(String userName) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("user_id").eq("user_name",userName);
+        return baseMapper.selectOne(queryWrapper);
+    }
+
+    @Override
     public String getPasswordByUserName(String userName)
     {
         if (StringUtils.isEmpty(userName))

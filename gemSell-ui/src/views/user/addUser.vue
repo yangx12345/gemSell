@@ -1,17 +1,20 @@
 <template>
   <div class="app-container">
     <el-dialog
-      :title="this.currentUser.userId? '编辑用户':'添加用户'"
-      :visible.sync="dialogFormVisible"
-      :before-close="onCancel()"
+      :title="dialogForm.dialogFormTitle"
+      :visible.sync="dialogForm.dialogFormVisible"
       :close-on-click-modal="false"
-      >
+      @before-close="onCancel()"
+    >
       <el-form ref="currentUser" :model="currentUser" :inline="true" label-width="120px" :rules="userRules">
         <el-form-item label="登录名" prop="userName">
           <el-input v-model="currentUser.userName" placeholder="请输入" :disabled="type==='update'" />
         </el-form-item>
-        <el-form-item v-if="!this.currentUser.userId" label="登录密码" prop="password">
+        <el-form-item v-if="!currentUser.userId" label="登录密码" prop="password">
           <el-input v-model="currentUser.password" placeholder="请输入" show-password />
+        </el-form-item>
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="currentUser.name" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="性别">
           <el-radio-group v-model="currentUser.sex" placeholder="请输入">
@@ -31,20 +34,19 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary"  @click="onSubmit">{{ this.currentUser.userId?'保存':'添加' }}</el-button>
+        <el-button type="primary" @click="onSubmit">{{ currentUser.userId?'保存':'添加' }}</el-button>
       </span>
     </el-dialog>
-    
   </div>
 </template>
 
 <script>
-import { add, getById, update } from '@/api/userManage.js'
+import { add, update } from '@/api/userManage.js'
 export default {
   props: {
-    dialogFormVisible: {
-      type: Boolean,
-      default: false
+    dialogForm: {
+      type: Object,
+      default: null
     },
     currentUser: {
       type: Object,
@@ -57,17 +59,17 @@ export default {
         userName: [{ required: true, trigger: 'blur', message: '请输入登录名' }, { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }],
         password: [{ required: true, trigger: 'blur', message: '请输入密码' }, { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }],
         role: [{ required: true, trigger: 'blur', message: '请选择角色' }],
-        phone: [{ pattern: /^1[3|4|5|7|8][0-9]{9}$/, trigger: 'blur', message: '电话号码不合法' }],
+        phone: [{ pattern: /^1[3|4|5|7|8][0-9]{9}$/, trigger: 'blur', message: '电话号码不合法' }]
       },
       type: ''
     }
   },
   methods: {
-    onCancel(){
-      if(this.$refs['currentUser']){
-      this.$refs['currentUser'].clearValidate() 
+    onCancel() {
+      if (this.$refs['currentUser']) {
+        this.$refs['currentUser'].clearValidate()
       }
-      this.$emit('update:dialogFormVisible', false)
+      this.dialogForm.dialogFormVisible = false
     },
     // 提交
     onSubmit() {
@@ -80,7 +82,7 @@ export default {
                   message: '增加成功',
                   type: 'success'
                 })
-                this.$emit('update:dialogFormVisible', false)
+                this.dialogForm.dialogFormVisible = false
                 this.$emit('getList')
               }
             })
@@ -91,7 +93,7 @@ export default {
                   message: '更新成功',
                   type: 'success'
                 })
-                this.$emit('update:dialogFormVisible', false)
+                this.dialogForm.dialogFormVisible = false
                 this.$emit('getList')
               }
             })

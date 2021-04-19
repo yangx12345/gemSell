@@ -2,17 +2,17 @@
   <div class="container">
     <el-form ref="form" :model="form" :inline="true" label-min-width="80px">
       <el-form-item label="用户姓名">
-        <el-input v-model="form.userName" />
+        <el-input v-model="form.name" clearable />
       </el-form-item>
       <el-form-item label="用户手机号">
-        <el-input v-model="form.phone" />
+        <el-input v-model="form.phone" clearable />
       </el-form-item>
       <el-form-item label="用户角色">
-          <el-select v-model="form.role" placeholder="请选择用户角色">
-            <el-option label="系统管理员" :value="'0'"></el-option>
-            <el-option label="鉴定人" :value="'1'"></el-option>
-            <el-option label="普通用户" :value="'2'"></el-option>
-          </el-select>
+        <el-select v-model="form.role" placeholder="请选择用户角色" clearable>
+          <el-option label="系统管理员" :value="'0'" />
+          <el-option label="鉴定人" :value="'1'" />
+          <el-option label="普通用户" :value="'2'" />
+        </el-select>
       </el-form-item>
       <el-button type="primary" @click="getList()">查询</el-button>
       <el-button @click="resetData">重置</el-button>
@@ -37,6 +37,12 @@
       />
       <el-table-column
         prop="userName"
+        label="登录名"
+        min-width="120"
+        align="center"
+      />
+      <el-table-column
+        prop="name"
         label="姓名"
         min-width="120"
         align="center"
@@ -84,13 +90,13 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    <addUser :dialogFormVisible.sync="dialogFormVisible" :currentUser="currentUser" @getList="getList"></addUser>
+    <addUser :dialog-form="dialogForm" :current-user="currentUser" @getList="getList" />
   </div>
 
 </template>
 
 <script>
-import { getListByCondition, batchDelete, restPassword, deleteById, update } from '@/api/userManage'
+import { getListByCondition, batchDelete, restPassword, deleteById } from '@/api/userManage'
 import addUser from './addUser'
 export default {
   components: {
@@ -105,12 +111,16 @@ export default {
       pageSize: 10,
       ids: [],
       total: 0,
-      dialogFormVisible: false,
+      dialogForm: {
+        dialogFormVisible: false,
+        dialogFormTitle: ''
+      },
       currentUser: {
         userName: '',
         password: '',
         userId: '',
         sex: '',
+        name: '',
         role: '',
         phone: ''
       }
@@ -121,10 +131,10 @@ export default {
   },
   methods: {
     // 角色翻译
-    roleFormatter(row){
-      if(row.role === '0') return '管理员'
-      if(row.role === '1') return '鉴定师'
-      if(row.role === '2') return '普通用户'
+    roleFormatter(row) {
+      if (row.role === '0') return '管理员'
+      if (row.role === '1') return '鉴定师'
+      if (row.role === '2') return '普通用户'
     },
     // 重置密码
     openMessage(row) {
@@ -184,20 +194,23 @@ export default {
         })
       })
     },
-    addUser(){
+    addUser() {
       this.currentUser = {
         userName: '',
         password: '',
+        name: '',
         userId: '',
-        sex: '',
-        role: '',
+        sex: '男',
+        role: '2',
         phone: ''
       }
-      this.dialogFormVisible = true
+      this.dialogForm.dialogFormVisible = true
+      this.dialogForm.dialogFormTitle = '增加用户'
     },
     updateClick(row) {
       this.currentUser = { ...row }
-      this.dialogFormVisible = true
+      this.dialogForm.dialogFormVisible = true
+      this.dialogForm.dialogFormTitle = '修改用户'
     },
     // 重置
     resetData() {
@@ -205,7 +218,6 @@ export default {
       this.getList()
     },
     getList() {
-      if (!this.form.departmentId) this.form.departmentId = this.$store.getters.deptId
       getListByCondition(this.form, this.pageIndex, this.pageSize).then(resp => {
         this.tableData = resp.data.list
         this.total = resp.data.total

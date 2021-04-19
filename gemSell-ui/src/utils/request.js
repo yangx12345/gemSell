@@ -19,8 +19,8 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-        //将token放到请求头发送给服务器,将tokenkey放在请求头中
-        config.headers['token'] = getToken();
+      // 将token放到请求头发送给服务器,将tokenkey放在请求头中
+      config.headers['token'] = getToken()
     }
     return config
   },
@@ -49,7 +49,7 @@ service.interceptors.response.use(
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 1) {
       Message({
-        message: res.message || 'Error',
+        message: res.msg || 'Error',
         type: 'error',
         duration: 5 * 1000
       })

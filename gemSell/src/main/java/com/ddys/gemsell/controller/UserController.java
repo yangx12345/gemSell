@@ -67,6 +67,12 @@ public class UserController {
         if(entity==null){
 		return ResultUtil.parameterError();
         }
+        User findUser = userService.getByUsername(entity.getUserName());
+        if (findUser!=null)
+        {
+            return ResultUtil.error("用户名已存在");
+        }
+        entity.setPassword(SecureUtil.md5(entity.getPassword()));
         return ResultUtil.judgmentResult(userService.saveEntity(entity));
     }
 
