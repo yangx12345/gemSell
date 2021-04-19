@@ -12,11 +12,13 @@
                     <result column="status" property="status"/>
                     <result column="create_time" property="createTime"/>
                     <result column="success_time" property="successTime"/>
+                    <result column="number" property="number"/>
+                    <result column="total_price" property="totalPrice"/>
         </resultMap>
 
     <sql id="selectVo">
         select
-        order_id, user_id, user_name, good_id, good_name, price, status, create_time, success_time
+        order_id, user_id, user_name, good_id, good_name, price, status, create_time, success_time,number,total_price
        from order a
     </sql>
     <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.Order" resultMap="BaseResultMap">

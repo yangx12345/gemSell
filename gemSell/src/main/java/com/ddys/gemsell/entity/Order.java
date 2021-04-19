@@ -49,7 +49,7 @@ public class Order implements Serializable {
     private String goodName;
 
     /**
-     * 价格
+     * 单价
      */
     @TableField("price")
     private BigDecimal price;
@@ -72,5 +72,16 @@ public class Order implements Serializable {
     @TableField("success_time")
     private LocalDateTime successTime;
 
+    /**
+     * 商品数量
+     */
+    @TableField("number")
+    private Integer number;
+
+    /**
+     * 单价
+     */
+    @TableField("total_price")
+    private BigDecimal totalPrice;
 
 }

@@ -8,6 +8,7 @@
                     <result column="good_name" property="goodName"/>
                     <result column="price" property="price"/>
                     <result column="user_id" property="userId"/>
+                    <result column="number" property="number"/>
         </resultMap>
 
     <sql id="selectVo">

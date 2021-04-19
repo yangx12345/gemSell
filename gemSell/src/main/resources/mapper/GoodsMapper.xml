@@ -12,6 +12,8 @@
                     <result column="price" property="price"/>
                     <result column="purchase_price" property="purchasePrice"/>
                     <result column="status" property="status"/>
+                    <result column="total_number" property="totalNumber"/>
+                    <result column="remain_number" property="remainNumber"/>
         </resultMap>
 
     <sql id="selectVo">

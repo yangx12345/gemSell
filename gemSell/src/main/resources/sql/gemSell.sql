@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : yang
  Source Server Type    : MySQL
  Source Server Version : 50728
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 16/04/2021 15:25:34
+ Date: 19/04/2021 19:51:46
 */
 
 SET NAMES utf8mb4;
@@ -74,6 +74,7 @@ CREATE TABLE `cart`  (
   `good_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
   `price` decimal(10, 2) NOT NULL COMMENT '价格',
   `user_id` int(11) NOT NULL COMMENT '用户id',
+  `number` int(11) NULL DEFAULT NULL COMMENT '商品数量',
   PRIMARY KEY (`cart_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车' ROW_FORMAT = Dynamic;
 
@@ -90,12 +91,13 @@ CREATE TABLE `goods`  (
   `good_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
   `type_id` int(11) NULL DEFAULT NULL COMMENT '类型id',
   `type_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '类型名称',
-  `
-introduce` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品介绍',
+  `introduce` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品介绍',
   `img_address` json NULL COMMENT '图片地址',
   `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '价格',
   `purchase_price` decimal(10, 2) NULL DEFAULT NULL,
   `status` int(1) NULL DEFAULT NULL COMMENT '商品状态（0未发布，1已发布未售，2已售）',
+  `total_number` int(11) NULL DEFAULT NULL COMMENT '商品总数量',
+  `remain_number` int(11) NULL DEFAULT NULL COMMENT '商品剩余数量',
   PRIMARY KEY (`good_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品' ROW_FORMAT = Dynamic;
 
@@ -113,10 +115,12 @@ CREATE TABLE `order`  (
   `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户名',
   `good_id` int(11) NOT NULL COMMENT '商品id',
   `good_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
-  `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '价格',
+  `price` decimal(10, 2) NOT NULL COMMENT '单价',
   `status` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '状态，0待付款，1已付代发，2已发，3取消，4完成',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `success_time` datetime(0) NULL DEFAULT NULL COMMENT '完成时间（包含完成和取消订单时间）',
+  `number` int(11) NULL DEFAULT NULL COMMENT '商品数量',
+  `total_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '商品总价',
   PRIMARY KEY (`order_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单' ROW_FORMAT = Dynamic;
 
