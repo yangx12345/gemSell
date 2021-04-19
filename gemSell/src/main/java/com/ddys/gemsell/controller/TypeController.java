@@ -1,6 +1,7 @@
 package com.ddys.gemsell.controller;
 
 
+import com.ddys.gemsell.common.form.SelectForm;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -96,6 +97,13 @@ public class TypeController {
 		  return ResultUtil.parameterError();
         }
         return ResultUtil.judgmentResult(typeService.deleteByIds(ids));
+    }
+
+    @GetMapping("getTypeSelect")
+    public Result getTypeSelect()
+    {
+        List<SelectForm> list= typeService.getTypeSelect();
+        return ResultUtil.success(list);
     }
 }
 

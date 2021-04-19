@@ -1,5 +1,6 @@
 package com.ddys.gemsell.service;
 
+import com.ddys.gemsell.common.form.SelectForm;
 import com.ddys.gemsell.entity.Type;
 import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
@@ -37,4 +38,5 @@ public interface TypeService extends IService<Type> {
      */
     public boolean deleteByIds(String ids);
 
+	List<SelectForm> getTypeSelect();
 }
