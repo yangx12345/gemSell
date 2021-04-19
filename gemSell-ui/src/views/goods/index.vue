@@ -8,11 +8,11 @@
         <el-input v-model="form.typeName" />
       </el-form-item>
       <el-form-item label="商品状态">
-          <el-select v-model="form.status" placeholder="请选择商品状态">
-            <el-option label="未发布" :value="'0'"></el-option>
-            <el-option label="已发布未售" :value="'1'"></el-option>
-            <el-option label="已售" :value="'2'"></el-option>
-          </el-select>
+        <el-select v-model="form.status" placeholder="请选择商品状态">
+          <el-option label="未发布" :value="'0'" />
+          <el-option label="已发布未售" :value="'1'" />
+          <el-option label="已售" :value="'2'" />
+        </el-select>
       </el-form-item>
       <el-button type="primary" @click="getList()">查询</el-button>
       <el-button @click="resetData">重置</el-button>
@@ -48,7 +48,7 @@
         align="center"
       />
       <el-table-column
-        prop="role"
+        prop="introduce"
         label="商品介绍"
         align="center"
         min-width="240"
@@ -90,14 +90,14 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    <addgood :dialogFormVisible.sync="dialogFormVisible" :currentgood="currentgood" :options="options" @getList="getList"></addgood>
+    <addgood :dialog-form-visible.sync="dialogFormVisible" :currentgood="currentgood" :options="options" @getList="getList" />
   </div>
 
 </template>
 
 <script>
 import { getListByCondition, batchDelete, deleteById } from '@/api/goods'
-import {getSelectTree} from '@/api/type'
+import { getSelectTree } from '@/api/type'
 import addgood from './addGoods'
 export default {
   components: {
@@ -115,11 +115,8 @@ export default {
       dialogFormVisible: false,
       currentgood: {
         goodName: '',
-        password: '',
         goodId: '',
-        sex: '',
-        role: '',
-        phone: ''
+        imgAddress: '12'
       },
       options: []
     }
@@ -132,10 +129,11 @@ export default {
   },
   methods: {
     // 角色翻译
-    statusFormatter(row){
-      if(row.status === '0') return '未发布'
-      if(row.status === '1') return '已发布未售'
-      if(row.status === '2') return '已售'
+    statusFormatter(row) {
+      console.log(row)
+      if (row.status === 0) return '未发布'
+      if (row.status === 1) return '已发布未售'
+      if (row.status === 2) return '已售'
     },
     handleSizeChange(val) {
       this.pagesize = val
@@ -168,13 +166,13 @@ export default {
         })
       })
     },
-    addgood(){
+    addgood() {
       this.currentgood = {
         goodName: '',
         typeId: '',
         goodId: '',
         introduce: '',
-        imgAddress: '',
+        imgAddress: '12',
         price: '',
         status: '',
         purchasePrice: ''

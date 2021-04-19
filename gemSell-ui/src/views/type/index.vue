@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <el-form  ref="form" :model="form" :inline="true" label-width="80px">
+    <el-form ref="form" :model="form" :inline="true" label-width="80px">
       <!-- <el-form-item label="分类名称" prop="typeName">
         <el-input v-model="form.typeName" clearable />
       </el-form-item>
@@ -8,14 +8,15 @@
       <el-button @click="resetData()">重置</el-button> -->
       <el-button type="primary" @click="add()">添加</el-button>
     </el-form>
-    
+
     <el-table
-    :data="tableData"
-    style="width: 100%;margin: 20px 0;"
-    row-key="typeId"
-    border
-    default-expand-all
-    :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+      :data="tableData"
+      style="width: 100%;margin: 20px 0;"
+      row-key="typeId"
+      border
+      default-expand-all
+      :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+    >
       <el-table-column
         prop="typeId"
         label="编号"
@@ -31,7 +32,7 @@
           <el-button type="text" size="small" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
-  </el-table>
+    </el-table>
     <div>
       <el-dialog :title="addOrupdate === 'add' ? '增加分类':'修改分类'" :visible.sync="dialogFormVisible" @close="cancale">
         <el-form ref="addForm" :model="entity" :rules="rules">
@@ -76,7 +77,7 @@ export default {
         typeId: null,
         typeName: '',
         parentId: null
-        },
+      },
       dialogFormVisible: false,
       formLabelWidth: '100px',
       rules: {
@@ -103,11 +104,10 @@ export default {
       this.getList()
     },
     add(row) {
-      if(row){
+      if (row) {
         const { typeId } = row
         this.entity.parentId = typeId
-      }
-      else {
+      } else {
         this.entity.parentId = 0
       }
       this.dialogFormVisible = true

@@ -28,7 +28,7 @@ const mutations = {
   },
   SET_ROLE: (state, role) => {
     state.role = role
-  },
+  }
 }
 
 const actions = {
@@ -55,10 +55,10 @@ const actions = {
         if (!data) {
           return reject('Verification failed, please Login again.')
         }
-        if(data.role === 2) {
+        if (data.role === 2) {
           commit('logout')
-          Message.error('非管理员和鉴定人员不能登录后台管理系统!');
-          Router.push(`/login?redirect=${Router.fullPath}`)
+          this.$message.error('非管理员和鉴定人员不能登录后台管理系统!')
+          this.$router.push(`/login?redirect=${Router.fullPath}`)
           return
         }
 
@@ -85,10 +85,10 @@ const actions = {
       // }).catch(error => {
       //   reject(error)
       // })
-        removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
+      removeToken() // must remove  token  first
+      resetRouter()
+      commit('RESET_STATE')
+      resolve()
     })
   },
 
