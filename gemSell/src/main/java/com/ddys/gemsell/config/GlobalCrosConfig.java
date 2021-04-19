@@ -42,6 +42,8 @@ public class GlobalCrosConfig {
                 registry.addInterceptor(authenticationInterceptor)
                         .addPathPatterns("/**")
                         .excludePathPatterns("/user/login")
+                        .excludePathPatterns("/type/getListByCondition")
+                        .excludePathPatterns("/goods/getListByCondition")
                         .excludePathPatterns("/user/register");
             }
         };
