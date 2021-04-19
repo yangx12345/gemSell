@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { getListByCondition, batchDelete, restPassword, deleteById, update } from '@/api/employee'
+import { getListByCondition, batchDelete, restPassword, deleteById, update } from '@/api/userManage'
 import addUser from './addUser'
 export default {
   components: {

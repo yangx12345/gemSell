@@ -49,8 +49,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { getListByCondition, add, update, deleteById } from '@/api/department'
+import { getListByCondition, add, update, deleteById } from '@/api/type'
 export default {
 
   data() {

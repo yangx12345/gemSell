@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import User from '@/views/user/index'
 import Type from "@/views/type/index"
-import Goods from "@/views/goods"
+import Goods from "@/views/goods/index"
 import Order from "@/views/order"
 import Authenticate from "@/views/authenticate"
 Vue.use(Router)
@@ -47,9 +47,9 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: "/user",
+    path: "/",
     component: Layout,
-    redirect: '/user/user',
+    redirect: '/user',
     children: [
       {
         path: "user",
@@ -118,6 +118,7 @@ export const constantRoutes = [
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
+  mode:'history',
   routes: constantRoutes
 })
 

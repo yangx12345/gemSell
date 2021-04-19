@@ -4,6 +4,7 @@
       :title="this.currentUser.userId? '编辑用户':'添加用户'"
       :visible.sync="dialogFormVisible"
       :before-close="onCancel()"
+      :close-on-click-modal="false"
       >
       <el-form ref="currentUser" :model="currentUser" :inline="true" label-width="120px" :rules="userRules">
         <el-form-item label="登录名" prop="userName">
@@ -38,7 +39,7 @@
 </template>
 
 <script>
-import { add, getById, update } from '@/api/employee.js'
+import { add, getById, update } from '@/api/userManage.js'
 export default {
   props: {
     dialogFormVisible: {
@@ -97,11 +98,6 @@ export default {
           }
         }
       })
-    },
-    onCancel() {
-      if(this.$refs['currentUser']){
-        this.$refs['currentUser'].resetFields()
-      }
     }
   }
 }
