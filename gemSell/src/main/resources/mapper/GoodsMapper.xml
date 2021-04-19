@@ -7,9 +7,7 @@
                     <result column="good_name" property="goodName"/>
                     <result column="type_id" property="typeId"/>
                     <result column="type_name" property="typeName"/>
-                    <result column="
-introduce" property="
-introduce"/>
+                    <result column="introduce" property="introduce"/>
                     <result column="img_address" property="imgAddress"/>
                     <result column="price" property="price"/>
                     <result column="purchase_price" property="purchasePrice"/>
@@ -18,8 +16,7 @@ introduce"/>
 
     <sql id="selectVo">
         select
-        good_id, good_name, type_id, type_name, 
-introduce, img_address, price, purchase_price, status
+        good_id, good_name, type_id, type_name, introduce, img_address, price, purchase_price, status,total_number,remain_number
        from goods a
     </sql>
     <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.Goods" resultMap="BaseResultMap">

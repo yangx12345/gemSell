@@ -70,5 +70,17 @@ public class Goods implements Serializable {
     @TableField("status")
     private Integer status;
 
+    /**
+     * 商品总数量
+     */
+    @TableField("total_number")
+    private Integer totalNumber;
+
+    /**
+     * 商品剩余数量
+     */
+    @TableField("remain_number")
+    private Integer remainNumber;
+
 
 }
