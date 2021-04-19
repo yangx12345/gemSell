@@ -1,6 +1,7 @@
 package com.ddys.gemsell.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ddys.gemsell.common.form.SelectForm;
 import com.ddys.gemsell.entity.Type;
 import com.ddys.gemsell.mapper.TypeMapper;
 import com.ddys.gemsell.service.TypeService;
@@ -11,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import cn.hutool.core.convert.Convert;
 
 
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,6 +54,34 @@ public class TypeServiceImpl extends ServiceImpl<TypeMapper, Type>implements Typ
     @Transactional(readOnly=false,rollbackFor=Exception.class)
     public boolean deleteById(Integer id){
         return this.removeById(id);
+    }
+
+    @Override
+    public List<SelectForm> getTypeSelect() {
+        QueryWrapper<Type> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("type_id","type_name").eq("parent_id","0");
+        List<Type> list = baseMapper.selectList(queryWrapper);
+        List<SelectForm> selectFormList = new ArrayList<>();
+        for(Type type:list)
+        {
+            SelectForm selectForm = new SelectForm();
+            selectForm.setId(type.getTypeId());
+            selectForm.setLabel(type.getTypeName());
+            QueryWrapper<Type> queryWrapper1 = new QueryWrapper<>();
+            queryWrapper1.select("type_id","type_name").eq("parent_id",type.getTypeId());
+            List<Type> list1 = baseMapper.selectList(queryWrapper1);
+            List<SelectForm> selectFormList1 = new ArrayList<>();
+            for (Type type1:list1)
+            {
+                SelectForm selectForm1 = new SelectForm();
+                selectForm1.setId(type1.getTypeId());
+                selectForm1.setLabel(type1.getTypeName());
+                selectFormList1.add(selectForm1);
+            }
+            selectForm.setChildren(selectFormList1);
+            selectFormList.add(selectForm);
+        }
+        return selectFormList;
     }
 
     @Override

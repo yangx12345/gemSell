@@ -161,5 +161,36 @@ public class UserController {
         return ResultUtil.judgmentResult(userService.updateEntity(user));
     }
 
+    @PostMapping("register")
+    public Result register(@RequestBody User user)
+    {
+        if (user == null || StringUtils.isBlank(user.getUserName()) || StringUtils.isBlank(user.getPassword()))
+        {
+            return ResultUtil.parameterError();
+        }
+        User findUser  =  userService.getByUsernameAndPassword(user.getUserName(),user.getPassword());
+        if (findUser != null)
+        {
+            return ResultUtil.error("用户名已存在");
+        }
+        return ResultUtil.judgmentResult(userService.saveEntity(user));
+    }
+
+    @PostMapping("changePassword")
+    public Result changePassword(@RequestParam String oldPassword,@RequestParam String newPassword,@RequestParam String userName)
+    {
+        if (StringUtils.isBlank(oldPassword) || StringUtils.isBlank(newPassword) || StringUtils.isBlank(userName))
+        {
+            return ResultUtil.parameterError();
+        }
+        User user  =  userService.getByUsernameAndPassword(userName,oldPassword);
+        if (user == null)
+        {
+            return ResultUtil.error("用户不存在或密码错误");
+        }
+        user.setPassword(SecureUtil.md5(newPassword));
+        return ResultUtil.judgmentResult(userService.updateEntity(user));
+    }
+
 }
 
