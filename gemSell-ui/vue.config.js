@@ -38,18 +38,15 @@ module.exports = {
     },
     proxy: {
       '/api': {    //将www.exaple.com印射为/apis
-          target: 'http://localhost:8088',  // 接口域名
+          target: 'http://192.168.24.145:8088',  // 接口域名
           secure: false,  // 如果是https接口，需要配置这个参数
           changeOrigin: true,  //是否跨域,
-                  pathRewrite: {
-                      '^/api': '/gemsell-api'
-                      // pathRewrite: {'^/api': '/'} 重写之后url为 http://localhost:8080/xxxx
-                      // pathRewrite: {'^/api': '/api'} 重写之后url为 http://localhost:8080/api/xxxx
-                    }          
+          pathRewrite: {
+              '^/api': '/gemsell-api'
+            }          
       },
 
-    },  
-    before: require('./mock/mock-server.js')
+    }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

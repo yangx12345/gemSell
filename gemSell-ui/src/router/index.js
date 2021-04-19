@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import User from '@/views/user/index'
-import Type from '@/views/type/index'
-import Goods from '@/views/goods'
-import Order from '@/views/order'
-import Authenticate from '@/views/authenticate'
+import Type from "@/views/type/index"
+import Goods from "@/views/goods/index"
+import Order from "@/views/order"
+import Authenticate from "@/views/authenticate"
 Vue.use(Router)
 
 /* Layout */
@@ -47,12 +47,12 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/user',
+    path: "/",
     component: Layout,
-    redirect: '/user/user',
+    redirect: '/user',
     children: [
       {
-        path: 'user',
+        path: "user",
         name: '用户管理',
         component: User,
         meta: { title: '用户管理', icon: 'el-icon-user-solid' }
@@ -60,51 +60,51 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/type',
+    path: "/type",
     component: Layout,
     redirect: '/type/type',
     children: [
       {
-        path: 'type',
-        component: Type,
+        path: "type",
+        component:Type,
         meta: { title: '分类管理', icon: 'el-icon-set-up' }
       }
     ]
   },
   {
-    path: '/goods',
+    path: "/goods",
     component: Layout,
     redirect: '/goods/goods',
     children: [
       {
-        path: 'goods',
-        name: '商品管理',
-        component: Goods,
+        path: "goods",
+        name: "商品管理",
+        component:  Goods,
         meta: { title: '商品管理', icon: 'el-icon-s-goods' }
       }
     ]
   },
   {
-    path: '/order',
+    path: "/order",
     component: Layout,
     redirect: '/order/order',
     children: [
       {
-        path: 'order',
-        name: '订单管理',
-        component: Order,
+        path: "order",
+        name: "订单管理",
+        component:  Order,
         meta: { title: '订单管理', icon: 'el-icon-s-finance' }
       }
     ]
   },
   {
-    path: '/authenticate',
+    path: "/authenticate",
     component: Layout,
     redirect: '/authenticate/authenticate',
     children: [
       {
-        path: 'authenticate',
-        name: '鉴定管理',
+        path: "authenticate",
+        name: "鉴定管理",
         component: Authenticate,
         meta: { title: '鉴定管理', icon: 'el-icon-s-cooperation' }
       }
@@ -118,6 +118,7 @@ export const constantRoutes = [
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
+  mode:'history',
   routes: constantRoutes
 })
 
