@@ -53,3 +53,9 @@ export function batchDelete(ids) {
   })
 }
 
+export function getGoodsList() {
+  return request({
+    url: '/goods/getGoodsList',
+    method: 'get'
+  })
+}

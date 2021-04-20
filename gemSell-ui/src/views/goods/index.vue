@@ -205,9 +205,6 @@ export default {
         })
       })
     },
-    delPicture(row) {
-
-    },
     viewhandleClose() {
       this.viewVisible = false
       this.imgOptions = []
