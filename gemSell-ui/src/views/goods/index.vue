@@ -89,11 +89,12 @@
         fixed="right"
         label="操作"
         align="center"
-        min-width="120"
+        min-width="200"
       >
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="updateClick(scope.row)">编辑</el-button>
           <el-button type="text" size="small" @click="handleClick(scope.row)">删除</el-button>
+          <el-button type="text" size="small" @click="viewClick(scope.row)">图片预览</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -110,6 +111,19 @@
       />
     </div>
     <addgood :dialog-form-visible.sync="dialogFormVisible" :currentgood="currentgood" :options="options" @getList="getList" />
+    <el-dialog
+      title="商品图片预览"
+      :visible.sync="viewVisible"
+      width="60%"
+      :before-close="viewhandleClose"
+    >
+      <el-carousel height="450px">
+        <el-carousel-item v-for="item in imgOptions" :key="item.id">
+          <img :src="item.url">
+        </el-carousel-item>
+      </el-carousel>
+
+    </el-dialog>
   </div>
 
 </template>
@@ -142,7 +156,9 @@ export default {
         goodId: '',
         imgAddress: '12'
       },
-      options: []
+      options: [],
+      viewVisible: false,
+      imgOptions: []
     }
   },
   mounted() {
@@ -154,7 +170,6 @@ export default {
   methods: {
     // 角色翻译
     statusFormatter(row) {
-      console.log(row)
       if (row.status === 0) return '未发布'
       if (row.status === 1) return '已发布未售'
       if (row.status === 2) return '已售'
@@ -190,13 +205,20 @@ export default {
         })
       })
     },
+    delPicture(row) {
+
+    },
+    viewhandleClose() {
+      this.viewVisible = false
+      this.imgOptions = []
+    },
     addgood() {
       this.currentgood = {
         goodName: '',
         typeId: null,
         goodId: '',
         introduce: '',
-        imgAddress: '12',
+        imgAddress: JSON.stringify([{ name: 'defaultImg.jpg', url: 'http://localhost:8088/gemsell-api/imgs/defaultImg.jpg' }]),
         price: '',
         status: '',
         purchasePrice: ''
@@ -211,6 +233,10 @@ export default {
     resetData() {
       this.form = {}
       this.getList()
+    },
+    viewClick(row) {
+      this.imgOptions = JSON.parse(row.imgAddress)
+      this.viewVisible = true
     },
     getList() {
       if (!this.form.departmentId) this.form.departmentId = this.$store.getters.deptId

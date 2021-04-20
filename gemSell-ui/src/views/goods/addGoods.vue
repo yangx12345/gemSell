@@ -4,6 +4,7 @@
       :title="currentgood.goodId? '编辑商品':'添加商品'"
       width="60%"
       :visible.sync="dialogFormVisible"
+      @open="open()"
       @before-close="onCancel()"
     >
       <el-form ref="currentgood" :model="currentgood" label-width="120px" :rules="userRules">
@@ -54,21 +55,22 @@
           <el-upload
             :on-success="handleSuccess"
             :on-error="handleError"
-            :limit="1"
-            :with-credentials="true"
+            :on-remove="handleRemove"
+            :before-upload="handleUpload"
+            :limit="5"
+            multiple
+            :headers="head"
             :data="data"
+            :file-list="fileList"
             accept=".jpg,.jpeg,.png"
             class="upload-demo"
-            action="http://192.168.24.145:8088/ho-api/op/food/foodImageUpload"
+            list-type="picture"
+            action="http://localhost:8088/gemsell-api/goods/goodsImageUpload"
           >
             <el-button
               size="small"
               type="primary"
             >点击上传</el-button>
-            <div
-              slot="tip"
-              class="el-upload__tip"
-            >只能上传jpg/png/jpeg文件，且不超过500kb</div>
           </el-upload>
         </el-form-item>
         <el-row>
@@ -95,6 +97,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { add, update } from '@/api/goods.js'
 import { getById } from '@/api/type.js'
 // import the component
@@ -128,10 +131,31 @@ export default {
         price: [{ required: true, trigger: 'blur', message: '请输入售价' }]
       },
       type: '',
-      data: {}
+      data: { goodId: null },
+      fileList: [],
+      head: { token: '' }
     }
   },
+  computed: {
+    ...mapGetters([
+      'token'
+    ])
+  },
   methods: {
+    handleUpload() {
+      if (this.fileList.length > 4) {
+        this.$message({
+          message: '一个商品最多五张图片',
+          type: 'info'
+        })
+        return false
+      }
+      this.head.token = this.token
+    },
+    open() {
+      this.data.goodId = this.currentgood.goodId
+      this.fileList = JSON.parse(this.currentgood.imgAddress)
+    },
     changeType() {
       if (this.currentgood.typeId) {
         getById(this.currentgood.typeId).then(resp => {
@@ -140,12 +164,27 @@ export default {
       }
     },
     handleSuccess(response) {
-      if (response.code === 1000) {
+      this.currentgood.imgAddress = null
+      if (response.code === 1) {
         this.$message({
           message: '上传成功！',
           type: 'success'
         })
-        this.$router.back()
+      }
+    },
+    handleRemove(file, fileList) {
+      if (fileList.length !== 0) {
+        var list = []
+        fileList.forEach((item) => {
+          var o = {
+            name: item.name,
+            url: item.url
+          }
+          list.push(o)
+        })
+        this.currentgood.imgAddress = JSON.stringify(list)
+      } else {
+        this.currentgood.imgAddress = JSON.stringify([{ name: 'defaultImg.jpg', url: 'http://localhost:8088/gemsell-api/imgs/defaultImg.jpg' }])
       }
     },
     handleError() {
