@@ -145,7 +145,7 @@ export default {
     handleUpload() {
       if (this.fileList.length > 4) {
         this.$message({
-          message: '一个商品最多五张图片',
+          message: '一个商品最多上传五张图片',
           type: 'info'
         })
         return false
