@@ -1,6 +1,7 @@
 package com.ddys.gemsell.controller;
 
 
+import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -133,8 +134,8 @@ public class GoodsController {
             } else {
                 String fileName = file.getOriginalFilename();  // 文件名
                 String suffixName = fileName.substring(fileName.lastIndexOf("."));
-                String filePath = FileUtils.UPLOAD_PATH + goodId + "/";
-                fileName = goodId + "-" + fileName.substring(0,fileName.indexOf(".")) + suffixName; // 新文件名
+                String filePath = FileUtils.GOOD_UPLOAD_PATH + goodId + "/";
+                fileName = goodId + "-" + UUID.randomUUID() + suffixName; // 新文件名
                 File dest = new File(filePath + fileName);
                 if (!dest.getParentFile().exists()) {
                     dest.getParentFile().mkdirs();

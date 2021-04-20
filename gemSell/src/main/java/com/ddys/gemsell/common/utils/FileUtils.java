@@ -13,7 +13,7 @@ public class FileUtils extends FileUtil {
 	 **/
 	private static final String PROJECTPATH = System.getProperty("user.dir");
 
-	public static final String  UPLOAD_PATH = PROJECTPATH + "/src/main/resources/imgs/";
+	public static final String  GOOD_UPLOAD_PATH = PROJECTPATH + "/src/main/resources/imgs/goods";
 
 	public static final String BASH_URL = "http://localhost:8088/gemsell-api/imgs/";
 
