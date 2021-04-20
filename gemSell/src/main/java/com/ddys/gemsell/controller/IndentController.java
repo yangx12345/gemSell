@@ -19,7 +19,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/indent")
+@RequestMapping("/order")
 public class IndentController {
     @Autowired
     private IndentService indentService;

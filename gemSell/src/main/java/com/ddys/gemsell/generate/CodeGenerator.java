@@ -160,7 +160,7 @@ public class CodeGenerator {
 		// 策略配置
 		StrategyConfig strategy = new StrategyConfig();
 		//设置要映射的表名，可传多个
-		strategy.setInclude("order");
+		strategy.setInclude("indent");
 		//strategy.setInclude("user","address","authenticate","cart","goods","order","tb_city","tb_province","type");
 		//去掉表前缀
 		//strategy.setTablePrefix("t_");
