@@ -148,7 +148,7 @@ public class UserController {
     {
         String token = request.getHeader("token");
         Integer userId = Integer.valueOf(JwtUtils.getClaimValueByToken(token,"userId"));
-        return ResultUtil.success(userService.getEntityById(userId));
+        return ResultUtil.success(userService.getUserInfoByUserId(userId));
     }
 
     @PostMapping("restPassword")
@@ -192,7 +192,7 @@ public class UserController {
         User user  =  userService.getByUsernameAndPassword(userName,oldPassword);
         if (user == null)
         {
-            return ResultUtil.error("用户不存在或密码错误");
+            return ResultUtil.error("原密码错误");
         }
         user.setPassword(SecureUtil.md5(newPassword));
         return ResultUtil.judgmentResult(userService.updateEntity(user));

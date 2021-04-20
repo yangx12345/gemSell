@@ -47,4 +47,6 @@ public interface UserService extends IService<User> {
 	String getPasswordByUserName(String userName);
 
 	User getByUsername(String userName);
+
+	User getUserInfoByUserId(Integer userId);
 }
