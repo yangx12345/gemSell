@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Vue Admin Template',
+  title: '宝石商城后台管理系统',
 
   /**
    * @type {boolean} true | false

@@ -1,12 +1,12 @@
 'use strict'
 const path = require('path')
-const defaultSettings = require('./src/settings.js')
+// const defaultSettings = require('./src/settings.js')
 
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || 'vue Admin Template' // page title
+const name = '宝石商城后台管理系统' // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -37,14 +37,16 @@ module.exports = {
       errors: true
     },
     proxy: {
-      '/api': {    //将www.exaple.com印射为/apis
-          target: 'http://localhost:8088',  // 接口域名
-          secure: false,  // 如果是https接口，需要配置这个参数
-          changeOrigin: true,  //是否跨域,
-          pathRewrite: {
-              '^/api': '/gemsell-api'
-            }          
-      },
+      '/api': { // 将www.exaple.com印射为/apis
+        target: 'http://localhost:8088', // 接口域名
+        secure: false, // 如果是https接口，需要配置这个参数
+        changeOrigin: true, // 是否跨域,
+        // eslint-disable-next-line no-irregular-whitespace
+        pathRewrite: {
+          // eslint-disable-next-line no-irregular-whitespace
+          '^/api': '/gemsell-api'
+        }
+      }
 
     }
   },
