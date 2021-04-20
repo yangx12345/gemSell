@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 19/04/2021 21:54:41
+ Date: 20/04/2021 22:39:25
 */
 
 SET NAMES utf8mb4;
@@ -99,18 +99,18 @@ CREATE TABLE `goods`  (
   `total_number` int(11) NULL DEFAULT NULL COMMENT '商品总数量',
   `remain_number` int(11) NULL DEFAULT NULL COMMENT '商品剩余数量',
   PRIMARY KEY (`good_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of goods
 -- ----------------------------
-INSERT INTO `goods` VALUES (1, '南非钻石', 4, '钻石', '南非钻石的故事可以追溯到 1870 年当时一个名为阿德里安·范·维克 Adriann van Wyk的农夫在北开普省金伯利Kimberley附近拥有一个农场 当他发现自己的孩子正在玩弄几颗钻石时一切便从此开始了。', '12', 1000000.00, 100000.00, 1, 1, 1);
+INSERT INTO `goods` VALUES (2, '南非钻石', 4, '钻石', '南非钻石的故事可以追溯到 1870 年当时一个名为阿德里安·范·维克 Adriann van Wyk的农夫在北开普省金伯利Kimberley附近拥有一个农场 当他发现自己的孩子正在玩弄几颗钻石时一切便从此开始了。', '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', 140.00, 120.00, 1, 1, 1);
 
 -- ----------------------------
--- Table structure for order
+-- Table structure for indent
 -- ----------------------------
-DROP TABLE IF EXISTS `order`;
-CREATE TABLE `order`  (
+DROP TABLE IF EXISTS `indent`;
+CREATE TABLE `indent`  (
   `order_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '订单id',
   `user_id` int(11) NOT NULL COMMENT '用户id',
   `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户名',
@@ -120,14 +120,15 @@ CREATE TABLE `order`  (
   `status` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '状态，0待付款，1已付代发，2已发，3取消，4完成',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `success_time` datetime(0) NULL DEFAULT NULL COMMENT '完成时间（包含完成和取消订单时间）',
-  `number` int(11) NULL DEFAULT NULL COMMENT '商品数量',
+  `num` int(11) NULL DEFAULT NULL COMMENT '商品数量',
   `total_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '商品总价',
   PRIMARY KEY (`order_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of order
+-- Records of indent
 -- ----------------------------
+INSERT INTO `indent` VALUES (1, 1, 'admin', 2, '南非钻石', 140.00, '0', NULL, NULL, 1, NULL);
 
 -- ----------------------------
 -- Table structure for tb_city
@@ -542,7 +543,7 @@ CREATE TABLE `type`  (
   `type_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名',
   `parent_id` int(11) NOT NULL DEFAULT 0 COMMENT '一级分类父id为0',
   PRIMARY KEY (`type_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 61 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品分类' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品分类' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of type
@@ -604,6 +605,7 @@ INSERT INTO `type` VALUES (57, '金绿宝石', 5);
 INSERT INTO `type` VALUES (58, '碧玺', 5);
 INSERT INTO `type` VALUES (59, '金水菩提', 5);
 INSERT INTO `type` VALUES (60, '石榴石', 5);
+INSERT INTO `type` VALUES (61, '大钻石', 4);
 
 -- ----------------------------
 -- Table structure for user
