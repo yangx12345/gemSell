@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ddys.gemsell.common.utils.FileUtils;
+import com.ddys.gemsell.entity.User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -157,6 +158,13 @@ public class GoodsController {
             return ResultUtil.success("上传成功",pathJsonArray.toString());
         }
         return ResultUtil.error("上传失败");
+    }
+
+    @GetMapping("/getGoodsList")
+    public Result getGoodsList()
+    {
+        List<Goods> goodsList = goodsService.getGoodsList();
+        return ResultUtil.success(goodsList);
     }
 }
 

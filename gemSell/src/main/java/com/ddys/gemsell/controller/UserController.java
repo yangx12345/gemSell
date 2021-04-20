@@ -198,5 +198,12 @@ public class UserController {
         return ResultUtil.judgmentResult(userService.updateEntity(user));
     }
 
+    @GetMapping("/getUserList")
+    public Result getUserList()
+    {
+        List<User> users = userService.getUserList();
+        return ResultUtil.success(users);
+    }
+
 }
 

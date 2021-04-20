@@ -1,6 +1,8 @@
 package com.ddys.gemsell.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ddys.gemsell.entity.Goods;
+import com.ddys.gemsell.entity.User;
 import com.ddys.gemsell.mapper.GoodsMapper;
 import com.ddys.gemsell.service.GoodsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -45,6 +47,13 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods>implements 
     @Transactional(readOnly=false,rollbackFor=Exception.class)
     public boolean deleteById(Integer id){
         return this.removeById(id);
+    }
+
+    @Override
+    public List<Goods> getGoodsList() {
+        QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("good_id","good_name","price","remain_number");
+        return baseMapper.selectList(queryWrapper);
     }
 
     @Override

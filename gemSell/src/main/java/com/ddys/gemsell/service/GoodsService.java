@@ -37,4 +37,5 @@ public interface GoodsService extends IService<Goods> {
      */
     public boolean deleteByIds(String ids);
 
+	List<Goods> getGoodsList();
 }
