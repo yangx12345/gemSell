@@ -60,14 +60,6 @@ export function batchDelete(ids) {
   })
 }
 
-export function login(data) {
-  return request({
-    url: '/user/login',
-    method: 'post',
-    data: data
-  })
-}
-
 export function register(data) {
   return request({
     url: '/user/register',
@@ -89,47 +81,5 @@ export function restPassword(id) {
     url: '/user/restPassword',
     method: 'post',
     params: { userId: id }
-  })
-}
-
-export function getuserByCurrentDeptId(deptId) {
-  return request({
-    url: '/user/getuserByCurrentDeptId/' + deptId,
-    method: 'get'
-  })
-}
-
-export function getWorkStateChartData() {
-  return request({
-    url: '/user/getWorkStateChartData',
-    method: 'get'
-  })
-}
-
-export function getSexChartData() {
-  return request({
-    url: '/user/getSexChartData',
-    method: 'get'
-  })
-}
-
-export function getTiptopDegreeChartData() {
-  return request({
-    url: '/user/getTiptopDegreeChartData',
-    method: 'get'
-  })
-}
-
-export function getJobLevelChartData() {
-  return request({
-    url: '/user/getJobLevelChartData',
-    method: 'get'
-  })
-}
-
-export function getPosChartData() {
-  return request({
-    url: '/user/getPosChartData',
-    method: 'get'
   })
 }

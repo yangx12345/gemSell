@@ -2,21 +2,27 @@ import request from '@/utils/request'
 
 export function getById(id) {
   return request({
-    url: `/type/getById/${id}`,
+    url: `/order/getById/${id}`,
     method: 'get'
   })
 }
 
-export function getListByCondition() {
+export function getListByCondition(data, pageIndex, pageSize) {
   return request({
-    url: '/type/getListByCondition',
-    method: 'post'
+    url: '/order/getListByCondition',
+    method: 'post',
+    data: data,
+    params:
+      {
+        pageIndex: pageIndex,
+        pageSize: pageSize
+      }
   })
 }
 
 export function add(data) {
   return request({
-    url: '/type/add',
+    url: '/order/add',
     method: 'post',
     data: data
   })
@@ -24,7 +30,7 @@ export function add(data) {
 
 export function update(data) {
   return request({
-    url: '/type/update',
+    url: '/order/update',
     method: 'put',
     data: data
   })
@@ -32,22 +38,17 @@ export function update(data) {
 
 export function deleteById(id) {
   return request({
-    url: `/type/delete/${id}`,
+    url: `/order/delete/${id}`,
     method: 'delete'
   })
 }
 
 export function batchDelete(ids) {
   return request({
-    url: '/type/batchDelete',
+    url: '/order/batchDelete',
     method: 'delete',
-    params: ids
-  })
-}
-
-export function getSelectTree() {
-  return request({
-    url: '/type/getTypeSelect',
-    method: 'get'
+    params: {
+      ids: ids
+    }
   })
 }
