@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -44,8 +45,16 @@ public class GlobalCrosConfig {
                         .excludePathPatterns("/user/login")
                         .excludePathPatterns("/type/getListByCondition")
                         .excludePathPatterns("/goods/getListByCondition")
+                        .excludePathPatterns("/imgs/**")
                         .excludePathPatterns("/user/register");
             }
+
+            //添加访问后端静态资源
+            @Override
+            public void addResourceHandlers(ResourceHandlerRegistry registry){
+                 registry.addResourceHandler("/imgs/**").addResourceLocations("classpath:/imgs/");
+            }
+
         };
     }
 }

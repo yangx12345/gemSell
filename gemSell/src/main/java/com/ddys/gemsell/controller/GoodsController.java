@@ -1,6 +1,7 @@
 package com.ddys.gemsell.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ddys.gemsell.common.utils.FileUtils;
@@ -114,38 +115,45 @@ public class GoodsController {
     @PostMapping(value = "/goodsImageUpload")
     public Result goodsImageUpload(
                                   @RequestParam(value = "goodId", required = false) Integer goodId,
-                                  @RequestParam(value = "file", required = false) MultipartFile[] files) {
+                                  @RequestParam(value = "file", required = false) MultipartFile file) {
 
-        JSONArray pathJsonArray = new JSONArray();
-        for(MultipartFile file:files)
-        {
+
+            Goods goods = goodsService.getById(goodId);
+            JSONArray pathJsonArray = JSON.parseArray(goods.getImgAddress());
+            if (pathJsonArray.size() == 5)
+            {
+                ResultUtil.error("上传失败，一个商品最多五张图片");
+            }
+            if ("defaultImg.jpg".equals(pathJsonArray.getJSONObject(0).get("name")))
+            {
+                 pathJsonArray.remove(0);
+            }
             if (file.isEmpty()) {
                 return ResultUtil.error("图片为空");
             } else {
                 String fileName = file.getOriginalFilename();  // 文件名
                 String suffixName = fileName.substring(fileName.lastIndexOf("."));
-                String filePath = FileUtils.UPLOAD_PATH;
-                fileName = "good"+ goodId + suffixName; // 新文件名
+                String filePath = FileUtils.UPLOAD_PATH + goodId + "/";
+                fileName = goodId + "-" + fileName.substring(0,fileName.indexOf(".")) + suffixName; // 新文件名
                 File dest = new File(filePath + fileName);
                 if (!dest.getParentFile().exists()) {
                     dest.getParentFile().mkdirs();
                 }
                 try {
                     file.transferTo(dest);
-                    filePath = filePath+FileUtils.PICTURE_PATH+fileName;
+                    filePath = FileUtils.BASH_URL + goodId + "/" + fileName;
                     JSONObject path = new JSONObject();
-                    path.put(fileName,filePath);
+                    path.put("name",fileName);
+                    path.put("url",filePath);
                     pathJsonArray.add(path);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
         }
-        }
-        Goods goods = goodsService.getById(goodId);
         goods.setImgAddress(pathJsonArray.toString());
         boolean flag = goodsService.updateEntity(goods);
         if (flag) {
-            return ResultUtil.success("上传成功");
+            return ResultUtil.success("上传成功",pathJsonArray.toString());
         }
         return ResultUtil.error("上传失败");
     }
