@@ -13,7 +13,7 @@
                     <div class="left-220" style="margin: 0px;">
                         <div class="banner-nav">
                             <ul>
-                                <li v-for="(item,index) in cateList" :key="index">
+                                <li v-for="(item,index) in cateList.slice(0,5)" :key="index">
                                     <h3>
                                         <i class="iconfont icon-arrow-right"></i>
                                         <span>{{item.typeName}}</span>
@@ -26,10 +26,26 @@
                                     <div class="item-box">
                                         <dl>
                                             <dt>
-                                                <a href="/goods/40.html">{{item.typeName}}</a>
+                                                <a @click="gotoList(item.typeId)">{{item.typeName}}</a>
                                             </dt>
                                             <dd>
-                                                <a href="/goods/43.html" v-for="(itemVal,i) in item.children" :key="i">{{itemVal.typeName}}</a>
+                                                <a href="/goods/43.html" v-for="(itemVal,i) in item.children" :key="i"><span @click="gotoList(itemVal.typeId)">{{itemVal.typeName}}</span></a>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </li>
+                                <li>
+                                    <h3>
+                                        <i class="iconfont icon-arrow-right"></i>
+                                        <span>查看更多</span>
+                                    </h3>
+                                    <div class="item-box" >
+                                        <dl v-for="(item,index) in cateList.slice(5,cateList.length)" :key="index">
+                                            <dt>
+                                                <a @click="gotoList(item.typeId)">{{item.typeName}}</a>
+                                            </dt>
+                                            <dd>
+                                                <a href="/goods/43.html" v-for="(itemVal,i) in item.children" :key="i"><span @click="gotoList(item.typeId)">{{itemVal.typeName}}</span></a>
                                             </dd>
                                         </dl>
                                     </div>
@@ -81,53 +97,36 @@ export default {
     },
 
     created() {
-        // //加载动画
-        // const loading = this.$loading({
-        //     lock: true,
-        //     text: "Loading",
-        //     spinner: "el-icon-loading",
-        //     background: "rgba(0, 0, 0, 0.7)"
-        // });
-        // this.$axios
-        //     .get("/gemsell-api/goods/gettopdata/goods")
-        //     .then(response => {
-        //         // this.cateList = response.data.message.catelist;
-        //         this.sliderList = response.data.message.sliderlist;
-        //         this.topList = response.data.message.toplist;
-
-        //     });
-        // this.$axios
-        //     .get("/gemsell-api/goods/getgoodsgroup")
-        //     .then(response => {
-        //         this.content = response.data.message;
-        //         //关闭加载动画
-        //         // let loadingInstance = Loading.service({ text: false });
-        //         // this.$nextTick(() => {
-        //         //     // 以服务的方式调用的 Loading 需要异步关闭 
-        //         //     loadingInstance.close();
-        //         // });
-        //     });
-
-            this.$axios
-            .post("/gemsell-api/type/getListByCondition")
-            .then(response => {
-                console.log(response.data.data);
-                this.cateList = response.data.data;
-                this.content = response.data.data;
-            });
-            var data= {
-                status: 1
-            }
-            this.$axios
-            .post("/gemsell-api/goods/getListByCondition?pageIndex="+1+"&pageSize="+10,data, 1,10)
-            .then(response => {
-                this.sliderList = response.data.data.list;
-                this.topList = response.data.data.list;
-            });
+        this.$axios
+        .post("/gemsell-api/type/getListByCondition")
+        .then(response => {
+            console.log(response.data.data);
+            this.cateList = response.data.data;
+            this.content = response.data.data;
+        });
+        var data= {
+            status: 1
+        }
+        this.$axios
+        .post("/gemsell-api/goods/getListByCondition?pageIndex="+1+"&pageSize="+10,data, 1,10)
+        .then(response => {
+            this.sliderList = response.data.data.list;
+            this.topList = response.data.data.list;
+        });
+    },
+    methods: {
+        gotoList(typeId){
+            this.$router.push({
+                path:'/goodslist',
+                query: {
+                    typeId: typeId
+                }
+            })
+        }
     }
 };
 </script>
-<style>
+<style scoped>
 /* 轮播图样式 */
 
 .bannerImg {

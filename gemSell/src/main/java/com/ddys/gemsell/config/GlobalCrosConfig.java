@@ -45,6 +45,7 @@ public class GlobalCrosConfig {
                         .excludePathPatterns("/user/login")
                         .excludePathPatterns("/type/getListByCondition")
                         .excludePathPatterns("/goods/getListByCondition")
+                        .excludePathPatterns("/goods/getById/{id}")
                         .excludePathPatterns("/imgs/**")
                         .excludePathPatterns("/user/register");
             }

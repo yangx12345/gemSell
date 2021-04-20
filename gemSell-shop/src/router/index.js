@@ -22,9 +22,11 @@ import OrderList from '../components/orderList'
 
 import OrderDetail from '../components/orderDetail'
 
+import GoodsList from '../components/goodsList'
+
 import axios from 'axios';
 //基础地址
-axios.defaults.baseURL = 'http://192.168.24.145:8088';
+axios.defaults.baseURL = 'http://192.168.0.113:8088';
 //让ajax携带cookie
 // 跨域请求时 是否会携带 凭证(cookie)
 axios.defaults.withCredentials = true;
@@ -44,8 +46,13 @@ let routes = [{
     component: Index
   },
   {
+    //商品列表
+    path: '/goodslist',
+    component: GoodsList
+  },
+  {
     //详情页
-    path: '/detail/:id',
+    path: '/detail',
     component: Detail
   },
   {

@@ -204,11 +204,12 @@ line-height: 30px;border: 1px solid #34ad2a;}
 .banner-nav ul li:hover h3 p{ color:rgba(255,255,255,0.5); }
 .banner-nav ul li .item-box{ display:none; position:absolute; top:0;left:220px; bottom:0; width:705px; height:400px; background-color:rgba(0,0,0,0.6); z-index:9999; }
 .banner-nav ul li:hover .item-box{ display:block; }
-.banner-nav ul li .item-box dl{ display:block; padding:15px 30px 0; }
-.banner-nav ul li .item-box dl dt{ font-size:14px; font-weight:700; line-height:28px; }
-.banner-nav ul li .item-box dl dd{ font-size:12px; line-height:24px; }
-.banner-nav ul li .item-box dl a{ color:#fff; }
-.banner-nav ul li .item-box dl dd a{ margin-right:5px; }
+.banner-nav ul li .item-box dl{ display:block; padding:15px 30px 0;}
+.banner-nav ul li .item-box dl dt{ font-size:16px; color:#d70029; font-weight:700; line-height:28px; }
+.banner-nav ul li .item-box dl dd{ font-size:12px; line-height:24px;}
+.banner-nav ul li .item-box dl a{ color:#fff;}
+.banner-nav ul li .item-box dl dd a{ margin-right:5px; margin: 10px 20px;}
+.banner-nav ul li .item-box a:hover{ color:#d70029; }
 
 /*商品按照分类展示列表*/
 .img-list{ margin:-15px 0 0 -15px; *display:inline-block; }

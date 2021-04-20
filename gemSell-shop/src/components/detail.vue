@@ -32,7 +32,7 @@
                                     <dl>
                                         <dd>
                                             <div id="buyButton" class="btn-buy">
-                                                <button onclick="cartAdd(this,'/',1,'/shopping.html');" class="buy">立即购买</button>
+                                                <button @click="cartAdd(this,'/',1,'/shopping.html');" class="buy">立即购买</button>
                                                 <button @click="addGoods" class="add">加入购物车</button>
                                             </div>
                                         </dd>
@@ -63,7 +63,7 @@
                                         <div class="img-box">
                                             <!-- <a href="#/site/goodsinfo/90" class=""> -->
                                             <router-link :to="'/detail/'+items.goodId">
-                                                <img :src="items.img_url">
+                                                <img :src="items.imgAddress[0].url">
                                             </router-link>
                                             <!-- </a> -->
                                         </div>
@@ -79,7 +79,7 @@
             </div>
         </div>
         <BackTop></BackTop>
-        <img v-if="imgList.length!=0" class="moveImg" :src="imgList[0].original_path" alt="">
+        <img v-if="imgList.length!=0" class="moveImg" :src="imgList[0].url" alt="">
     </div>
 </template>
 <script>
@@ -121,29 +121,33 @@ export default {
         //获取商品信息
         getProductDatil() {
             //获取Id
-            this.productId = this.$route.params.id;
+            this.productId = this.$route.query.id;
+            var _this = this
             //获取数据
              this.$axios.get(`/gemsell-api/goods/getById/${this.productId}`)
                 .then(response => {
-                    this.goodsInfo = response.data
-                    this.imgList = this.goodsInfo.imgAddress;
+                    _this.goodsInfo = response.data.data
+                    _this.imgList = JSON.parse(_this.goodsInfo.imgAddress);
                     // 处理 放大镜数据
                     let temArr = [];
                     // 循环处理数据
-                    this.imgList.forEach((v, i) => {
+                    _this.imgList.forEach((v, i) => {
                         temArr.push({
                             id: v.id,
-                            url: v.original_path
+                            url: v.url
                         })
                     })
                     // 临时数组 
-                    this.images.normal_size = temArr;
-                     this.buyCount = 1;
+                    _this.images.normal_size = temArr;
+                     _this.buyCount = 1;
                 });
+                var data= {
+                    status: 1
+                }
                 this.$axios
-                    .post("/gemsell-api/goods/getListByCondition",data, 1,10)
+                    .post("/gemsell-api/goods/getListByCondition?pageIndex="+1+"&pageSize="+10,data)
                     .then(response => {
-                        this.hotList = response.data;
+                        _this.hotList = response.data;
                     });
         },
         //移动图片动画
@@ -179,8 +183,6 @@ watch: {
             background: "rgba(0, 0, 0, 0.7)"
         });
         this.getProductDatil();
-        //加载页面时获取第一页评论
-        this.getCommentsInfo();
         //关闭加载动画
         let loadingInstance = Loading.service({ text: false });
         this.$nextTick(() => {
