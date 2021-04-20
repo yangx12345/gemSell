@@ -78,7 +78,10 @@ public class TypeServiceImpl extends ServiceImpl<TypeMapper, Type>implements Typ
                 selectForm1.setLabel(type1.getTypeName());
                 selectFormList1.add(selectForm1);
             }
-            selectForm.setChildren(selectFormList1);
+            selectForm.setChildren(null);
+            if (!selectFormList1.isEmpty()) {
+                selectForm.setChildren(selectFormList1);
+            }
             selectFormList.add(selectForm);
         }
         return selectFormList;

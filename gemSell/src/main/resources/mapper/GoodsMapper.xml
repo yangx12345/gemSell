@@ -24,6 +24,15 @@
     <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.Goods" resultMap="BaseResultMap">
         <include refid="selectVo"></include>
          where 1=1
+        <if test="goodName!=null and goodName!=''">
+            and good_name like "%" #{goodName} "%"
+        </if>
+        <if test="typeId!=null and typeId!=''">
+            and type_id = #{typeId}
+        </if>
+        <if test="status!=null">
+            and status = #{status}
+        </if>
     </select>
 
 </mapper>
