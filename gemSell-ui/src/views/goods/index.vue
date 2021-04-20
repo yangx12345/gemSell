@@ -2,13 +2,13 @@
   <div class="container">
     <el-form ref="form" :model="form" :inline="true" label-min-width="80px">
       <el-form-item label="商品名称">
-        <el-input v-model="form.goodName" />
+        <el-input v-model="form.goodName" clearable />
       </el-form-item>
       <el-form-item label="商品分类">
-        <el-input v-model="form.typeName" />
+        <treeselect v-model="form.typeId" :options="options" style="width: 240px" />
       </el-form-item>
       <el-form-item label="商品状态">
-        <el-select v-model="form.status" placeholder="请选择商品状态">
+        <el-select v-model="form.status" placeholder="请选择商品状态" clearable>
           <el-option label="未发布" :value="'0'" />
           <el-option label="已发布未售" :value="'1'" />
           <el-option label="已售" :value="'2'" />
@@ -55,8 +55,26 @@
         :show-overflow-tooltip="true"
       />
       <el-table-column
+        prop="totalNumber"
+        label="总数量"
+        min-width="80"
+        align="center"
+      />
+      <el-table-column
+        prop="remainNumber"
+        label="剩余数量"
+        min-width="80"
+        align="center"
+      />
+      <el-table-column
+        prop="purchasePrice"
+        label="进价"
+        min-width="120"
+        align="center"
+      />
+      <el-table-column
         prop="price"
-        label="价格"
+        label="售价"
         min-width="120"
         align="center"
       />
@@ -68,9 +86,10 @@
         align="center"
       />
       <el-table-column
+        fixed="right"
         label="操作"
         align="center"
-        min-width="220"
+        min-width="120"
       >
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="updateClick(scope.row)">编辑</el-button>
@@ -99,9 +118,14 @@
 import { getListByCondition, batchDelete, deleteById } from '@/api/goods'
 import { getSelectTree } from '@/api/type'
 import addgood from './addGoods'
+// import the component
+import Treeselect from '@riophae/vue-treeselect'
+// import the styles
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
   components: {
-    addgood
+    addgood,
+    Treeselect
   },
   data() {
     return {
@@ -169,7 +193,7 @@ export default {
     addgood() {
       this.currentgood = {
         goodName: '',
-        typeId: '',
+        typeId: null,
         goodId: '',
         introduce: '',
         imgAddress: '12',

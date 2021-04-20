@@ -2,34 +2,54 @@
   <div class="app-container">
     <el-dialog
       :title="currentgood.goodId? '编辑商品':'添加商品'"
+      width="60%"
       :visible.sync="dialogFormVisible"
       @before-close="onCancel()"
     >
-      <el-form ref="currentgood" :model="currentgood" :inline="true" label-width="120px" :rules="userRules">
-        <el-form-item label="商品名称" prop="goodName">
-          <el-input v-model="currentgood.goodName" placeholder="请输入" :disabled="type==='update'" />
-        </el-form-item>
-        <el-form-item label="商品分类" prop="typeId">
-          <treeselect v-model="currentgood.typeId" :options="options" style="width: 240px" @input="changeType()" />
-        </el-form-item>
-        <el-form-item label="商品状态" prop="status">
-          <el-radio-group v-model="currentgood.status" placeholder="请输入">
-            <el-radio :label="0">未发布</el-radio>
-            <el-radio :label="1">已发布未售</el-radio>
-            <el-radio :label="2">已售</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="进价" prop="purchasePrice">
-          <el-input v-model="currentgood.purchasePrice" placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="售价" prop="price">
-          <el-input v-model="currentgood.price" placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="数量" prop="totalNumber">
-          <el-input v-model="currentgood.totalNumber" placeholder="请输入" />
-        </el-form-item>
+      <el-form ref="currentgood" :model="currentgood" label-width="120px" :rules="userRules">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="商品名称" prop="goodName">
+              <el-input v-model="currentgood.goodName" placeholder="请输入" :disabled="type==='update'" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="商品分类" prop="typeId">
+              <treeselect v-model="currentgood.typeId" :options="options" style="width: 240px" @input="changeType()" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="商品状态" prop="status">
+              <el-radio-group v-model="currentgood.status" placeholder="请输入">
+                <el-radio :label="0">未发布</el-radio>
+                <el-radio :label="1">已发布未售</el-radio>
+                <el-radio :label="2">已售</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="进价" prop="purchasePrice">
+              <el-input v-model="currentgood.purchasePrice" type="number" :min="0" placeholder="请输入" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="售价" prop="price">
+              <el-input v-model="currentgood.price" type="number" :min="0" placeholder="请输入" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="数量" prop="totalNumber">
+              <el-input v-model="currentgood.totalNumber" type="number" :min="0" placeholder="请输入" />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item
-          label="商品"
+          v-if="currentgood.goodId"
+          label="商品图片"
         >
           <el-upload
             :on-success="handleSuccess"
@@ -51,14 +71,19 @@
             >只能上传jpg/png/jpeg文件，且不超过500kb</div>
           </el-upload>
         </el-form-item>
-        <el-form-item label="商品介绍" prop="introduce">
-          <el-input
-            v-model="currentgood.introduce"
-            type="textarea"
-            :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="请输入"
-          />
-        </el-form-item>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="商品介绍" prop="introduce">
+              <el-input
+                v-model="currentgood.introduce"
+                style="width:100%"
+                type="textarea"
+                :autosize="{ minRows:4, maxRows: 6}"
+                placeholder="请输入"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="onCancel()">取 消</el-button>
@@ -97,8 +122,8 @@ export default {
   data() {
     return {
       userRules: {
-        goodName: [{ required: true, trigger: 'blur', message: '请输入登录名' }, { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }],
-        password: [{ required: true, trigger: 'blur', message: '请输入密码' }, { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }],
+        goodName: [{ required: true, trigger: 'blur', message: '请输入商品名称' }, { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }],
+        typeId: [{ required: true, trigger: 'blur', message: '请选择分类' }],
         purchasePrice: [{ required: true, trigger: 'blur', message: '请输入进价' }],
         price: [{ required: true, trigger: 'blur', message: '请输入售价' }]
       },
@@ -108,10 +133,11 @@ export default {
   },
   methods: {
     changeType() {
-      console.log(this.currentgood.typeId)
-      getById(this.currentgood.typeId).then(resp => {
-        this.currentgood.typeName = resp.data.typeName
-      })
+      if (this.currentgood.typeId) {
+        getById(this.currentgood.typeId).then(resp => {
+          this.currentgood.typeName = resp.data.typeName
+        })
+      }
     },
     handleSuccess(response) {
       if (response.code === 1000) {
