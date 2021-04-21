@@ -66,9 +66,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>implements Use
     }
 
     @Override
-    public List<User> getUserList() {
+    public List<User> getUserList(String role) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("user_id","user_name");
+        if (StringUtils.isEmpty(role))
+        {
+            queryWrapper.select("user_id","user_name");
+        }
+        else
+        {
+            queryWrapper.select("user_id","user_name").eq("role",role);
+        }
         return baseMapper.selectList(queryWrapper);
     }
 

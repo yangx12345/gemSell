@@ -50,5 +50,5 @@ public interface UserService extends IService<User> {
 
 	User getUserInfoByUserId(Integer userId);
 
-	List<User> getUserList();
+	List<User> getUserList(String role);
 }

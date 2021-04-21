@@ -199,9 +199,9 @@ public class UserController {
     }
 
     @GetMapping("/getUserList")
-    public Result getUserList()
+    public Result getUserList(@RequestParam String role)
     {
-        List<User> users = userService.getUserList();
+        List<User> users = userService.getUserList(role);
         return ResultUtil.success(users);
     }
 
