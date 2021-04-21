@@ -4,6 +4,7 @@
       :title="order.orderId? '编辑商品':'添加商品'"
       width="60%"
       :visible.sync="dialogFormVisible"
+      @open="open()"
       @before-close="onCancel()"
     >
       <el-form ref="order" :model="order" label-width="120px" :rules="orderRules">
@@ -41,7 +42,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="数量" prop="num">
-              <el-input v-model="order.num" type="number" :min="0" @blur="BlurNumber" />
+              <el-input v-model="order.num" type="number" :min="0" @change="BlurNumber" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -116,6 +117,13 @@ export default {
     })
   },
   methods: {
+    open() {
+      this.goodsOptions.forEach((item) => {
+        if (item.goodId === this.order.goodId) {
+          this.topNumber = item.remainNumber
+        }
+      })
+    },
     BlurNumber() {
       if (this.order.num > this.topNumber) {
         this.$message(
@@ -141,14 +149,12 @@ export default {
           this.order.price = item.price
           this.topNumber = item.remainNumber
           this.order.num = item.remainNumber
-          this.order.totalPrice = this.order.number * this.order.price
+          this.order.totalPrice = this.order.num * this.order.price
         }
       })
     },
     onCancel() {
-      if (this.$refs['order']) {
-        this.$refs['order'].clearValidate()
-      }
+      this.$refs['order'].clearValidate()
       this.$emit('update:dialogFormVisible', false)
     },
     // 提交

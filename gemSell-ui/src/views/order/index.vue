@@ -4,19 +4,21 @@
       <el-form-item label="商品名称">
         <el-input v-model="form.goodName" clearable />
       </el-form-item>
-      <el-form-item label="商品分类">
-        <treeselect v-model="form.typeId" :options="options" style="width: 240px" />
+      <el-form-item label="用户名">
+        <el-input v-model="form.userName" clearable />
       </el-form-item>
       <el-form-item label="商品状态">
         <el-select v-model="form.status" placeholder="请选择商品状态" clearable>
-          <el-option label="未发布" :value="'0'" />
-          <el-option label="已发布未售" :value="'1'" />
-          <el-option label="已售" :value="'2'" />
+          <el-option label="待付款" :value="'0'" />
+          <el-option label="已付代发" :value="'1'" />
+          <el-option label="已发" :value="'2'" />
+          <el-option label="取消" :value="'3'" />
+          <el-option label="完成" :value="'4'" />
         </el-select>
       </el-form-item>
       <el-button type="primary" @click="getList()">查询</el-button>
       <el-button @click="resetData">重置</el-button>
-      <el-button type="primary" @click="addgood">添加</el-button>
+      <el-button type="primary" @click="addorder">添加</el-button>
       <el-button type="danger" :disabled="ids.length === 0" @click="batchDelete"> 删除</el-button>
     </el-form>
     <el-table
@@ -36,60 +38,59 @@
         align="center"
       />
       <el-table-column
+        prop="userName"
+        label="用户名"
+        min-width="100"
+        align="center"
+      />
+      <el-table-column
         prop="goodName"
         label="商品名称"
-        min-width="120"
-        align="center"
-      />
-      <el-table-column
-        prop="typeName"
-        label="类型名称"
-        min-width="120"
-        align="center"
-      />
-      <el-table-column
-        prop="introduce"
-        label="商品介绍"
-        align="center"
-        min-width="240"
-        :show-overflow-tooltip="true"
-      />
-      <el-table-column
-        prop="totalNumber"
-        label="总数量"
-        min-width="80"
-        align="center"
-      />
-      <el-table-column
-        prop="remainNumber"
-        label="剩余数量"
-        min-width="80"
-        align="center"
-      />
-      <el-table-column
-        prop="purchasePrice"
-        label="进价"
-        min-width="120"
+        min-width="100"
         align="center"
       />
       <el-table-column
         prop="price"
-        label="售价"
-        min-width="120"
+        label="单价"
+        align="center"
+        min-width="100"
+      />
+      <el-table-column
+        prop="num"
+        label="数量"
+        min-width="80"
+        align="center"
+      />
+      <el-table-column
+        prop="totalPrice"
+        label="总价"
+        min-width="80"
         align="center"
       />
       <el-table-column
         prop="status"
-        label="商品状态"
+        label="状态"
         min-width="120"
         :formatter="statusFormatter"
+        align="center"
+      />
+      <el-table-column
+        prop="createTime"
+        label="创建时间"
+        min-width="160"
+        align="center"
+      />
+      <el-table-column
+        prop="successTime"
+        label="完成时间"
+        min-width="160"
         align="center"
       />
       <el-table-column
         fixed="right"
         label="操作"
         align="center"
-        min-width="200"
+        min-width="120"
       >
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="updateClick(scope.row)">编辑</el-button>
@@ -117,14 +118,9 @@
 <script>
 import { getListByCondition, batchDelete, deleteById } from '@/api/order'
 import addOrder from './addOrder'
-// import the component
-import Treeselect from '@riophae/vue-treeselect'
-// import the styles
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
   components: {
-    addOrder,
-    Treeselect
+    addOrder
   },
   data() {
     return {
@@ -160,9 +156,11 @@ export default {
   methods: {
     // 角色翻译
     statusFormatter(row) {
-      if (row.status === 0) return '未发布'
-      if (row.status === 1) return '已发布未售'
-      if (row.status === 2) return '已售'
+      if (row.status === '0') return '待付款'
+      if (row.status === '1') return '已付代发'
+      if (row.status === '2') return '已发'
+      if (row.status === '3') return '取消'
+      if (row.status === '4') return '完成'
     },
     handleSizeChange(val) {
       this.pagesize = val
@@ -199,8 +197,8 @@ export default {
       this.viewVisible = false
       this.imgOptions = []
     },
-    addgood() {
-      this.currentgood = {
+    addorder() {
+      this.order = {
         orderId: null,
         userId: null,
         userName: '',
@@ -216,7 +214,7 @@ export default {
       this.dialogFormVisible = true
     },
     updateClick(row) {
-      this.currentgood = { ...row }
+      this.order = { ...row }
       this.dialogFormVisible = true
     },
     // 重置
