@@ -58,7 +58,7 @@
                         <el-carousel trigger="click">
                             <el-carousel-item v-for="(item, index) in sliderList" :key="index">
                                 <a href="#">
-                                <img :src="item.img_url" alt="" class="bannerImg">
+                                <img :src="JSON.parse(item.imgAddress)[0].url" alt="" class="bannerImg">
                                 </a>
                             </el-carousel-item>
                         </el-carousel>
@@ -66,10 +66,10 @@
                     <!--/幻灯片-->
                     <div class="left-220">
                         <ul class="side-img-list">
-                            <li v-for="(item,index) in topList" :key="item.id">
+                            <li v-for="(item,index) in topList.slice(0,3)" :key="item.id">
                                 <div class="img-box">
                                     <label>{{index+1}}</label>
-                                    <img :src="item.img_url">
+                                    <img :src="JSON.parse(item.imgAddress)[0].url">
                                 </div>
                                 <div class="txt-box">
                                     <a href="/goods/show-98.html">{{item.goodName}}</a>

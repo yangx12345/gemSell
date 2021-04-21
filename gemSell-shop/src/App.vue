@@ -43,30 +43,10 @@
                                     <span class="out" style="top: 0px;">首页</span>
                                 </router-link>
                             </li>
-                            <li class="news">
-                                <a href="#" class="">
-                                    <span class="out" style="top: 0px;">每日精选</span>
-                                </a>
-                            </li>
-                            <li class="photo">
-                                <a href="#" class="">
-                                    <span class="out" style="top: 0px;">秒杀专区</span>
-                                </a>
-                            </li>
-                            <li class="video">
-                                <a href="#" class="">
-                                    <span class="out" style="top: 0px;">生鲜超市</span>
-                                </a>
-                            </li>
-                            <li class="down">
-                                <a href="#" class="">
-                                    <span class="out" style="top: 0px;">会员权益</span>
-                                </a>
-                            </li>
                             <li class="goods">
-                                <a href="" class="router-link-exact-active ">
+                                 <router-link to="/goodslist">
                                     <span class="out" style="top: 0px;">购物商城</span>
-                                </a>
+                                 </router-link>
                             </li>
                         </ul>
                     </div>

@@ -241,7 +241,6 @@ export default {
       this.viewVisible = true
     },
     getList() {
-      if (!this.form.departmentId) this.form.departmentId = this.$store.getters.deptId
       getListByCondition(this.form, this.pageIndex, this.pageSize).then(resp => {
         this.tableData = resp.data.list
         this.total = resp.data.total

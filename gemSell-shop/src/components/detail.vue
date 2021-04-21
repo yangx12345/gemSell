@@ -50,7 +50,7 @@
                                     </ul>
                                 </div>
                             </Affix>
-                            <div class="tab-content entry" v-show="isSelected" v-html="goodsInfo.introduce">
+                            <div class="tab-content entry" style="padding: 20px" v-show="isSelected" v-html="goodsInfo.introduce">
                             </div>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                                         <div class="img-box">
                                             <!-- <a href="#/site/goodsinfo/90" class=""> -->
                                             <router-link :to="'/detail/'+items.goodId">
-                                                <img :src="items.imgAddress[0].url">
+                                                <img :src="JSON.parse(items.imgAddress)[0].url">
                                             </router-link>
                                             <!-- </a> -->
                                         </div>
@@ -147,7 +147,7 @@ export default {
                 this.$axios
                     .post("/gemsell-api/goods/getListByCondition?pageIndex="+1+"&pageSize="+10,data)
                     .then(response => {
-                        _this.hotList = response.data;
+                        _this.hotList = response.data.data.list;
                     });
         },
         //移动图片动画

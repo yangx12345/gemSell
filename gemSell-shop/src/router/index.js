@@ -26,7 +26,7 @@ import GoodsList from '../components/goodsList'
 
 import axios from 'axios';
 //基础地址
-axios.defaults.baseURL = 'http://192.168.0.113:8088';
+axios.defaults.baseURL = 'http://192.168.0.108:8088';
 //让ajax携带cookie
 // 跨域请求时 是否会携带 凭证(cookie)
 axios.defaults.withCredentials = true;

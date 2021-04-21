@@ -1,9 +1,21 @@
 <template>
-    <div class="good-container">
+<div>
+    <div>
+        <el-form ref="form" :model="form" :inline="true" label-min-width="80px" style="margin: 10px 10% 0">
+            <el-form-item label="商品名称">
+                <el-input v-model="form.goodName" clearable />
+            </el-form-item>
+            <el-form-item label="商品分类">
+                <treeselect v-model="form.typeId" :options="options" style="width: 240px" />
+            </el-form-item>
+            <el-button type="primary" @click="getList()">查询</el-button>
+        </el-form>
+    </div>
+    <div class="good-container" style="padding-bottom: 30px">
         <div class="goods-item" v-for="(item,index) in goodList" :key="index" @click="gotoDetail(item)">
                <el-image
                  style="width: 200px; height: 200px"
-                :src="item.imgAddress[0].url"
+                :src="JSON.parse(item.imgAddress)[0].url"
                 ></el-image>
                 <div class="goods-item-content">
                     <strong class="goodPrice">
@@ -17,14 +29,40 @@
                     </el-tooltip>
                 </div>
         </div>
+        <div>
+        <el-pagination
+            :current-page="pageIndex"
+            :page-size="pageSize"
+            :total="total"
+            style="margin-top:10px;text-align: center"
+            background
+            layout="total, prev, pager, next, jumper"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+        />
+        </div>
     </div>
+</div>
+    
 </template>
 
 <script>
+// import the component
+import Treeselect from '@riophae/vue-treeselect'
+// import the styles
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
+    components: {
+        Treeselect
+    },
      data: function() {
         return {
-            goodList: []
+            goodList: [],
+            form: {},
+            pageIndex: 1,
+            pageSize: 10,
+            total: 0,
+            options: []
         };
     },
     mounted() {
@@ -32,13 +70,34 @@ export default {
             status: 1,
             typeId: this.$route.query.typeId
         }
+        this.form.typeId = data.typeId
         this.$axios
-        .post("/gemsell-api/goods/getListByCondition?pageIndex="+1+"&pageSize="+10,data, 1,10)
+        .post("/gemsell-api/goods/getListByCondition?pageIndex="+1+"&pageSize="+10,data)
         .then(response => {
             this.goodList = response.data.data.list;
+            this.total = response.data.data.total
         });
+        this.$axios
+        .post("/gemsell-api/type/getTypeSelect")
+        .then(response => {
+            this.options = response.data.data;
+        })
     },
     methods: {
+        handleSizeChange(val) {
+            this.pagesize = val
+            this.getList()
+        },
+        handleCurrentChange(val) {
+            this.pageIndex = val
+            this.getList()
+        },
+        getList(){
+            this.$axios.post("/gemsell-api/goods/getListByCondition?pageIndex="+pageIndex+"&pageSize="+this.pageSize,data).then(resp => {
+            this.goodList = resp.data.data.list
+            this.total = resp.data.data.total
+            })
+        },
         gotoDetail(row){
              this.$router.push({
                 path:'/detail',
