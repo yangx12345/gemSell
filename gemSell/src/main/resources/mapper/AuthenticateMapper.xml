@@ -29,6 +29,15 @@
     <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.Authenticate" resultMap="BaseResultMap">
         <include refid="selectVo"></include>
          where 1=1
+        <if test="ownerName!=null and ownerName!=''">
+            and a.owner_name like "%" #{ownerName} "%"
+        </if>
+        <if test="treasureCode!=null and treasureCode!=''">
+            and a.treasure_code like "%" #{treasureCode} "%"
+        </if>
+        <if test="authUserName!=null and authUserName!=''">
+            and a.auth_user_name like "%" #{authUserName} "%"
+        </if>
     </select>
 
 </mapper>

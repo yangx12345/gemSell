@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : yang
+ Source Server         : localhost
  Source Server Type    : MySQL
  Source Server Version : 50728
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 20/04/2021 22:39:25
+ Date: 21/04/2021 15:47:09
 */
 
 SET NAMES utf8mb4;
@@ -52,7 +52,7 @@ CREATE TABLE `authenticate`  (
   `texture` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '质地',
   `weight` double NULL DEFAULT NULL COMMENT '重量',
   `form_city` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '产地',
-  `auth_user_id` int(11) NOT NULL COMMENT '鉴定人id',
+  `auth_user_id` int(11) NULL DEFAULT NULL COMMENT '鉴定人id',
   `auth_user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '鉴定人名',
   `result` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '鉴定结果',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '申请时间',
@@ -123,12 +123,12 @@ CREATE TABLE `indent`  (
   `num` int(11) NULL DEFAULT NULL COMMENT '商品数量',
   `total_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '商品总价',
   PRIMARY KEY (`order_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of indent
 -- ----------------------------
-INSERT INTO `indent` VALUES (1, 1, 'admin', 2, '南非钻石', 140.00, '0', NULL, NULL, 1, NULL);
+INSERT INTO `indent` VALUES (3, 1, 'admin', 2, '南非钻石', 140.00, '4', '2021-04-21 11:01:50', '2021-04-21 13:20:12', 1, 140.00);
 
 -- ----------------------------
 -- Table structure for tb_city
@@ -624,11 +624,13 @@ CREATE TABLE `user`  (
   `update_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES (1, 'admin', '96e79218965eb72c92a549dd5a330112', 'admin', '0', '15133185689', '男', '2021-04-16 13:43:35', '', '', '2021-02-16 15:28:37');
+INSERT INTO `user` VALUES (4, 'user1', 'e10adc3949ba59abbe56e057f20f883e', 'user1', '2', '', '男', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (5, 'auth1', 'e10adc3949ba59abbe56e057f20f883e', 'auh1', '1', '', '男', NULL, NULL, NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

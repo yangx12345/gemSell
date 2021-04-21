@@ -84,9 +84,10 @@ export function restPassword(id) {
   })
 }
 
-export function getUserList() {
+export function getUserList(role) {
   return request({
     url: '/user/getUserList',
-    method: 'get'
+    method: 'get',
+    params: { role: role }
   })
 }

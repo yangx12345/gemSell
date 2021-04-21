@@ -7,7 +7,7 @@
       @open="open()"
       @before-close="onCancel()"
     >
-      <el-form ref="currentgood" :model="currentgood" label-width="120px" :rules="userRules">
+      <el-form ref="currentgood" :model="currentgood" label-width="120px" :rules="goodsRules">
         <el-row>
           <el-col :span="12">
             <el-form-item label="商品名称" prop="goodName">
@@ -71,6 +71,7 @@
               size="small"
               type="primary"
             >点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">一个商品最多五张图片</div>
           </el-upload>
         </el-form-item>
         <el-row>
@@ -124,7 +125,7 @@ export default {
   },
   data() {
     return {
-      userRules: {
+      goodsRules: {
         goodName: [{ required: true, trigger: 'blur', message: '请输入商品名称' }, { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }],
         typeId: [{ required: true, trigger: 'blur', message: '请选择分类' }],
         purchasePrice: [{ required: true, trigger: 'blur', message: '请输入进价' }],
@@ -155,6 +156,7 @@ export default {
     open() {
       this.data.goodId = this.currentgood.goodId
       this.fileList = JSON.parse(this.currentgood.imgAddress)
+      this.currentgood.imgAddress = JSON.parse(this.currentgood.imgAddress)
     },
     changeType() {
       if (this.currentgood.typeId) {
@@ -164,8 +166,13 @@ export default {
       }
     },
     handleSuccess(response) {
-      this.currentgood.imgAddress = null
       if (response.code === 1) {
+        if (this.currentgood.imgAddress[0].name === 'defaultImg.jpg') {
+          this.currentgood.imgAddress = []
+          this.currentgood.imgAddress.push(response.data)
+        } else {
+          this.currentgood.imgAddress.push(response.data)
+        }
         this.$message({
           message: '上传成功！',
           type: 'success'
@@ -182,9 +189,9 @@ export default {
           }
           list.push(o)
         })
-        this.currentgood.imgAddress = JSON.stringify(list)
+        this.currentgood.imgAddress = list
       } else {
-        this.currentgood.imgAddress = JSON.stringify([{ name: 'defaultImg.jpg', url: 'http://localhost:8088/gemsell-api/imgs/defaultImg.jpg' }])
+        this.currentgood.imgAddress = [{ name: 'defaultImg.jpg', url: 'http://localhost:8088/gemsell-api/imgs/defaultImg.jpg' }]
       }
     },
     handleError() {
@@ -203,6 +210,7 @@ export default {
     onSubmit() {
       this.$refs['currentgood'].validate((valid) => {
         if (valid) {
+          this.currentgood.imgAddress = JSON.stringify(this.currentgood.imgAddress)
           this.currentgood.remainNumber = this.currentgood.totalNumber
           if (!this.currentgood.goodId) {
             add(this.currentgood).then(resp => {

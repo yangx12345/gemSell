@@ -1,22 +1,18 @@
 <template>
   <div class="container">
     <el-form ref="form" :model="form" :inline="true" label-min-width="80px">
-      <el-form-item label="商品名称">
-        <el-input v-model="form.goodName" clearable />
+      <el-form-item label="请求人">
+        <el-input v-model="form.ownerName" clearable />
       </el-form-item>
-      <el-form-item label="商品分类">
-        <treeselect v-model="form.typeId" :options="options" style="width: 240px" />
+      <el-form-item label="鉴品编码">
+        <el-input v-model="form.treasureCode" clearable />
       </el-form-item>
-      <el-form-item label="商品状态">
-        <el-select v-model="form.status" placeholder="请选择商品状态" clearable>
-          <el-option label="未发布" :value="'0'" />
-          <el-option label="已发布未售" :value="'1'" />
-          <el-option label="已售" :value="'2'" />
-        </el-select>
+      <el-form-item label="鉴定人">
+        <el-input v-model="form.authUserName" clearable />
       </el-form-item>
       <el-button type="primary" @click="getList()">查询</el-button>
       <el-button @click="resetData">重置</el-button>
-      <el-button type="primary" @click="addgood">添加</el-button>
+      <el-button type="primary" @click="addAuthenticate">添加</el-button>
       <el-button type="danger" :disabled="ids.length === 0" @click="batchDelete"> 删除</el-button>
     </el-form>
     <el-table
@@ -30,59 +26,76 @@
         align="center"
       />
       <el-table-column
-        prop="goodId"
+        prop="authenticateId"
         label="编号"
         min-width="50"
         align="center"
       />
       <el-table-column
-        prop="goodName"
-        label="商品名称"
+        prop="ownerName"
+        label="请求人"
         min-width="120"
+        align="center"
+      />
+      <el-table-column
+        prop="authUserName"
+        label="鉴定人"
+        min-width="120"
+        align="center"
+      />
+      <el-table-column
+        prop="treasureName"
+        label="鉴品名称"
+        min-width="120"
+        align="center"
+      />
+      <el-table-column
+        prop="treasureCode"
+        label="鉴品编码"
+        min-width="80"
         align="center"
       />
       <el-table-column
         prop="typeName"
         label="类型名称"
+        min-width="80"
+        align="center"
+      />
+      <el-table-column
+        prop="texture"
+        label="质地"
+        min-width="80"
+        align="center"
+      />
+      <el-table-column
+        prop="weight"
+        label="重量"
+        min-width="80"
+        align="center"
+      />
+      <el-table-column
+        prop="formCity"
+        label="产地"
         min-width="120"
         align="center"
       />
       <el-table-column
-        prop="introduce"
-        label="商品介绍"
+        prop="result"
+        label="鉴定结果"
         align="center"
         min-width="240"
         :show-overflow-tooltip="true"
       />
       <el-table-column
-        prop="totalNumber"
-        label="总数量"
-        min-width="80"
+        prop="createTime"
+        label="申请时间"
+        min-width="160"
         align="center"
       />
       <el-table-column
-        prop="remainNumber"
-        label="剩余数量"
-        min-width="80"
-        align="center"
-      />
-      <el-table-column
-        prop="purchasePrice"
-        label="进价"
-        min-width="120"
-        align="center"
-      />
-      <el-table-column
-        prop="price"
-        label="售价"
-        min-width="120"
-        align="center"
-      />
-      <el-table-column
-        prop="status"
-        label="商品状态"
-        min-width="120"
-        :formatter="statusFormatter"
+        prop="createTime"
+        label="鉴定时间"
+        min-width="160"
         align="center"
       />
       <el-table-column
@@ -110,7 +123,7 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    <addgood :dialog-form-visible.sync="dialogFormVisible" :currentgood="currentgood" :options="options" @getList="getList" />
+    <addgood :dialog-form-visible.sync="dialogFormVisible" :authenticate="Authenticate" :options="options" @getList="getList" />
     <el-dialog
       title="商品图片预览"
       :visible.sync="viewVisible"
@@ -129,17 +142,16 @@
 </template>
 
 <script>
-import { getListByCondition, batchDelete, deleteById } from '@/api/goods'
+import { getListByCondition, batchDelete, deleteById } from '@/api/authenticate'
 import { getSelectTree } from '@/api/type'
 import addgood from './addAuthenticate'
-// import the component
-import Treeselect from '@riophae/vue-treeselect'
-// import the styles
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+// // import the component
+// import Treeselect from '@riophae/vue-treeselect'
+// // import the styles
+// import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
   components: {
-    addgood,
-    Treeselect
+    addgood
   },
   data() {
     return {
@@ -151,10 +163,23 @@ export default {
       ids: [],
       total: 0,
       dialogFormVisible: false,
-      currentgood: {
-        goodName: '',
-        goodId: '',
-        imgAddress: '12'
+      Authenticate: {
+        authenticateId: null,
+        ownerId: null,
+        ownerName: '',
+        imgAddress: [],
+        treasureName: '',
+        treasureCode: '',
+        typeId: null,
+        typeName: '',
+        texture: '',
+        weight: '',
+        formCity: '',
+        authUserId: '',
+        authUserName: '',
+        result: '',
+        createTime: '',
+        successTime: ''
       },
       options: [],
       viewVisible: false,
@@ -188,7 +213,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteById(row.goodId).then(response => {
+        deleteById(row.authenticateId).then(response => {
           const res = response
           if (res.code === 1) {
             this.$message({
@@ -212,21 +237,29 @@ export default {
       this.viewVisible = false
       this.imgOptions = []
     },
-    addgood() {
-      this.currentgood = {
-        goodName: '',
+    addAuthenticate() {
+      this.Authenticate = {
+        authenticateId: null,
+        ownerId: null,
+        ownerName: '',
+        imgAddress: [],
+        treasureName: '',
+        treasureCode: '',
         typeId: null,
-        goodId: '',
-        introduce: '',
-        imgAddress: JSON.stringify([{ name: 'defaultImg.jpg', url: 'http://localhost:8088/gemsell-api/imgs/defaultImg.jpg' }]),
-        price: '',
-        status: '',
-        purchasePrice: ''
+        typeName: '',
+        texture: '',
+        weight: '',
+        formCity: '',
+        authUserId: '',
+        authUserName: '',
+        result: '',
+        createTime: '',
+        successTime: ''
       }
       this.dialogFormVisible = true
     },
     updateClick(row) {
-      this.currentgood = { ...row }
+      this.Authenticate = { ...row }
       this.dialogFormVisible = true
     },
     // 重置
@@ -246,7 +279,7 @@ export default {
       })
     },
     handleSelectionChange(val) {
-      this.ids = val.map(item => item.goodId)
+      this.ids = val.map(item => item.authenticateId)
     },
     batchDelete() {
       this.$confirm('您确定要批量删除已选定的数据项?', '警告', {

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-dialog
-      :title="order.orderId? '编辑商品':'添加商品'"
+      :title="order.orderId? '编辑订单':'添加订单'"
       width="60%"
       :visible.sync="dialogFormVisible"
       @open="open()"
@@ -105,7 +105,7 @@ export default {
     }
   },
   mounted() {
-    getUserList().then(resp => {
+    getUserList('2').then(resp => {
       if (resp.code === 1) {
         this.userOptions = resp.data
       }

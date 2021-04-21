@@ -119,17 +119,7 @@ public class GoodsController {
                                   @RequestParam(value = "goodId", required = false) Integer goodId,
                                   @RequestParam(value = "file", required = false) MultipartFile file) {
 
-
-            Goods goods = goodsService.getById(goodId);
-            JSONArray pathJsonArray = JSON.parseArray(goods.getImgAddress());
-            if (pathJsonArray.size() == 5)
-            {
-                ResultUtil.error("上传失败，一个商品最多五张图片");
-            }
-            if ("defaultImg.jpg".equals(pathJsonArray.getJSONObject(0).get("name")))
-            {
-                 pathJsonArray.remove(0);
-            }
+            JSONObject path = new JSONObject();
             if (file.isEmpty()) {
                 return ResultUtil.error("图片为空");
             } else {
@@ -143,21 +133,14 @@ public class GoodsController {
                 }
                 try {
                     file.transferTo(dest);
-                    filePath = FileUtils.BASH_URL + goodId + "/" + fileName;
-                    JSONObject path = new JSONObject();
-                    path.put("name",fileName);
+                    filePath = FileUtils.BASH_URL + "goods" + goodId + "/" + fileName;
+                    path.put("name",file.getOriginalFilename());
                     path.put("url",filePath);
-                    pathJsonArray.add(path);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
         }
-        goods.setImgAddress(pathJsonArray.toString());
-        boolean flag = goodsService.updateEntity(goods);
-        if (flag) {
-            return ResultUtil.success("上传成功",pathJsonArray.toString());
-        }
-        return ResultUtil.error("上传失败");
+          return ResultUtil.success("上传成功",path);
     }
 
     @GetMapping("/getGoodsList")

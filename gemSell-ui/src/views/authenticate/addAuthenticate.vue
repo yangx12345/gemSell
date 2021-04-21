@@ -1,56 +1,78 @@
 <template>
   <div class="app-container">
     <el-dialog
-      :title="currentgood.goodId? '编辑商品':'添加商品'"
+      :title="authenticate.authenticateId? '编辑鉴定':'添加商品'"
       width="60%"
       :visible.sync="dialogFormVisible"
       @open="open()"
       @before-close="onCancel()"
     >
-      <el-form ref="currentgood" :model="currentgood" label-width="120px" :rules="userRules">
+      <el-form ref="authenticate" :model="authenticate" label-width="120px" :rules="authenticateRules">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="商品名称" prop="goodName">
-              <el-input v-model="currentgood.goodName" placeholder="请输入" :disabled="type==='update'" />
+            <el-form-item label="用户" prop="ownerId">
+              <el-select v-model="authenticate.ownerId" placeholder="请选择用户" @change="userChange">
+                <el-option
+                  v-for="item in userOptions"
+                  :key="item.userId"
+                  :label="item.userName"
+                  :value="item.userId"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="商品分类" prop="typeId">
-              <treeselect v-model="currentgood.typeId" :options="options" style="width: 240px" @input="changeType()" />
+            <el-form-item label="鉴定人" prop="authUserId">
+              <el-select v-model="authenticate.authUserId" placeholder="请选择鉴定人" @change="authChange">
+                <el-option
+                  v-for="item in authOptions"
+                  :key="item.userId"
+                  :label="item.userName"
+                  :value="item.userId"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="商品状态" prop="status">
-              <el-radio-group v-model="currentgood.status" placeholder="请输入">
-                <el-radio :label="0">未发布</el-radio>
-                <el-radio :label="1">已发布未售</el-radio>
-                <el-radio :label="2">已售</el-radio>
-              </el-radio-group>
+            <el-form-item label="鉴品名称" prop="treasureName">
+              <el-input v-model="authenticate.treasureName" placeholder="请输入鉴品名称" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="进价" prop="purchasePrice">
-              <el-input v-model="currentgood.purchasePrice" type="number" :min="0" placeholder="请输入" />
+            <el-form-item label="鉴品编码" prop="treasureCode">
+              <el-input v-model="authenticate.treasureCode" placeholder="请输入鉴品编码" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="售价" prop="price">
-              <el-input v-model="currentgood.price" type="number" :min="0" placeholder="请输入" />
+            <el-form-item label="鉴品分类" prop="typeId">
+              <treeselect v-model="authenticate.typeId" :options="options" style="width: 240px" @input="changeType()" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="数量" prop="totalNumber">
-              <el-input v-model="currentgood.totalNumber" type="number" :min="0" placeholder="请输入" />
+            <el-form-item label="质地" prop="texture">
+              <el-input v-model="authenticate.texture" placeholder="请输入" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="重量" prop="weight">
+              <el-input v-model="authenticate.weight" type="number" :min="0" :step="0.1" placeholder="请输入" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="产地" prop="formCity">
+              <el-input v-model="authenticate.formCity" placeholder="请输入" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item
-          v-if="currentgood.goodId"
-          label="商品图片"
+          prop="imgAddress"
+          label="鉴品图片"
         >
           <el-upload
             :on-success="handleSuccess"
@@ -60,24 +82,24 @@
             :limit="5"
             multiple
             :headers="head"
-            :data="data"
             :file-list="fileList"
             accept=".jpg,.jpeg,.png"
             class="upload-demo"
             list-type="picture"
-            action="http://localhost:8088/gemsell-api/goods/goodsImageUpload"
+            action="http://localhost:8088/gemsell-api/authenticate/imageUpload"
           >
             <el-button
               size="small"
               type="primary"
             >点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">一个鉴品最多五张图片</div>
           </el-upload>
         </el-form-item>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="商品介绍" prop="introduce">
+            <el-form-item label="鉴定结果" prop="result">
               <el-input
-                v-model="currentgood.introduce"
+                v-model="authenticate.result"
                 style="width:100%"
                 type="textarea"
                 :autosize="{ minRows:4, maxRows: 6}"
@@ -89,7 +111,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="onCancel()">取 消</el-button>
-        <el-button type="primary" @click="onSubmit">{{ currentgood.goodId?'保存':'添加' }}</el-button>
+        <el-button type="primary" @click="onSubmit">{{ authenticate.authenticateId?'保存':'添加' }}</el-button>
       </span>
     </el-dialog>
 
@@ -98,8 +120,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { add, update } from '@/api/goods.js'
+import { add, update } from '@/api/authenticate'
 import { getById } from '@/api/type.js'
+import { getUserList } from '@/api/userManage'
 // import the component
 import Treeselect from '@riophae/vue-treeselect'
 // import the styles
@@ -113,7 +136,7 @@ export default {
       type: Boolean,
       default: false
     },
-    currentgood: {
+    authenticate: {
       type: Object,
       default: null
     },
@@ -124,16 +147,22 @@ export default {
   },
   data() {
     return {
-      userRules: {
-        goodName: [{ required: true, trigger: 'blur', message: '请输入商品名称' }, { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }],
+      authenticateRules: {
+        ownerId: [{ required: true, trigger: 'blur', message: '请选择用户' }],
+        treasureName: [{ required: true, trigger: 'blur', message: '请输入鉴品名称' }],
+        treasureCode: [{ required: true, trigger: 'blur', message: '请输入鉴品编码' }],
+        imgAddress: [{ required: true, trigger: 'blur', message: '请上传鉴品图片' }],
         typeId: [{ required: true, trigger: 'blur', message: '请选择分类' }],
-        purchasePrice: [{ required: true, trigger: 'blur', message: '请输入进价' }],
-        price: [{ required: true, trigger: 'blur', message: '请输入售价' }]
+        texture: [{ required: true, trigger: 'blur', message: '请输入质地' }],
+        formCity: [{ required: true, trigger: 'blur', message: '请输入产地' }],
+        weight: [{ required: true, trigger: 'blur', message: '请输入重量' }]
       },
       type: '',
-      data: { goodId: null },
+      data: { authenticateId: null },
       fileList: [],
-      head: { token: '' }
+      head: { token: '' },
+      userOptions: [],
+      authOptions: []
     }
   },
   computed: {
@@ -141,9 +170,42 @@ export default {
       'token'
     ])
   },
+  mounted() {
+    getUserList('2').then(resp => {
+      if (resp.code === 1) {
+        this.userOptions = resp.data
+      }
+    })
+    getUserList('1').then(resp => {
+      if (resp.code === 1) {
+        this.authOptions = resp.data
+      }
+    })
+  },
   methods: {
+    changeType() {
+      if (this.authenticate.typeId) {
+        getById(this.authenticate.typeId).then(resp => {
+          this.authenticate.typeName = resp.data.typeName
+        })
+      }
+    },
+    userChange(value) {
+      this.userOptions.forEach((item) => {
+        if (item.userId === value) {
+          this.authenticate.ownerName = item.userName
+        }
+      })
+    },
+    authChange(value) {
+      this.authOptions.forEach((item) => {
+        if (item.userId === value) {
+          this.authenticate.authUserName = item.userName
+        }
+      })
+    },
     handleUpload() {
-      if (this.fileList.length > 4) {
+      if (this.fileList.length > 4 || this.authenticate.imgAddress.length > 4) {
         this.$message({
           message: '一个商品最多上传五张图片',
           type: 'info'
@@ -153,19 +215,14 @@ export default {
       this.head.token = this.token
     },
     open() {
-      this.data.goodId = this.currentgood.goodId
-      this.fileList = JSON.parse(this.currentgood.imgAddress)
-    },
-    changeType() {
-      if (this.currentgood.typeId) {
-        getById(this.currentgood.typeId).then(resp => {
-          this.currentgood.typeName = resp.data.typeName
-        })
+      if (this.authenticate.authenticateId) {
+        this.fileList = JSON.parse(this.authenticate.imgAddress)
+        this.authenticate.imgAddress = JSON.parse(this.authenticate.imgAddress)
       }
     },
     handleSuccess(response) {
-      this.currentgood.imgAddress = null
       if (response.code === 1) {
+        this.authenticate.imgAddress.push(response.data)
         this.$message({
           message: '上传成功！',
           type: 'success'
@@ -182,9 +239,9 @@ export default {
           }
           list.push(o)
         })
-        this.currentgood.imgAddress = JSON.stringify(list)
+        this.authenticate.imgAddress = list
       } else {
-        this.currentgood.imgAddress = JSON.stringify([{ name: 'defaultImg.jpg', url: 'http://localhost:8088/gemsell-api/imgs/defaultImg.jpg' }])
+        this.authenticate.imgAddress = []
       }
     },
     handleError() {
@@ -194,18 +251,19 @@ export default {
       })
     },
     onCancel() {
-      if (this.$refs['currentgood']) {
-        this.$refs['currentgood'].clearValidate()
+      if (this.$refs['authenticate']) {
+        this.$refs['authenticate'].clearValidate()
       }
       this.$emit('update:dialogFormVisible', false)
+      this.fileList = []
     },
     // 提交
     onSubmit() {
-      this.$refs['currentgood'].validate((valid) => {
+      this.$refs['authenticate'].validate((valid) => {
         if (valid) {
-          this.currentgood.remainNumber = this.currentgood.totalNumber
-          if (!this.currentgood.goodId) {
-            add(this.currentgood).then(resp => {
+          this.authenticate.imgAddress = JSON.stringify(this.authenticate.imgAddress)
+          if (!this.authenticate.authenticateId) {
+            add(this.authenticate).then(resp => {
               if (resp.code === 1) {
                 this.$message({
                   message: '增加成功',
@@ -216,7 +274,7 @@ export default {
               }
             })
           } else {
-            update(this.currentgood).then((result) => {
+            update(this.authenticate).then((result) => {
               if (result.code === 1) {
                 this.$message({
                   message: '更新成功',

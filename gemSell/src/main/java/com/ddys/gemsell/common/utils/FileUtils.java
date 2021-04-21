@@ -15,6 +15,8 @@ public class FileUtils extends FileUtil {
 
 	public static final String  GOOD_UPLOAD_PATH = PROJECTPATH + "/src/main/resources/imgs/goods";
 
+	public static final String  AUTH_UPLOAD_PATH = PROJECTPATH + "/src/main/resources/imgs/auth/";
+
 	public static final String BASH_URL = "http://localhost:8088/gemsell-api/imgs/";
 
 
