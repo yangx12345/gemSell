@@ -63,6 +63,10 @@ public class IndentController {
 		return ResultUtil.parameterError();
         }
         entity.setCreateTime(LocalDateTime.now());
+        if ("3".equals(entity.getStatus()) || "4".equals(entity.getStatus()))
+        {
+            entity.setSuccessTime(LocalDateTime.now());
+        }
         return ResultUtil.judgmentResult(indentService.saveEntity(entity));
     }
 
@@ -76,7 +80,20 @@ public class IndentController {
         if(entity==null){
 		return ResultUtil.parameterError();
         }
-        return ResultUtil.judgmentResult(indentService.updateEntity(entity));
+        Indent findIndent = indentService.getEntityById(entity.getOrderId());
+        if ("3".equals(findIndent.getStatus()) || "4".equals(findIndent.getStatus()))
+        {
+            return ResultUtil.judgmentResult(indentService.updateEntity(entity));
+        }
+        else
+        {
+            if ("3".equals(entity.getStatus()) || "4".equals(entity.getStatus()))
+            {
+                entity.setSuccessTime(LocalDateTime.now());
+            }
+            return ResultUtil.judgmentResult(indentService.updateEntity(entity));
+        }
+
     }
 
 
