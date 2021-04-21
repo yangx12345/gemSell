@@ -24,6 +24,15 @@
     <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.Indent" resultMap="BaseResultMap">
         <include refid="selectVo"></include>
          where 1=1
+        <if test="goodName!=null and goodName!=''">
+            and good_name like "%" #{goodName} "%"
+        </if>
+        <if test="userName!=null and userName!=''">
+            and user_name like "%" #{userName} "%"
+        </if>
+        <if test="status!=null">
+            and status = #{status}
+        </if>
     </select>
 
 </mapper>

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import com.ddys.gemsell.service.IndentService;
 import com.ddys.gemsell.entity.Indent;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -61,6 +62,7 @@ public class IndentController {
         if(entity==null){
 		return ResultUtil.parameterError();
         }
+        entity.setCreateTime(LocalDateTime.now());
         return ResultUtil.judgmentResult(indentService.saveEntity(entity));
     }
 
