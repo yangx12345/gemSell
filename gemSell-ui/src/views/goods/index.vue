@@ -153,8 +153,13 @@ export default {
       dialogFormVisible: false,
       currentgood: {
         goodName: '',
+        typeId: null,
         goodId: '',
-        imgAddress: '12'
+        introduce: '',
+        imgAddress: JSON.stringify([{ name: 'defaultImg.jpg', url: 'http://localhost:8088/gemsell-api/imgs/defaultImg.jpg' }]),
+        price: '',
+        status: '',
+        purchasePrice: ''
       },
       options: [],
       viewVisible: false,
