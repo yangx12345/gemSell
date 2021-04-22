@@ -85,6 +85,8 @@
 </template>
 <script>
 import { Loading } from "element-ui";
+import { getListByCondition} from '@/api/type'
+import { getGoodsListByCondition} from '@/api/goods'
 export default {
     name: "index",
     data: function() {
@@ -97,21 +99,19 @@ export default {
     },
 
     created() {
-        this.$axios
-        .post("/gemsell-api/type/getListByCondition")
+        getListByCondition("/gemsell-api/type/getListByCondition")
         .then(response => {
-            console.log(response.data.data);
-            this.cateList = response.data.data;
-            this.content = response.data.data;
+            console.log(response.data);
+            this.cateList = response.data;
+            this.content = response.data;
         });
         var data= {
             status: 1
         }
-        this.$axios
-        .post("/gemsell-api/goods/getListByCondition?pageIndex="+1+"&pageSize="+10,data, 1,10)
+        getGoodsListByCondition(data,1,10)
         .then(response => {
-            this.sliderList = response.data.data.list;
-            this.topList = response.data.data.list;
+            this.sliderList = response.data.list;
+            this.topList = response.data.list;
         });
     },
     methods: {

@@ -174,7 +174,7 @@
 <script>
 // 导入省市联动
 import VDistpicker from "v-distpicker";
-
+import { getById } from '@/api/order'
 export default {
   name: "order",
   // 注册的组件
@@ -305,7 +305,7 @@ export default {
   created(){
     //保存id
     this.orderForm.goodsids = this.$route.params.id;
-    this.$axios.get(`gemsell-api/validate/order/getgoodslist/${this.$route.params.id}`)
+    getById(this.$route.params.id)
     .then(response=>{
         //定义总金额
         let total = 0;

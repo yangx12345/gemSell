@@ -181,10 +181,10 @@ export default {
         },
         Submit() {
             //判断是否有商品
-            if (this.totalPrice == 0) {
-                this.$Message.error('请先登录!');
-                return;
-            }
+            // if (this.totalPrice == 0) {
+            //     this.$Message.error('请先登录!');
+            //     return;
+            // }
 
             let ids = '';
             this.message.forEach(v=>{

@@ -30,9 +30,21 @@
                                 </div>
                                 <div class="spec-box">
                                     <dl>
+                                        <dt>购买数量</dt>
+                                        <dd>
+                                            <div class="stock-box">
+                                                <el-input-number v-model="buyCount" :min="1" :max="goodsInfo.totalNumber" label="描述文字" size="small"></el-input-number>
+                                            </div>
+                                            <span class="stock-txt">
+                                                库存
+                                                <em id="commodityStockNum">{{goodsInfo.remainNumber}}</em>件
+                                            </span>
+                                        </dd>
+                                    </dl>
+                                    <dl>
                                         <dd>
                                             <div id="buyButton" class="btn-buy">
-                                                <button @click="cartAdd(this,'/',1,'/shopping.html');" class="buy">立即购买</button>
+                                                <button @click="addOrder()" class="buy">立即购买</button>
                                                 <button @click="addGoods" class="add">加入购物车</button>
                                             </div>
                                         </dd>
@@ -85,6 +97,9 @@
 <script>
 import { Loading } from "element-ui";
 import $ from 'jquery';
+import { getGoodsListByCondition, getById} from '@/api/goods'
+import { add } from '@/api/cart'
+import { addorder } from '@/api/order'
 export default {
     name: 'detail',
     data: function() {
@@ -93,7 +108,7 @@ export default {
             goodsInfo: {},
             hotList: [],
             imgList: [],
-            buyCount: '',
+            buyCount: 1,
             isSelected: true,
             // 放大镜设置
             zoomerOptions: {
@@ -124,9 +139,9 @@ export default {
             this.productId = this.$route.query.id;
             var _this = this
             //获取数据
-             this.$axios.get(`/gemsell-api/goods/getById/${this.productId}`)
+             getById(this.productId)
                 .then(response => {
-                    _this.goodsInfo = response.data.data
+                    _this.goodsInfo = response.data
                     _this.imgList = JSON.parse(_this.goodsInfo.imgAddress);
                     // 处理 放大镜数据
                     let temArr = [];
@@ -137,21 +152,48 @@ export default {
                             url: v.url
                         })
                     })
-                    // 临时数组 
+                    // 临时数组
                     _this.images.normal_size = temArr;
                      _this.buyCount = 1;
                 });
                 var data= {
                     status: 1
                 }
-                this.$axios
-                    .post("/gemsell-api/goods/getListByCondition?pageIndex="+1+"&pageSize="+10,data)
+                getGoodsListByCondition(data,1,5)
                     .then(response => {
-                        _this.hotList = response.data.data.list;
+                        _this.hotList = response.data.list;
                     });
         },
-        //移动图片动画
+        // 立即购买
+        addOrder(){
+            if(!this.$store.state.token){
+                this.$message.error('请先登录！')
+                return
+            }
+            var order = {
+                goodId: this.goodsInfo.goodId,
+                goodName: this.goodsInfo.goodName,
+                price: this.goodsInfo.price,
+                num: this.buyCount,
+                userId: this.$store.state.currentUser.userId,
+                userName: this.$store.state.currentUser.userName,
+                status: 0,
+                totalPrice: this.buyCount * this.goodsInfo.price
+            }
+            addOrder(order).then(resp=>{
+                if(resp.code === 1){
+                    this.$router.push({
+                        path: `/order/${resp.data}`
+                    })
+                }
+            })
+        },
+        // 添加购物车
         addGoods(){
+            if(!this.$store.state.token){
+                this.$message.error('请先登录！')
+                return
+            }
             //获取加入购物车的位置
             let addOffset = $('.add').offset();
             //获取购物车的位置
@@ -159,16 +201,27 @@ export default {
             $('.moveImg').stop().show().addClass('move').css(addOffset).animate(carTarget,1000,function(){
                 $(this).hide().removeClass('move');
             })
+            var cart = {
+                goodId: this.goodsInfo.goodId,
+                goodName: this.goodsInfo.goodName,
+                price: this.goodsInfo.price,
+                number: this.buyCount,
+                userId: this.$store.state.currentUser.userId
+            }
+            add(cart).then(resp=>{
+                if(resp.code === 1){
+                    this.$store.commit('addGoods',{
+                        goodId:this.productId,
+                        goodNum:this.buyCount
+                    });
+                }
+            })
 
-         this.$store.commit('addGoods',{
-            goodId:this.productId,
-            goodNum:this.buyCount
-         });
         }
 },
 watch: {
         $route(val, oldVal) {
-            // 数组长度为0 直接销毁 
+            // 数组长度为0 直接销毁
             this.images.normal_size = [];
             // 回调函数中重新复制 再次 生成
             this.getProductDatil();
@@ -186,7 +239,7 @@ watch: {
         //关闭加载动画
         let loadingInstance = Loading.service({ text: false });
         this.$nextTick(() => {
-            // 以服务的方式调用的 Loading 需要异步关闭 
+            // 以服务的方式调用的 Loading 需要异步关闭
             loadingInstance.close();
         });
     }

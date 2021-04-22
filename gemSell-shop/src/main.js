@@ -34,7 +34,7 @@ Vue.use(ProductZoomer);
 Vue.config.productionTip = false
 
 //导入vuex文件
-import { store } from './vuex/store';
+import store from './vuex/store';
 import router from './router'
 
 

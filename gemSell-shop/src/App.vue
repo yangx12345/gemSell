@@ -11,15 +11,14 @@
                         <a target="_blank" href="#"></a>
                     </div>
                     <div id="menu" class="right-box">
-                        <span v-show="$store.state.isLogin == false">
-                           <router-link to="/login">登录</router-link>
+                        <span v-show="$store.state.currentUser.userId === undefined">
+                           <router-link to="/login/login">登录</router-link>
                             <strong>|</strong>
-                            <a href="" class="">注册</a>
+                            <router-link to="/login/register">注册</router-link>
                             <strong>|</strong>
                         </span>
-                        <span v-show="$store.state.isLogin == true">
+                        <span v-show="$store.state.currentUseruserId">
                             <!-- <a href="" class="">会员中心</a> -->
-                        <router-link to="/vipCenter">会员中心</router-link>
                             <strong>|</strong>
                             <a @click="layout">退出</a>
                             <strong>|</strong>
@@ -102,13 +101,12 @@ export default {
     },
     methods: {
         layout() {
-            this.isShow = true;
+            this.$store.dispatch('user/logout')
         },
         userExit() {
             this.$axios.get('/site/account/logout').then(response => {
                if (response.data.status == 0) {
                  this.$router.push('/index');
-                 this.$store.state.isLogin = false;
                }
             })
         }

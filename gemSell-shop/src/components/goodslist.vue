@@ -43,7 +43,7 @@
         </div>
     </div>
 </div>
-    
+
 </template>
 
 <script>
@@ -51,6 +51,8 @@
 import Treeselect from '@riophae/vue-treeselect'
 // import the styles
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import { getTypeSelect} from '@/api/type'
+import { getGoodsListByCondition} from '@/api/goods'
 export default {
     components: {
         Treeselect
@@ -71,16 +73,14 @@ export default {
             typeId: this.$route.query.typeId
         }
         this.form.typeId = data.typeId
-        this.$axios
-        .post("/gemsell-api/goods/getListByCondition?pageIndex="+1+"&pageSize="+10,data)
+        getGoodsListByCondition(this.form, this.pageIndex, this.pageSize)
         .then(response => {
-            this.goodList = response.data.data.list;
-            this.total = response.data.data.total
+            this.goodList = response.data.list;
+            this.total = response.data.total
         });
-        this.$axios
-        .post("/gemsell-api/type/getTypeSelect")
+        getTypeSelect()
         .then(response => {
-            this.options = response.data.data;
+            this.options = response.data;
         })
     },
     methods: {
@@ -93,9 +93,9 @@ export default {
             this.getList()
         },
         getList(){
-            this.$axios.post("/gemsell-api/goods/getListByCondition?pageIndex="+pageIndex+"&pageSize="+this.pageSize,data).then(resp => {
-            this.goodList = resp.data.data.list
-            this.total = resp.data.data.total
+            getGoodsListByCondition(this.form, this.pageIndex, this.pageSize).then(resp => {
+            this.goodList = resp.data.list
+            this.total = resp.data.total
             })
         },
         gotoDetail(row){
