@@ -174,11 +174,12 @@ public class UserController {
         {
             return ResultUtil.parameterError();
         }
-        User findUser  =  userService.getByUsernameAndPassword(user.getUserName(),user.getPassword());
+        User findUser  =  userService.getByUsername(user.getUserName());
         if (findUser != null)
         {
             return ResultUtil.error("用户名已存在");
         }
+        user.setPassword(SecureUtil.md5(user.getPassword()));
         return ResultUtil.judgmentResult(userService.saveEntity(user));
     }
 
