@@ -37,4 +37,7 @@ public interface IndentService extends IService<Indent> {
      */
     public boolean deleteByIds(String ids);
 
+	List<Indent> getByIds(String ids);
+
+    Boolean batchAdd(List<Indent> indents);
 }

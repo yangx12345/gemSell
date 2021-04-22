@@ -51,7 +51,21 @@ public class IndentServiceImpl extends ServiceImpl<IndentMapper, Indent>implemen
     @Transactional(readOnly=false,rollbackFor=Exception.class)
     public boolean deleteByIds(String ids){
         Integer[]Ids=Convert.toIntArray(ids);
-        List<Integer>idList=Arrays.asList(Ids);
+        List<Integer> idList = Arrays.asList(Ids);
         return this.removeByIds(idList);
     }
+
+    @Override
+    public Boolean batchAdd(List<Indent> indents) {
+        return this.saveBatch(indents);
+    }
+
+    @Override
+    public List<Indent> getByIds(String ids) {
+        Integer[]Ids=Convert.toIntArray(ids);
+        List<Integer> idList = Arrays.asList(Ids);
+        return this.listByIds(idList);
+    }
+
+
 }

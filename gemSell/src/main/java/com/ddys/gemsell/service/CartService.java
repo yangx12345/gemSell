@@ -37,4 +37,5 @@ public interface CartService extends IService<Cart> {
      */
     public boolean deleteByIds(String ids);
 
+	Cart getByUserIdAndGoodId(Integer userId, Integer goodId);
 }

@@ -61,7 +61,15 @@ public class CartController {
         if(entity==null){
 		return ResultUtil.parameterError();
         }
-        return ResultUtil.judgmentResult(cartService.saveEntity(entity));
+        Cart cart  = cartService.getByUserIdAndGoodId(entity.getUserId(),entity.getGoodId());
+        if (cart != null)
+        {
+            cart.setNumber(cart.getNumber()+1);
+            return ResultUtil.judgmentResult(cartService.updateEntity(cart));
+        }
+        else {
+            return ResultUtil.judgmentResult(cartService.saveEntity(entity));
+        }
     }
 
 
@@ -102,5 +110,7 @@ public class CartController {
         }
         return ResultUtil.judgmentResult(cartService.deleteByIds(ids));
     }
+
+
 }
 
