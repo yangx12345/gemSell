@@ -47,7 +47,8 @@ public class GlobalCrosConfig {
                         .excludePathPatterns("/goods/getListByCondition")
                         .excludePathPatterns("/goods/getById/{id}")
                         .excludePathPatterns("/imgs/**")
-                        .excludePathPatterns("/user/register");
+                        .excludePathPatterns("/user/register")
+                        .excludePathPatterns("/type/getTypeSelect");
             }
 
             //添加访问后端静态资源
