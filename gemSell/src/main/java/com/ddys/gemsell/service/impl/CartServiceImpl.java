@@ -1,5 +1,6 @@
 package com.ddys.gemsell.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ddys.gemsell.entity.Cart;
 import com.ddys.gemsell.mapper.CartMapper;
 import com.ddys.gemsell.service.CartService;
@@ -45,6 +46,13 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart>implements Car
     @Transactional(readOnly=false,rollbackFor=Exception.class)
     public boolean deleteById(Integer id){
         return this.removeById(id);
+    }
+
+    @Override
+    public Cart getByUserIdAndGoodId(Integer userId, Integer goodId) {
+        QueryWrapper<Cart> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",userId).eq("good_id",goodId);
+        return baseMapper.selectOne(queryWrapper);
     }
 
     @Override

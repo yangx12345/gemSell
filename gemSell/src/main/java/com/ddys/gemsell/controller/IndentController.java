@@ -1,19 +1,16 @@
 package com.ddys.gemsell.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.ddys.gemsell.common.result.Result;
 import com.ddys.gemsell.common.result.ResultUtil;
 import com.ddys.gemsell.common.utils.StringUtils;
-import org.springframework.web.bind.annotation.RestController;
+import com.ddys.gemsell.entity.Indent;
+import com.ddys.gemsell.service.IndentService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import com.ddys.gemsell.service.IndentService;
-import com.ddys.gemsell.entity.Indent;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -67,7 +64,15 @@ public class IndentController {
         {
             entity.setSuccessTime(LocalDateTime.now());
         }
-        return ResultUtil.judgmentResult(indentService.saveEntity(entity));
+        boolean flag = indentService.saveEntity(entity);
+        if (flag)
+        {
+            return ResultUtil.success(entity.getOrderId());
+        }
+        else
+        {
+            return ResultUtil.error("添加失败");
+        }
     }
 
 
@@ -120,6 +125,32 @@ public class IndentController {
 		  return ResultUtil.parameterError();
         }
         return ResultUtil.judgmentResult(indentService.deleteByIds(ids));
+    }
+
+    /**
+     * 根据ids批量查找订单
+     */
+    @GetMapping("getByIds")
+    public Result getByIds(@RequestParam String ids)
+    {
+        if(StringUtils.isBlank(ids))
+        {
+            return ResultUtil.parameterError();
+        }
+        return ResultUtil.success(indentService.getByIds(ids));
+    }
+
+    /**
+     * 批量添加订单
+     */
+    @PostMapping("batchAdd")
+    public Result batchAdd(@RequestBody List<Indent> Indents)
+    {
+        if(Indents.isEmpty())
+        {
+            return ResultUtil.parameterError();
+        }
+        return ResultUtil.judgmentResult(indentService.batchAdd(Indents));
     }
 }
 
