@@ -82,7 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>implements Use
     @Override
     public User getUserInfoByUserId(Integer userId) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("user_name","role","name").eq("user_id",userId);
+        queryWrapper.select("user_name","role","name","user_id").eq("user_id",userId);
         return baseMapper.selectOne(queryWrapper);
     }
 
