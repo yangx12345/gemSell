@@ -9,11 +9,12 @@
                     <result column="price" property="price"/>
                     <result column="user_id" property="userId"/>
                     <result column="number" property="number"/>
+                    <result column="img_address" property="imgAddress"/>
         </resultMap>
 
     <sql id="selectVo">
         select
-        cart_id, good_id, good_name, price, user_id,number
+        cart_id, good_id, good_name, price, user_id,number,img_address
        from cart a
     </sql>
     <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.Cart" resultMap="BaseResultMap">

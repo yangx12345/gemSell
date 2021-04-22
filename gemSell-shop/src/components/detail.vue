@@ -99,7 +99,7 @@ import { Loading } from "element-ui";
 import $ from 'jquery';
 import { getGoodsListByCondition, getById} from '@/api/goods'
 import { add } from '@/api/cart'
-import { addorder } from '@/api/order'
+import { addorder  } from '@/api/order'
 export default {
     name: 'detail',
     data: function() {
@@ -166,7 +166,7 @@ export default {
         },
         // 立即购买
         addOrder(){
-            if(!this.$store.state.token){
+            if(this.$store.state.currentUser === undefined){
                 this.$message.error('请先登录！')
                 return
             }
@@ -178,9 +178,10 @@ export default {
                 userId: this.$store.state.currentUser.userId,
                 userName: this.$store.state.currentUser.userName,
                 status: 0,
-                totalPrice: this.buyCount * this.goodsInfo.price
+                totalPrice: this.buyCount * this.goodsInfo.price,
+                imgAddress: this.goodsInfo.imgAddress
             }
-            addOrder(order).then(resp=>{
+            addorder(order).then(resp=>{
                 if(resp.code === 1){
                     this.$router.push({
                         path: `/order/${resp.data}`
@@ -190,7 +191,7 @@ export default {
         },
         // 添加购物车
         addGoods(){
-            if(!this.$store.state.token){
+            if(this.$store.state.currentUser === undefined){
                 this.$message.error('请先登录！')
                 return
             }
@@ -206,7 +207,8 @@ export default {
                 goodName: this.goodsInfo.goodName,
                 price: this.goodsInfo.price,
                 number: this.buyCount,
-                userId: this.$store.state.currentUser.userId
+                userId: this.$store.state.currentUser.userId,
+                imgAddress: this.goodsInfo.imgAddress
             }
             add(cart).then(resp=>{
                 if(resp.code === 1){

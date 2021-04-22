@@ -4,9 +4,11 @@
         <!-- 通用查询映射结果 -->
         <resultMap id="BaseResultMap" type="com.ddys.gemsell.entity.Address">
                     <id column="address_id" property="addressId"/>
-                    <result column="province_id" property="provinceId"/>
-                    <result column="city_id" property="cityId"/>
+                    <result column="province" property="province"/>
+                    <result column="area" property="area"/>
+                    <result column="city" property="city"/>
                     <result column="detailed" property="detailed"/>
+                    <result column="postcode" property="postcode"/>
                     <result column="name" property="name"/>
                     <result column="phone" property="phone"/>
                     <result column="user_id" property="userId"/>
@@ -14,7 +16,7 @@
 
     <sql id="selectVo">
         select
-        address_id, province_id, city_id, detailed, name, phone, user_id
+        address_id, province, area, city, detailed, postcode, name, phone, user_id
        from address a
     </sql>
     <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.Address" resultMap="BaseResultMap">

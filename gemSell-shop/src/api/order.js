@@ -6,7 +6,15 @@ export function getById(id) {
     method: 'get'
   })
 }
-
+export function getByIds(ids) {
+  return request({
+    url: `/order/getByIds`,
+    params: {
+      ids: ids
+    },
+    method: 'get'
+  })
+}
 export function getListByCondition(data, pageIndex, pageSize) {
   return request({
     url: '/order/getListByCondition',
@@ -27,6 +35,7 @@ export function addorder(data) {
     data: data
   })
 }
+
 
 export function update(data) {
   return request({

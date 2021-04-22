@@ -92,4 +92,11 @@ public class Indent implements Serializable {
     private BigDecimal totalPrice;
 
 
+    /**
+     * 商品图片
+     */
+    @TableField("img_address")
+    private String imgAddress;
+
+
 }

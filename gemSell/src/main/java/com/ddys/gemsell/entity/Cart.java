@@ -52,5 +52,11 @@ public class Cart implements Serializable {
     @TableField("number")
     private Integer number;
 
+    /**
+     * 商品图片
+     */
+    @TableField("img_address")
+    private String imgAddress;
+
 
 }

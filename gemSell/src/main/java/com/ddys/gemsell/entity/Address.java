@@ -23,22 +23,34 @@ public class Address implements Serializable {
     private Integer addressId;
 
     /**
-     * 省份id
+     * 省份
      */
-    @TableField("province_id")
-    private Integer provinceId;
+    @TableField("province")
+    private String province;
 
     /**
-     * 城市id
+     * 地区
      */
-    @TableField("city_id")
-    private Integer cityId;
+    @TableField("area")
+    private String area;
+
+    /**
+     * 城市
+     */
+    @TableField("city")
+    private String city;
 
     /**
      * 详细地址
      */
     @TableField("detailed")
     private String detailed;
+
+    /**
+     * 邮政编码
+     */
+    @TableField("postcode")
+    private String postcode;
 
     /**
      * 收货人名

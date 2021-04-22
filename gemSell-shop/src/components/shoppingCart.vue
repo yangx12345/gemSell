@@ -64,20 +64,20 @@
                                     </td>
                                 </tr>
                                 <!-- 商品列表 -->
-                                <tr v-for="item in message" :key="item.id">
+                                <tr v-for="item in message" :key="item.cartId">
                                     <td>
                                         <el-switch v-model="item.selected" active-color="black" inactive-color="hotpink">
                                         </el-switch>
                                     </td>
-                                    <td><img :src="item.img_url" alt="" width=60></td>
-                                    <td>{{item.title}}</td>
-                                    <td>{{item.sell_price}}</td>
+                                    <td><img :src="JSON.parse(item.imgAddress)[0].url" alt="" width=60></td>
+                                    <td>{{item.goodName}}</td>
+                                    <td>{{item.price}}</td>
                                     <td>
-                                        <el-input-number size="mini" :min='1' v-model="item.buycount" @change="numChange($event,item.id)"></el-input-number>
+                                        <el-input-number size="mini" :min='1' v-model="item.number" @change="numChange($event,item.cartId)"></el-input-number>
                                     </td>
-                                    <td>{{item.buycount *item.sell_price}}</td>
+                                    <td>{{item.number *item.price}}</td>
                                     <td>
-                                        <el-button @click="delOne(item.id)" type="danger" icon="el-icon-delete" circle></el-button>
+                                        <el-button @click="delOne(item.cartId)" type="danger" icon="el-icon-delete" circle></el-button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -107,6 +107,7 @@
 </template>
 <script>
 import { Loading } from "element-ui";
+import {getListByCondition} from '@/api/cart'
 export default {
     name: "shoppingCart",
     data() {
@@ -116,24 +117,13 @@ export default {
     },
     //生命周期函数
     created() {
-        let cartData = this.$store.state.cartDate;
-        //定义拼接数据
-        let ids = '';
-        for (const key in cartData) {
-            ids += key;
-            ids += ",";
+        var userId = this.$store.state.currentUser.userId
+        var data = {
+            userId: userId
         }
-        //去掉最后一个多余的逗号
-        ids = ids.slice(0, -1);
         //调用接口
-        this.$axios.get(`/site/comment/getshopcargoods/${ids}`).then(response => {
-            // console.log(response)
-            response.data.message.forEach(v => {
-                v.buycount = cartData[v.id];
-                //设置默认是否被选中
-                v.selected = true;
-            });
-            this.message = response.data.message;
+        getListByCondition(data,1,10).then(response => {
+            this.message = response.data.list;
         })
     },
     //计算属性
@@ -143,7 +133,7 @@ export default {
             let totalPrice = 0;
             this.message.forEach((v, i) => {
                 if (v.selected == true) {
-                    totalPrice += v.buycount * v.sell_price;
+                    totalPrice += v.number * v.price;
                 }
             })
             return totalPrice;
@@ -153,7 +143,7 @@ export default {
             let totalNum = 0;
             this.message.forEach((v, i) => {
                 if (v.selected == true) {
-                    totalNum += parseInt(v.buycount);
+                    totalNum += parseInt(v.number);
                 }
             })
             return totalNum;

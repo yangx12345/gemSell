@@ -379,7 +379,7 @@ line-height: 30px;border: 1px solid #34ad2a;}
     .cart-head h2 i{ display:inline-block; margin-right:5px; color:#83c44e; font-size:23px; line-height:35px; vertical-align:middle; }
     .cart-head .cart-setp{ position:relative; margin-left:200px; }
   .cart-head .cart-setp li{ position:relative; float:left; width:33.33%; height:35px; line-height:35px; text-align:center; color:#999; font-size:12px; *width:33.3%; }
-    .cart-head .cart-setp li .progress{ margin-right:1px; height:35px; line-height:35px; color:#424242; background:#eee; }
+    .cart-head .cart-setp li .progress{ text-align: center; margin-right:1px; height:35px; line-height:35px; color:#424242; background:#eee; }
     .cart-head .cart-setp li .progress span{ margin-right:2px; font-size:14px; font-weight:600; }
     .cart-head .cart-setp li.active .progress{ color:#fff; background:#83c44e; }
     .cart-head .cart-setp li.first .progress{ border-top-left-radius:20px; border-bottom-left-radius:20px; }

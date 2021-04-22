@@ -66,7 +66,7 @@ let routes = [{
   },
   {
     //订单
-    path: '/order/:id',
+    path: '/order/:ids',
     component: Order,
     meta: {
       checkLogin: true

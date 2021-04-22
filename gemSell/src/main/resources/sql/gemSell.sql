@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : yang
  Source Server Type    : MySQL
  Source Server Version : 50728
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 21/04/2021 15:47:09
+ Date: 22/04/2021 21:12:53
 */
 
 SET NAMES utf8mb4;
@@ -23,9 +23,11 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `address`;
 CREATE TABLE `address`  (
   `address_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '地址id',
-  `province_id` int(11) NOT NULL COMMENT '省份id',
-  `city_id` int(11) NOT NULL COMMENT '城市id',
+  `province` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '省份',
+  `area` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地区',
+  `city` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '城市',
   `detailed` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '详细地址',
+  `postcode` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮政编码',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '收货人名',
   `phone` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号',
   `user_id` int(11) NOT NULL COMMENT '所属人id',
@@ -75,6 +77,7 @@ CREATE TABLE `cart`  (
   `price` decimal(10, 2) NOT NULL COMMENT '价格',
   `user_id` int(11) NOT NULL COMMENT '用户id',
   `number` int(11) NULL DEFAULT NULL COMMENT '商品数量',
+  `img_address` json NULL COMMENT '商品图片',
   PRIMARY KEY (`cart_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车' ROW_FORMAT = Dynamic;
 
@@ -122,13 +125,17 @@ CREATE TABLE `indent`  (
   `success_time` datetime(0) NULL DEFAULT NULL COMMENT '完成时间（包含完成和取消订单时间）',
   `num` int(11) NULL DEFAULT NULL COMMENT '商品数量',
   `total_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '商品总价',
+  `img_address` json NULL COMMENT '商品图片',
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`order_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of indent
 -- ----------------------------
-INSERT INTO `indent` VALUES (3, 1, 'admin', 2, '南非钻石', 140.00, '4', '2021-04-21 11:01:50', '2021-04-21 13:20:12', 1, 140.00);
+INSERT INTO `indent` VALUES (3, 1, 'admin', 2, '南非钻石', 140.00, '4', '2021-04-21 11:01:50', '2021-04-21 13:20:12', 1, 140.00, NULL, NULL);
+INSERT INTO `indent` VALUES (4, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-22 20:35:59', NULL, 1, 140.00, NULL, NULL);
+INSERT INTO `indent` VALUES (5, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-22 20:36:16', NULL, 1, 140.00, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for tb_city
