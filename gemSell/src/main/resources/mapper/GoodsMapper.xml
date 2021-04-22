@@ -33,6 +33,7 @@
         <if test="status!=null">
             and status = #{status}
         </if>
+        order by good_id desc
     </select>
 
 </mapper>
