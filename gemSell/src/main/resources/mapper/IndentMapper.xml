@@ -15,11 +15,13 @@
                     <result column="num" property="num"/>
                     <result column="total_price" property="totalPrice"/>
                     <result column="img_address" property="imgAddress"/>
+                    <result column="address_id" property="addressId"/>
+
         </resultMap>
 
     <sql id="selectVo">
         select
-        order_id, user_id, user_name, good_id, good_name, price, status, create_time, success_time, num, total_price,img_address
+        order_id, user_id, user_name, good_id, good_name, price, status, create_time, success_time, num, total_price,img_address,address_id
        from indent a
     </sql>
     <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.Indent" resultMap="BaseResultMap">

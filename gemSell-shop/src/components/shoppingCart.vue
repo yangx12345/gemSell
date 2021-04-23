@@ -73,7 +73,7 @@
                                     <td>{{item.goodName}}</td>
                                     <td>{{item.price}}</td>
                                     <td>
-                                        <el-input-number size="mini" :min='1' v-model="item.number" @change="numChange($event,item.cartId)"></el-input-number>
+                                        <el-input-number size="mini" :min='1' v-model="item.number" @change="numChange($event,item)"></el-input-number>
                                     </td>
                                     <td>{{item.number *item.price}}</td>
                                     <td>
@@ -107,7 +107,7 @@
 </template>
 <script>
 import { Loading } from "element-ui";
-import {getListByCondition} from '@/api/cart'
+import { getListByCondition, update,deleteById } from '@/api/cart'
 export default {
     name: "shoppingCart",
     data() {
@@ -151,35 +151,20 @@ export default {
     },
     methods: {
         //同步购物车的数量
-        numChange(num, id) {
-            //调用仓库的方法
-            console.log(num, id)
-            this.$store.commit('updateGoodsNum', {
-                goodId: id,
-                goodNum: num
-            })
+        numChange(num, cart) {
+            cart.number = num
+            update(cart)
         },
         //删除数据(同步购物车的数量)
         delOne(id) {
-            this.$store.commit('deleteGood', id);
-            //删除后更新视图
-            this.message.forEach((val, index) => {
-                if (val.id == id) {
-                    this.message.splice(index, 1);
-                }
-            })
+            deleteById(id)
+            this.$store.commmit('updateGoodsNum',this.$store.state.cartDate - 1)
         },
         Submit() {
-            //判断是否有商品
-            // if (this.totalPrice == 0) {
-            //     this.$Message.error('请先登录!');
-            //     return;
-            // }
-
             let ids = '';
             this.message.forEach(v=>{
                 if (v.selected == true) {
-                    ids +=v.id;
+                    ids +=v.cartId;
                     ids += ",";
                 }
             })

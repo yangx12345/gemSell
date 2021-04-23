@@ -58,5 +58,10 @@ public class Cart implements Serializable {
     @TableField("img_address")
     private String imgAddress;
 
+    /**
+     * 购物车状态
+     */
+    @TableField("status")
+    private String status;
 
 }

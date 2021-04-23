@@ -67,7 +67,7 @@
                   </div>
                 </div>
               </div>
-              <div class="right-auto">
+              <!-- <div class="right-auto">
                 <div class="bg-wrap" style="min-height: 765px;">
                   <div class="sub-tit">
                     <a href="javascript:void(0)" class="add" @click="back">
@@ -102,9 +102,8 @@
                     <dl class="head form-group">
                       <dd>
                         订单号：{{orderInfo.order_no}}
-                        <router-link v-if="orderInfo.status==1" class="btn-mypay" :to="'/pay/'+orderInfo.id">去付款</router-link>
                         <a v-if="orderInfo.status<4&&orderInfo.status>1" class="btn-mypay" @click="signExpress">签收</a>
-                        <!---->
+                   
                       </dd>
                     </dl>
                     <dl class="form-group">
@@ -151,11 +150,10 @@
                         <tr>
                           <td colspan="7" align="right">
                             <p>商品金额：
-                              <b class="red">￥{{orderInfo.real_amount}}</b>&nbsp;&nbsp;+&nbsp;&nbsp;运费：
-                              <b class="red">￥{{orderInfo.express_fee}}</b>
+                              <b class="red">￥{{orderInfo.real_amount}}</b>
                             </p>
                             <p style="font-size: 22px;">应付总金额：
-                              <b class="red">￥{{orderInfo.real_amount + orderInfo.express_fee}}</b>
+                              <b class="red">￥{{orderInfo.real_amount}}</b>
                             </p>
                           </td>
                         </tr>
@@ -168,27 +166,19 @@
                     </dl>
                     <dl class="form-group">
                       <dt>顾客姓名：</dt>
-                      <dd>{{orderInfo.accept_name}}</dd>
+                      <dd>{{orderInfo.name}}</dd>
                     </dl>
                     <dl class="form-group">
                       <dt>送货地址：</dt>
-                      <dd>{{orderInfo.area + orderInfo.address}}</dd>
+                      <dd>{{orderInfo.province + orderInfo.city + orderInfo.area + orderInfo.detailed}}</dd>
                     </dl>
                     <dl class="form-group">
                       <dt>联系电话：</dt>
-                      <dd>{{orderInfo.mobile}}</dd>
-                    </dl>
-                    <dl class="form-group">
-                      <dt>电子邮箱：</dt>
-                      <dd>{{orderInfo.email}}</dd>
-                    </dl>
-                    <dl class="form-group">
-                      <dt>备注留言：</dt>
-                      <dd>{{orderInfo.message}}</dd>
+                      <dd>{{orderInfo.phone}}</dd>
                     </dl>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -204,9 +194,9 @@ export default {
       orderInfo: {}
     }
   },
-  created() {
-    this.getOrderInfo();
-  },
+  // created() {
+  //   this.getOrderInfo();
+  // },
   methods: {
     getOrderInfo() {
       this.$axios.get(`site/validate/order/getorderdetial/${this.$route.params.id}`)

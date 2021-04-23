@@ -98,5 +98,11 @@ public class Indent implements Serializable {
     @TableField("img_address")
     private String imgAddress;
 
+    /**
+     * 商品图片
+     */
+    @TableField("address_id")
+    private String addressId;
+
 
 }

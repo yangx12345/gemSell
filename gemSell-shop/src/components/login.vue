@@ -60,6 +60,7 @@
 </template>
 <script>
 import { register } from '@/api/userManage'
+import { getListByCondition } from '@/api/cart'
 export default {
     name: 'login',
     data() {
@@ -104,6 +105,14 @@ export default {
                         })
                         this.$store.dispatch('getInfo')
                         this.$router.go(-1);
+                        var userId = this.$store.state.currentUser.userId
+                        var data = {
+                            userId: userId
+                        }
+                        //调用接口
+                        getListByCondition(data,1,10).then(response => {
+                            this.$store.commit('updateGoodsNum',response.data.total)
+                        })
                         //   关闭进度条
                         this.$Loading.finish();
 
@@ -131,6 +140,14 @@ export default {
                                 }
                                 this.$store.dispatch('login', loginForm).then(() => {
                                 this.$store.dispatch('getInfo')
+                                var userId = this.$store.state.currentUser.userId
+                                var data = {
+                                    userId: userId
+                                }
+                                //调用接口
+                                getListByCondition(data,1,10).then(response => {
+                                    this.$store.commit('updateGoodsNum',response.data.total)
+                                })
                                 this.$router.go(-1);
                             })
                         }else {

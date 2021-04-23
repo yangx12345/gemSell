@@ -19,12 +19,6 @@
                 <div class="el-row">
                   <div class="el-col el-col-12">
                     <dl class="form-group">
-                      <dt>订 单 号：</dt>
-                      <dd>{{orderInfo.order_no}}</dd>
-                    </dl>
-                  </div>
-                  <div class="el-col el-col-12">
-                    <dl class="form-group">
                       <dt>收货人姓名：</dt>
                       <dd>{{orderInfo.accept_name}}</dd>
                     </dl>
@@ -56,14 +50,6 @@
                     <dl class="form-group">
                       <dt>支付方式：</dt>
                       <dd>在线支付</dd>
-                    </dl>
-                  </div>
-                </div>
-                <div class="el-row">
-                  <div class="el-col el-col-12">
-                    <dl class="form-group">
-                      <dt>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</dt>
-                      <dd>{{orderInfo.message}}</dd>
                     </dl>
                   </div>
                 </div>

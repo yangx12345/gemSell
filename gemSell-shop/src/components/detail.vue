@@ -166,7 +166,7 @@ export default {
         },
         // 立即购买
         addOrder(){
-            if(this.$store.state.currentUser === undefined){
+            if(this.$store.state.currentUser === undefined || this.$store.state.currentUser === '' ||this.$store.state.currentUser === null){
                 this.$message.error('请先登录！')
                 return
             }
@@ -191,7 +191,7 @@ export default {
         },
         // 添加购物车
         addGoods(){
-            if(this.$store.state.currentUser === undefined){
+            if(this.$store.state.currentUser === undefined || this.$store.state.currentUser === '' ||this.$store.state.currentUser === null){
                 this.$message.error('请先登录！')
                 return
             }
@@ -212,10 +212,7 @@ export default {
             }
             add(cart).then(resp=>{
                 if(resp.code === 1){
-                    this.$store.commit('addGoods',{
-                        goodId:this.productId,
-                        goodNum:this.buyCount
-                    });
+                    this.$store.commit('updateGoodsNum',this.$store.state.cartDate + 1);
                 }
             })
 

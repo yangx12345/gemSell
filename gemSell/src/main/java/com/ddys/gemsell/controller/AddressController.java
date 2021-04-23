@@ -61,7 +61,13 @@ public class AddressController {
         if(entity==null){
 		return ResultUtil.parameterError();
         }
-        return ResultUtil.judgmentResult(addressService.saveEntity(entity));
+        boolean flag = addressService.saveEntity(entity);
+        if (flag) {
+            return ResultUtil.success(entity.getAddressId());
+        }else
+        {
+            return ResultUtil.error("增加失败");
+        }
     }
 
 

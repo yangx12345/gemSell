@@ -45,10 +45,30 @@
                             <h2 class="slide-tit">
                                 <span>1、收货地址</span>
                             </h2>
-                            <div id="addressForm" name="addressForm" url="">
+                            
+                            
+                            <div  id="addressForm" name="addressForm" url="">
+                              <div v-if="!isNew">
+                                <el-table ref="multipleTable" :data="addressList" tooltip-effect="dark" height="255" style="width: 100%" @current-change="clickChange">
+                                  <el-table-column label="选择" width="55">
+                                      <template slot-scope="scope">
+                                          <el-radio  v-model="tableRadio" :label="scope.row"><i></i></el-radio>
+                                      </template>
+                                  </el-table-column>
+                                  <el-table-column prop="name" label="收货人姓名" header-align="center" align="center"></el-table-column>
+                                  <el-table-column prop="phone" label="手机号" header-align="center" align="center"></el-table-column>
+                                  <el-table-column prop="storeCode" label="详细地址" header-align="center">
+                                      <template slot-scope="scope">
+                                          {{scope.row.province}}-{{scope.row.city}}-{{scope.row.area}}<br>
+                                          {{scope.row.detailed}}
+                                      </template>
+                                  </el-table-column>
+                                </el-table>
+                                <el-button type="success" @click="isNew = true">新增地址</el-button>
+                             </div>
                                 <!-- 上面的一堆 个人信息输入 -->
-                                <div class="form-box address-info">
-                                    <el-form-item label="收货人姓名" prop="accept_name">
+                                <div v-else class="form-box address-info">
+                                    <el-form-item label="收货人姓名" prop="name">
                                         <el-input v-model="addressForm.name" style="width:500px"></el-input>
                                     </el-form-item>
                                     <el-form-item label="所属地区" prop="">
@@ -61,6 +81,8 @@
                                     <el-form-item label="手机号" prop="phone">
                                         <el-input v-model="addressForm.phone" style="width:500px"></el-input>
                                     </el-form-item>
+                                    <el-button type="success" @click="isNew = false">返回地址列表</el-button>
+                                    <el-button type="success" @click="saveAddress">保存</el-button>
                                 </div>
                                 <h2 class="slide-tit">
                                     <span>2、商品清单</span>
@@ -118,7 +140,7 @@
                                         </p>
                                         <p class="btn-box">
                                             <router-link to="/cart">返回购物车</router-link>
-                                            <a id="btnSubmit" class="btn submit" @click="sureOrder">确认提交</a>
+                                            <a id="btnSubmit" class="btn submit" @click="sureOrder">支付</a>
                                         </p>
                                     </div>
                                 </div>
@@ -135,6 +157,8 @@
 // 导入省市联动
 import VDistpicker from "v-distpicker";
 import { getById, getByIds } from '@/api/order'
+import { getListByCondition } from '@/api/cart'
+import { add,getAddressListByCondition } from '@/api/address'
 export default {
   name: "order",
   // 注册的组件
@@ -201,6 +225,12 @@ export default {
       total:0,
       // 商品总件数
       totalCount:0,
+      // 用户的地址列表
+      addressList:[],
+      // 当前选择的地址
+      tableRadio: null,
+      // 是否新增地址
+      isNew: false,
       rules: {
         //   需要跟字段相对应
         name: [
@@ -231,6 +261,20 @@ export default {
   },
   //方法
   methods:{
+    // 选择地址
+    clickChange(val){
+      console.log(val)
+      this.tableRadio = val
+    },
+    // 保存地址
+    saveAddress(){
+      add(this.addressForm).then(resp=>{
+        if(resp.code === 1){
+          this.$message.success('添加成功！')
+        }
+      })
+    },
+    // 选择地区
     selected(value){
         this.addressForm.province = JSON.stringify(value.province)
         this.addressForm.city = JSON.stringify(value.city)
@@ -238,12 +282,26 @@ export default {
     },
     //提交订单
     sureOrder(){
-        let orderid = this.$route.params.ids;
-        this.$router.push('/pay/'+orderid);
-        //删除购物车数据
-        this.message.forEach(v=>{
-            this.$store.commit('deleteGood',v.orderId);
-        })
+      this.$confirm('确认支付?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '支付成功!'
+          });
+          this.$router.push('/pay/'+orderid);
+          //删除购物车数据
+          this.message.forEach(v=>{
+              this.$store.commit('deleteGood',v.orderId);
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
     }
   },
   created(){
@@ -265,6 +323,12 @@ export default {
         this.message = response.data;
         this.total = total;
         this.totalCount = totalCount
+    })
+    var data = {
+      userId: this.$store.state.currentUser.userId
+    }
+    getAddressListByCondition(data,1,10).then(resp=>{
+      this.addressList = resp.data.list
     })
   }
 };
