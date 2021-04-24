@@ -61,3 +61,10 @@ export function batchDelete(ids) {
     }
   })
 }
+export function batchUpdate(data) {
+  return request({
+    url: '/order/batchUpdate',
+    method: 'post',
+    data
+  })
+}

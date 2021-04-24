@@ -7,7 +7,7 @@
             <div class="location">
               <span>当前位置：</span>
               <a href="/index.html">首页</a> &gt;
-              <a href="#/site/member/center" class="">会员中心</a>&gt;
+              <a class="">会员中心</a>&gt;
               <a href="#/site/member/orderlist" class="router-link-exact-active ">我的订单</a>
             </div>
           </div>
@@ -15,51 +15,41 @@
             <div class="left-260">
               <div class="bg-wrap">
                 <div class="avatar-box">
-                  <a href="/user/center/avatar.html" class="img-box">
-                                          <img src="../../static/images/lst.jpg" alt="">
-                                            </a>
                   <h3>
-                                                小刘
-                                            </h3>
-                  <p>
-                    <b>注册会员</b>
-                  </p>
+                      {{ $store.state.currentUser.userName }}
+                  </h3>
                 </div>
                 <div class="center-nav">
                   <ul>
                     <li>
                       <h2>
-                                                        <i class="iconfont icon-order"></i>
-                                                        <span>订单管理</span>
-                                                    </h2>
+                          <i class="iconfont icon-order"></i>
+                          <span>订单管理</span>
+                      </h2>
                       <div class="list">
                         <p>
-                          <a href="#/site/member/orderlist" class="router-link-exact-active ">
-                                                                <i class="iconfont icon-arrow-right"></i>交易订单</a>
+                          <a class="router-link-exact-active ">
+                          <i class="iconfont icon-arrow-right"></i>交易订单</a>
                         </p>
                       </div>
                     </li>
                     <li>
                       <h2>
-                                                        <i class="iconfont icon-user"></i>
-                                                        <span>账户管理</span>
-                                                    </h2>
+                          <i class="iconfont icon-user"></i>
+                          <span>账户管理</span>
+                      </h2>
                       <div class="list">
                         <p>
-                          <a href="#/site/member/center" class="">
-                                                                <i class="iconfont icon-arrow-right"></i>账户资料</a>
+                          <a class="">
+                            <i class="iconfont icon-arrow-right"></i>账户资料</a>
                         </p>
                         <p>
-                          <a href="#/site/member/center" class="">
-                                                                <i clrouter-linkss="iconfont icon-router-linkrrow-right"></i>头像设置</a>
+                          <a class="">
+                            <i clrouter-linkss="iconfont icon-router-linkrrow-right"></i>头像设置</a>
                         </p>
                         <p>
-                          <a href="#/site/member/center" class="">
-                                                                <i class="iconfont icon-arrow-right"></i>修改密码</a>
-                        </p>
-                        <p>
-                          <a href="javascript:void(0)">
-                                                                <i class="iconfont icon-arrow-right"></i>退出登录</a>
+                          <a class="">
+                            <i class="iconfont icon-arrow-right"></i>修改密码</a>
                         </p>
                       </div>
                     </li>
@@ -72,7 +62,7 @@
                 <div class="sub-tit">
                   <ul>
                     <li class="selected">
-                      <a href="/user/order-list.html">交易订单</a>
+                      <a>交易订单</a>
                     </li>
                   </ul>
                 </div>
@@ -85,30 +75,30 @@
                     <tbody>
                       <tr>
                         <th width="5%" align="left">序号</th>
-                        <th width="13%" align="left">订单号</th>
+                        <th width="7%" align="left">订单号</th>
                         <th width="10%">姓名</th>
-                        <th width="11%">订单金额</th>
-                        <th width="12%">下单时间</th>
+                        <th width="10%">订单金额</th>
+                        <th width="7%">下单时间</th>
                         <th width="10%">状态</th>
-                        <th width="12%">操作</th>
+                        <th width="24%">操作</th>
                       </tr>
                       <tr v-for="(item, index) in message" :key="item.id">
                          <td>{{index+1}}</td>
-                        <td>{{item.order_no}}</td>
+                        <td>{{item.orderId}}</td>
                         <!-- 三元表达式 -->
-                        <td align="left">{{item.accept_name==''?'匿名用户':item.accept_name}}</td>
+                        <td align="left">{{item.userName==''?'匿名用户':item.userName}}</td>
                         <td align="left">
-                          <strong style="color: red;">￥{{item.real_amount}}</strong>
+                          <strong style="color: red;">￥{{item.totalPrice}}</strong>
                           <br> 在线支付
                         </td>
-                        <td align="left">{{item.payment_time | filterDate('YYYY:MM:DD HH:mm:ss')}}</td>
+                        <td align="left">{{item.createTime | filterDate('YYYY:MM:DD HH:mm:ss')}}</td>
                         <td align="left">
-                          {{item.statusName}}
+                          {{getStatus(item.status)}}
                         </td>
-                        <td align="left" style="display:flex;flex-direction:column;justify-content: center;">
-                          <router-link :to="'/orderDetail/'+item.id">查看订单</router-link>
-                          <!-- <br> -->
-                          <router-link v-if="item.status==1" :to="'/pay/'+item.id">去付款</router-link>
+                        <td align="left">
+                          <router-link :to="'/orderDetail/'+item.orderId">查看订单</router-link>
+                          <el-button v-if="item.status != '4'&&item.status != '3'" @click="cancalGoods(item)" type="text">取消订单</el-button>
+                          <el-button v-if="item.status = '2'"  @click="getGoods(item)" type="text">点击收货</el-button>
                         </td>
                       </tr>
                     </tbody>
@@ -123,6 +113,7 @@
   </div>
 </template>
 <script>
+import { getListByCondition, update } from '@/api/order'
 export default {
 
   name: 'orderList',
@@ -139,11 +130,34 @@ export default {
     this.getOrderInfo();
   },
   methods: {
+    // 翻译订单状态
+    getStatus(state){
+      if(state === '0'){
+        return '待付款'
+      }
+      if(state === '1'){
+        return '待发货'
+      }
+      if(state === '2'){
+        return '待收货'
+      }
+      if(state === '3'){
+        return '已取消'
+      }
+      if(state === '4'){
+        return '完成'
+      }
+      if(state === '5'){
+        return '审核中'
+      }
+    },
     getOrderInfo() {
-      this.$axios.get(`site/validate/order/userorderlist?pageIndex=${this.pageIndex
-          }&pageSize=${this.pageSize}`).then(response => {
-        this.message = response.data.message;
-        this.totalCount = response.data.totalcount;
+      var data = {
+        userId: this.$store.state.currentUser.userId
+      }
+      getListByCondition(data,this.pageIndex,this.pageSize).then(response => {
+        this.message = response.data.list;
+        this.totalCount = response.data.total;
       })
     },
     SizeChange(size) {
@@ -154,6 +168,58 @@ export default {
     CurrentChange(index) {
       this.pageIndex = index;
       this.getOrderInfo();
+    },
+    // 点击收货
+    getGoods(row){
+      console.log(row)
+      this.$confirm('确认收到货了？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          row.getTime = new Date().Format("yyyy-MM-dd hh:mm:ss")
+          row.status = '4'
+          update(row).then(resp=>{
+            if(resp.code === 1){
+              this.$message({
+                type: 'success',
+                message: '收货成功！'
+              }); 
+              this.getOrderInfo()
+            } 
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消确认'
+          });          
+        });
+    },
+    // 点击收货
+    cancalGoods(row){
+      console.log(row)
+      this.$confirm('确认取消订单？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          row.cancalTime = new Date().Format("yyyy-MM-dd hh:mm:ss")
+          row.status = '5'
+          update(row).then(resp=>{
+            if(resp.code === 1){
+              this.$message({
+                type: 'success',
+                message: '请求成功，请等候客服审核。'
+              }); 
+              this.getOrderInfo()
+            } 
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消确认'
+          });          
+        });
     }
   }
 }

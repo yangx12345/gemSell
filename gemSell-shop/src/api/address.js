@@ -6,7 +6,12 @@ export function getById(id) {
     method: 'get'
   })
 }
-
+export function getAddressById(id) {
+  return request({
+    url: `/address/getById/${id}`,
+    method: 'get'
+  })
+}
 export function getAddressListByCondition(data, pageIndex, pageSize) {
   return request({
     url: '/address/getListByCondition',

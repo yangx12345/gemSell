@@ -52,7 +52,7 @@
                                 <el-table ref="multipleTable" :data="addressList" tooltip-effect="dark" height="255" style="width: 100%" @current-change="clickChange">
                                   <el-table-column label="选择" width="55">
                                       <template slot-scope="scope">
-                                          <el-radio  v-model="tableRadio" :label="scope.row"><i></i></el-radio>
+                                          <el-radio  v-model="tableRadio" :label="scope.row.addressId"><i></i></el-radio>
                                       </template>
                                   </el-table-column>
                                   <el-table-column prop="name" label="收货人姓名" header-align="center" align="center"></el-table-column>
@@ -75,7 +75,7 @@
                                         <!-- 使用data中的数据 设置为初始值 -->
                                         <v-distpicker @selected="selected" :province="addressForm.province" :city="addressForm.city" :area="addressForm.area"></v-distpicker>
                                     </el-form-item>
-                                    <el-form-item label="详细地址" prop="address">
+                                    <el-form-item label="详细地址" prop="detailed">
                                         <el-input v-model="addressForm.detailed" style="width:500px"></el-input>
                                     </el-form-item>
                                     <el-form-item label="手机号" prop="phone">
@@ -156,7 +156,7 @@
 <script>
 // 导入省市联动
 import VDistpicker from "v-distpicker";
-import { getById, getByIds } from '@/api/order'
+import { getById, getByIds, update, batchUpdate} from '@/api/order'
 import { getListByCondition } from '@/api/cart'
 import { add,getAddressListByCondition } from '@/api/address'
 export default {
@@ -212,12 +212,12 @@ export default {
     };
     return {
       addressForm: {
-        name: "桐先生", // 收货人姓名,
+        name: "", // 收货人姓名,
         province: '',
         city: '',
         area: '',
-        detailed: "中粮商务公园18楼天台", // 详细地址
-        phone: "1008611" // 联系电话
+        detailed: "", // 详细地址
+        phone: "" // 联系电话
       },
       // 服务器返回的商品数据
       message: [],
@@ -256,9 +256,18 @@ export default {
         phone: [{ validator: checkMobile, trigger: "change" }],
         // 邮编验证
         postcode: [{ validator: checkPostCode, trigger: "change" }]
-      }
+      },
+      // 是否来自购物车
+      fromCart: false
     };
   },
+  beforeRouteEnter (to, from, next){
+		   next(vm => {//vm为vue的实例,代替this
+			  if(from.matched[0].path === '/detail'){
+          vm.fromCart = false
+        }else vm.fromCart = true
+			});
+		},
   //方法
   methods:{
     // 选择地址
@@ -268,17 +277,27 @@ export default {
     },
     // 保存地址
     saveAddress(){
+      this.addressForm.userId = this.$store.state.currentUser.userId
       add(this.addressForm).then(resp=>{
         if(resp.code === 1){
+          var data = {
+            userId: this.$store.state.currentUser.userId
+          }
+           getAddressListByCondition(data,1,10).then(resp=>{
+            this.addressList = resp.data.list
+          })
+          this.tableRadio = resp.data
           this.$message.success('添加成功！')
         }
       })
     },
     // 选择地区
     selected(value){
-        this.addressForm.province = JSON.stringify(value.province)
-        this.addressForm.city = JSON.stringify(value.city)
-        this.addressForm.area = JSON.stringify(value.area)
+      console.log(value)
+        this.addressForm.province = value.province.value
+        this.addressForm.city = value.city.value
+        this.addressForm.area = value.area.value
+        this.addressForm.postcode = value.area.code
     },
     //提交订单
     sureOrder(){
@@ -287,19 +306,31 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '支付成功!'
-          });
-          this.$router.push('/pay/'+orderid);
-          //删除购物车数据
-          this.message.forEach(v=>{
-              this.$store.commit('deleteGood',v.orderId);
+          this.message.forEach(item=>{
+            item.status = '1'
+            item.addressId  = this.tableRadio
+            item.payTime = new Date().Format("yyyy-MM-dd hh:mm:ss")
           })
+          batchUpdate(this.message).then(resp=>{
+            if(resp.code === 1){
+              this.$message({
+                type: 'success',
+                message: '支付成功!'
+              });
+              this.$router.push('/paySuccess/');
+              //删除购物车数据
+              if(this.fromCart){
+                this.$store.commit('updateGoodsNum',this.$store.state.cartDate - this.message.length);
+              }
+            }else {
+              this.$message.error(resp.msg)
+            }
+          })
+          
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消删除'
+            message: '已取消支付'
           });          
         });
     }
@@ -308,7 +339,7 @@ export default {
     //保存id
     getByIds(this.$route.params.ids)
     .then(response=>{
-        console.log(response)
+        console.log(this.$route)
         //定义总金额
         let total = 0;
         var totalCount = 0;

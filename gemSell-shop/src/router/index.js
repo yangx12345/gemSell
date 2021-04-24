@@ -82,7 +82,7 @@ let routes = [{
   },
   {
     //订单成功
-    path: '/paySuccess/:id',
+    path: '/paySuccess',
     component: paySuccess,
     meta: {
       checkLogin: true

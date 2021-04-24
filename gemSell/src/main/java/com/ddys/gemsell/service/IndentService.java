@@ -40,4 +40,6 @@ public interface IndentService extends IService<Indent> {
 	List<Indent> getByIds(String ids);
 
     Boolean batchAdd(List<Indent> indents);
+
+    Boolean batchUpdate(List<Indent> indents);
 }

@@ -95,7 +95,7 @@
                     <!--购物车底部-->
                     <div class="cart-foot clearfix">
                         <div class="right-box">
-                            <button class="button" onclick="javascript:location.href='/index.html';">继续购物</button>
+                            <button class="button" @click="$router.go(-1)">继续购物</button>
                             <button class="submit" @click="Submit">立即结算</button>
                         </div>
                     </div>

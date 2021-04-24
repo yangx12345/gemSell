@@ -17,11 +17,10 @@
                             <router-link to="/login/register">注册</router-link>
                             <strong>|</strong>
                         </span>
-                        <span v-show="$store.state.currentUseruserId">
-                            <!-- <a href="" class="">会员中心</a> -->
+                        <span v-show="$store.state.currentUser.userId">
+                            <router-link to="/orderlist">我的</router-link>
                             <strong>|</strong>
                             <a @click="layout">退出</a>
-                            <strong>|</strong>
                         </span>
                         <router-link to="/cart">
                             <i class="iconfont icon-cart"></i>购物车 (

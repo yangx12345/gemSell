@@ -29,7 +29,7 @@
                                                 <a @click="gotoList(item.typeId)">{{item.typeName}}</a>
                                             </dt>
                                             <dd>
-                                                <a href="/goods/43.html" v-for="(itemVal,i) in item.children" :key="i"><span @click="gotoList(itemVal.typeId)">{{itemVal.typeName}}</span></a>
+                                                <a v-for="(itemVal,i) in item.children" :key="i"><span @click="gotoList(itemVal.typeId)">{{itemVal.typeName}}</span></a>
                                             </dd>
                                         </dl>
                                     </div>
@@ -45,7 +45,7 @@
                                                 <a @click="gotoList(item.typeId)">{{item.typeName}}</a>
                                             </dt>
                                             <dd>
-                                                <a href="/goods/43.html" v-for="(itemVal,i) in item.children" :key="i"><span @click="gotoList(item.typeId)">{{itemVal.typeName}}</span></a>
+                                                <a v-for="(itemVal,i) in item.children" :key="i"><span @click="gotoList(itemVal.typeId)">{{itemVal.typeName}}</span></a>
                                             </dd>
                                         </dl>
                                     </div>

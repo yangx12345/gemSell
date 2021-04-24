@@ -56,6 +56,12 @@ public class IndentServiceImpl extends ServiceImpl<IndentMapper, Indent>implemen
     }
 
     @Override
+    @Transactional(readOnly=false,rollbackFor=Exception.class)
+    public Boolean batchUpdate(List<Indent> indents) {
+        return this.updateBatchById(indents);
+    }
+
+    @Override
     public Boolean batchAdd(List<Indent> indents) {
         return this.saveBatch(indents);
     }

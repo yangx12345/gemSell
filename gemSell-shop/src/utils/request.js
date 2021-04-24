@@ -4,7 +4,7 @@ import store from '@/vuex/store'
 import { getToken } from '@/utils/auth'
 
 // create an axios instance
-const baseURL = 'http://192.168.24.149:8088/gemsell-api/';
+const baseURL = 'http://192.168.0.108:8088/gemsell-api/';
 const service = axios.create({
   baseURL: baseURL, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests

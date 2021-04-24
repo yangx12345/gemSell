@@ -11,7 +11,10 @@
                     <result column="price" property="price"/>
                     <result column="status" property="status"/>
                     <result column="create_time" property="createTime"/>
-                    <result column="success_time" property="successTime"/>
+                    <result column="success_time" property="successTime"/><result column="create_time" property="createTime"/>
+                    <result column="get_time" property="getTime"/><result column="create_time" property="createTime"/>
+                    <result column="pay_time" property="payTime"/><result column="create_time" property="createTime"/>
+                    <result column="cancal_time" property="cancalTime"/>
                     <result column="num" property="num"/>
                     <result column="total_price" property="totalPrice"/>
                     <result column="img_address" property="imgAddress"/>
@@ -21,7 +24,7 @@
 
     <sql id="selectVo">
         select
-        order_id, user_id, user_name, good_id, good_name, price, status, create_time, success_time, num, total_price,img_address,address_id
+        order_id, user_id, pay_time, cancal_time, get_time, user_name, good_id, good_name, price, status, create_time, success_time, num, total_price,img_address,address_id
        from indent a
     </sql>
     <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.Indent" resultMap="BaseResultMap">

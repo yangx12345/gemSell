@@ -58,7 +58,7 @@ public class Indent implements Serializable {
     private BigDecimal price;
 
     /**
-     * 状态，0待付款，1已付代发，2已发，3取消，4完成
+     * 状态，0待付款，1已付代发，2已发，3取消，4完成, 5审核中
      */
     @TableField("status")
     private String status;
@@ -72,7 +72,31 @@ public class Indent implements Serializable {
     private LocalDateTime createTime;
 
     /**
-     * 完成时间（包含完成和取消订单时间）
+     * 收货时间
+     */
+    @TableField("get_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private LocalDateTime getTime;
+
+    /**
+     * 支付时间
+     */
+    @TableField("pay_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private LocalDateTime payTime;
+
+    /**
+     * 取消时间
+     */
+    @TableField("cancal_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private LocalDateTime cancalTime;
+
+    /**
+     * 完成时间
      */
     @TableField("success_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

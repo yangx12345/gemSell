@@ -152,5 +152,18 @@ public class IndentController {
         }
         return ResultUtil.judgmentResult(indentService.batchAdd(Indents));
     }
+
+    /**
+     * 批量添加订单
+     */
+    @PostMapping("batchUpdate")
+    public Result batchUpdate(@RequestBody List<Indent> Indents)
+    {
+        if(Indents.isEmpty())
+        {
+            return ResultUtil.parameterError();
+        }
+        return ResultUtil.judgmentResult(indentService.batchUpdate(Indents));
+    }
 }
 
