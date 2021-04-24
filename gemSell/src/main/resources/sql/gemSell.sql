@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : yang
  Source Server Type    : MySQL
- Source Server Version : 50731
+ Source Server Version : 50728
  Source Host           : localhost:3306
  Source Schema         : gemsell
 
  Target Server Type    : MySQL
- Target Server Version : 50731
+ Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 23/04/2021 15:17:08
+ Date: 24/04/2021 21:39:43
 */
 
 SET NAMES utf8mb4;
@@ -21,140 +21,156 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- Table structure for address
 -- ----------------------------
 DROP TABLE IF EXISTS `address`;
-CREATE TABLE `address` (
+CREATE TABLE `address`  (
   `address_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '地址id',
-  `province` varchar(11) NOT NULL COMMENT '省份',
-  `area` varchar(255) DEFAULT NULL COMMENT '地区',
-  `city` varchar(255) NOT NULL COMMENT '城市',
-  `detailed` varchar(255) NOT NULL COMMENT '详细地址',
-  `postcode` varchar(255) DEFAULT NULL COMMENT '邮政编码',
-  `name` varchar(255) NOT NULL COMMENT '收货人名',
-  `phone` varchar(255) NOT NULL COMMENT '手机号',
+  `province` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '省份',
+  `area` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地区',
+  `city` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '城市',
+  `detailed` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '详细地址',
+  `postcode` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮政编码',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '收货人名',
+  `phone` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号',
   `user_id` int(11) NOT NULL COMMENT '所属人id',
   PRIMARY KEY (`address_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='地址表';
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '地址表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of address
+-- ----------------------------
+INSERT INTO `address` VALUES (1, '北京市', '东城区', '北京市', 'xxxx', '110101', 'xxx', '15128131729', 1);
 
 -- ----------------------------
 -- Table structure for authenticate
 -- ----------------------------
 DROP TABLE IF EXISTS `authenticate`;
-CREATE TABLE `authenticate` (
+CREATE TABLE `authenticate`  (
   `authenticate_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '鉴定单id',
   `owner_id` int(11) NOT NULL COMMENT '请求人id',
-  `owner_name` varchar(255) DEFAULT NULL COMMENT '请求人名',
-  `img_address` json DEFAULT NULL COMMENT '鉴品图片',
-  `treasure_name` varchar(255) NOT NULL COMMENT '鉴品名称',
-  `treasure_code` varchar(255) DEFAULT NULL COMMENT '鉴品编码',
-  `type_id` int(11) DEFAULT NULL COMMENT '分类id',
-  `type_name` varchar(255) DEFAULT NULL COMMENT '分类名称',
-  `texture` varchar(255) DEFAULT NULL COMMENT '质地',
-  `weight` double DEFAULT NULL COMMENT '重量',
-  `form_city` varchar(255) DEFAULT NULL COMMENT '产地',
-  `auth_user_id` int(11) DEFAULT NULL COMMENT '鉴定人id',
-  `auth_user_name` varchar(255) DEFAULT NULL COMMENT '鉴定人名',
-  `result` varchar(255) DEFAULT NULL COMMENT '鉴定结果',
-  `create_time` datetime DEFAULT NULL COMMENT '申请时间',
-  `success_time` datetime DEFAULT NULL COMMENT '鉴定时间',
+  `owner_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '请求人名',
+  `img_address` json NULL COMMENT '鉴品图片',
+  `treasure_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '鉴品名称',
+  `treasure_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '鉴品编码',
+  `type_id` int(11) NULL DEFAULT NULL COMMENT '分类id',
+  `type_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名称',
+  `texture` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '质地',
+  `weight` double NULL DEFAULT NULL COMMENT '重量',
+  `form_city` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '产地',
+  `auth_user_id` int(11) NULL DEFAULT NULL COMMENT '鉴定人id',
+  `auth_user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '鉴定人名',
+  `result` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '鉴定结果',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '申请时间',
+  `success_time` datetime(0) NULL DEFAULT NULL COMMENT '鉴定时间',
   PRIMARY KEY (`authenticate_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='鉴定表';
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '鉴定表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of authenticate
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for cart
 -- ----------------------------
 DROP TABLE IF EXISTS `cart`;
-CREATE TABLE `cart` (
+CREATE TABLE `cart`  (
   `cart_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '购物车订单id',
   `good_id` int(11) NOT NULL COMMENT '商品id',
-  `good_name` varchar(255) NOT NULL COMMENT '商品名称',
-  `status` char(1) NOT NULL COMMENT '购物车状态，0代表在购物车中，1代表已结算',
-  `price` decimal(10,2) NOT NULL COMMENT '价格',
+  `good_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '购物车状态，0代表在购物车中，1代表已结算',
+  `price` decimal(10, 2) NOT NULL COMMENT '价格',
   `user_id` int(11) NOT NULL COMMENT '用户id',
-  `number` int(11) DEFAULT NULL COMMENT '商品数量',
-  `img_address` json DEFAULT NULL COMMENT '商品图片',
+  `number` int(11) NULL DEFAULT NULL COMMENT '商品数量',
+  `img_address` json NULL COMMENT '商品图片',
   PRIMARY KEY (`cart_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='购物车';
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of cart
 -- ----------------------------
-BEGIN;
 INSERT INTO `cart` VALUES (1, 2, '南非钻石', '', 140.00, 1, 2, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for goods
 -- ----------------------------
 DROP TABLE IF EXISTS `goods`;
-CREATE TABLE `goods` (
+CREATE TABLE `goods`  (
   `good_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品id',
-  `good_name` varchar(50) NOT NULL COMMENT '商品名称',
-  `type_id` int(11) DEFAULT NULL COMMENT '类型id',
-  `type_name` varchar(50) DEFAULT NULL COMMENT '类型名称',
-  `introduce` varchar(255) DEFAULT NULL COMMENT '商品介绍',
-  `img_address` json DEFAULT NULL COMMENT '图片地址',
-  `price` decimal(10,2) DEFAULT NULL COMMENT '价格',
-  `purchase_price` decimal(10,2) DEFAULT NULL,
-  `status` int(1) DEFAULT NULL COMMENT '商品状态（0未发布，1已发布未售，2已售）',
-  `total_number` int(11) DEFAULT NULL COMMENT '商品总数量',
-  `remain_number` int(11) DEFAULT NULL COMMENT '商品剩余数量',
+  `good_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
+  `type_id` int(11) NULL DEFAULT NULL COMMENT '类型id',
+  `type_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '类型名称',
+  `introduce` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品介绍',
+  `img_address` json NULL COMMENT '图片地址',
+  `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '价格',
+  `purchase_price` decimal(10, 2) NULL DEFAULT NULL,
+  `status` int(1) NULL DEFAULT NULL COMMENT '商品状态（0未发布，1已发布未售，2已售）',
+  `total_number` int(11) NULL DEFAULT NULL COMMENT '商品总数量',
+  `remain_number` int(11) NULL DEFAULT NULL COMMENT '商品剩余数量',
   PRIMARY KEY (`good_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品';
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of goods
 -- ----------------------------
-BEGIN;
 INSERT INTO `goods` VALUES (2, '南非钻石', 4, '钻石', '南非钻石的故事可以追溯到 1870 年当时一个名为阿德里安·范·维克 Adriann van Wyk的农夫在北开普省金伯利Kimberley附近拥有一个农场 当他发现自己的孩子正在玩弄几颗钻石时一切便从此开始了。', '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', 140.00, 120.00, 1, 1, 1);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for indent
 -- ----------------------------
 DROP TABLE IF EXISTS `indent`;
-CREATE TABLE `indent` (
+CREATE TABLE `indent`  (
   `order_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '订单id',
   `user_id` int(11) NOT NULL COMMENT '用户id',
-  `user_name` varchar(255) DEFAULT NULL COMMENT '用户名',
+  `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户名',
   `good_id` int(11) NOT NULL COMMENT '商品id',
-  `good_name` varchar(255) NOT NULL COMMENT '商品名称',
-  `price` decimal(10,2) NOT NULL COMMENT '单价',
-  `status` char(255) DEFAULT NULL COMMENT '状态，0待付款，1已付代发，2已发，3取消，4完成',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `success_time` datetime DEFAULT NULL COMMENT '完成时间（包含完成和取消订单时间）',
-  `num` int(11) DEFAULT NULL COMMENT '商品数量',
-  `total_price` decimal(10,2) DEFAULT NULL COMMENT '商品总价',
-  `img_address` json DEFAULT NULL COMMENT '商品图片',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `address_id` int(11) DEFAULT NULL COMMENT '地址id',
+  `good_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
+  `price` decimal(10, 2) NOT NULL COMMENT '单价',
+  `status` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '状态，0待付款，1已付代发，2已发，3取消，4完成，5审核中',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `success_time` datetime(0) NULL DEFAULT NULL COMMENT '完成时间',
+  `get_time` datetime(0) NULL DEFAULT NULL COMMENT '收货时间',
+  `pay_time` datetime(0) NULL DEFAULT NULL COMMENT '支付时间',
+  `cancal_time` datetime(0) NULL DEFAULT NULL COMMENT '取消时间',
+  `num` int(11) NULL DEFAULT NULL COMMENT '商品数量',
+  `total_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '商品总价',
+  `img_address` json NULL COMMENT '商品图片',
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `address_id` int(11) NULL DEFAULT NULL COMMENT '地址id',
   PRIMARY KEY (`order_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单';
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of indent
 -- ----------------------------
-BEGIN;
-INSERT INTO `indent` VALUES (3, 1, 'admin', 2, '南非钻石', 140.00, '4', '2021-04-21 11:01:50', '2021-04-21 13:20:12', 1, 140.00, NULL, NULL, NULL);
-INSERT INTO `indent` VALUES (4, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-22 20:35:59', NULL, 1, 140.00, NULL, NULL, NULL);
-INSERT INTO `indent` VALUES (5, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-22 20:36:16', NULL, 1, 140.00, NULL, NULL, NULL);
-INSERT INTO `indent` VALUES (6, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-23 08:58:47', NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
-INSERT INTO `indent` VALUES (7, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-23 11:16:18', NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
-COMMIT;
+INSERT INTO `indent` VALUES (3, 1, 'admin', 2, '南非钻石', 140.00, '4', '2021-04-21 11:01:50', '2021-04-21 13:20:12', NULL, NULL, NULL, 1, 140.00, NULL, NULL, NULL);
+INSERT INTO `indent` VALUES (4, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-22 20:35:59', NULL, NULL, NULL, NULL, 1, 140.00, NULL, NULL, NULL);
+INSERT INTO `indent` VALUES (5, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-22 20:36:16', NULL, NULL, NULL, NULL, 1, 140.00, NULL, NULL, NULL);
+INSERT INTO `indent` VALUES (6, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-23 08:58:47', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
+INSERT INTO `indent` VALUES (7, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-23 11:16:18', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
+INSERT INTO `indent` VALUES (8, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-24 14:47:45', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
+INSERT INTO `indent` VALUES (9, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-24 14:52:17', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
+INSERT INTO `indent` VALUES (10, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-24 14:54:13', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
+INSERT INTO `indent` VALUES (11, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-24 14:58:47', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
+INSERT INTO `indent` VALUES (12, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-24 15:01:26', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
+INSERT INTO `indent` VALUES (13, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-24 15:04:09', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
+INSERT INTO `indent` VALUES (14, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-24 16:37:26', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
+INSERT INTO `indent` VALUES (15, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-24 16:47:19', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
+INSERT INTO `indent` VALUES (16, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-24 18:42:23', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
+INSERT INTO `indent` VALUES (17, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-24 18:45:34', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
+INSERT INTO `indent` VALUES (18, 1, 'admin', 2, '南非钻石', 140.00, '1', '2021-04-24 18:49:03', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, 1);
 
 -- ----------------------------
 -- Table structure for tb_city
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_city`;
-CREATE TABLE `tb_city` (
+CREATE TABLE `tb_city`  (
   `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `provinceid` int(11) DEFAULT NULL,
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `provinceid` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='城市';
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '城市' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_city
 -- ----------------------------
-BEGIN;
 INSERT INTO `tb_city` VALUES (2, '天津市', 2);
 INSERT INTO `tb_city` VALUES (3, '石家庄市', 3);
 INSERT INTO `tb_city` VALUES (4, '唐山市', 3);
@@ -497,22 +513,20 @@ INSERT INTO `tb_city` VALUES (342, '五家渠市', 31);
 INSERT INTO `tb_city` VALUES (343, '香港特别行政区', 32);
 INSERT INTO `tb_city` VALUES (344, '澳门特别行政区', 33);
 INSERT INTO `tb_city` VALUES (345, '台湾省', 34);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for tb_province
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_province`;
-CREATE TABLE `tb_province` (
+CREATE TABLE `tb_province`  (
   `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='省份';
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '省份' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_province
 -- ----------------------------
-BEGIN;
 INSERT INTO `tb_province` VALUES (1, '北京市');
 INSERT INTO `tb_province` VALUES (3, '河北省');
 INSERT INTO `tb_province` VALUES (4, '山西省');
@@ -546,23 +560,21 @@ INSERT INTO `tb_province` VALUES (31, '新疆维吾尔自治区');
 INSERT INTO `tb_province` VALUES (32, '香港特别行政区');
 INSERT INTO `tb_province` VALUES (33, '澳门特别行政区');
 INSERT INTO `tb_province` VALUES (34, '台湾省');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for type
 -- ----------------------------
 DROP TABLE IF EXISTS `type`;
-CREATE TABLE `type` (
+CREATE TABLE `type`  (
   `type_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '分类id',
-  `type_name` varchar(20) DEFAULT NULL COMMENT '分类名',
-  `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '一级分类父id为0',
+  `type_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名',
+  `parent_id` int(11) NOT NULL DEFAULT 0 COMMENT '一级分类父id为0',
   PRIMARY KEY (`type_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品分类';
+) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品分类' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of type
 -- ----------------------------
-BEGIN;
 INSERT INTO `type` VALUES (2, '精品红宝石', 1);
 INSERT INTO `type` VALUES (4, '钻石', 0);
 INSERT INTO `type` VALUES (5, '彩色宝石', 0);
@@ -621,34 +633,31 @@ INSERT INTO `type` VALUES (58, '碧玺', 5);
 INSERT INTO `type` VALUES (59, '金水菩提', 5);
 INSERT INTO `type` VALUES (60, '石榴石', 5);
 INSERT INTO `type` VALUES (61, '大钻石', 4);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
+CREATE TABLE `user`  (
   `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户id',
-  `user_name` varchar(255) DEFAULT NULL COMMENT '用户名',
-  `password` varchar(255) DEFAULT NULL COMMENT '密码',
-  `name` varchar(32) DEFAULT NULL COMMENT '真实姓名',
-  `role` char(1) NOT NULL COMMENT '用户角色（0管理员，1鉴定人员，2普通用户）',
-  `phone` varchar(255) DEFAULT NULL COMMENT '手机号',
-  `sex` varchar(255) DEFAULT NULL COMMENT '性别',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `create_by` varchar(255) DEFAULT NULL COMMENT '创建人',
-  `update_by` varchar(255) DEFAULT NULL COMMENT '更新人',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户名',
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
+  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '真实姓名',
+  `role` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户角色（0管理员，1鉴定人员，2普通用户）',
+  `phone` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
+  `sex` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '性别',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `update_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-BEGIN;
 INSERT INTO `user` VALUES (1, 'admin', '96e79218965eb72c92a549dd5a330112', 'admin', '0', '15133185689', '男', '2021-04-16 13:43:35', '', '', '2021-02-16 15:28:37');
 INSERT INTO `user` VALUES (4, 'user1', 'e10adc3949ba59abbe56e057f20f883e', 'user1', '2', '', '男', NULL, NULL, NULL, NULL);
 INSERT INTO `user` VALUES (5, 'auth1', 'e10adc3949ba59abbe56e057f20f883e', 'auh1', '1', '', '男', NULL, NULL, NULL, NULL);
-COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
