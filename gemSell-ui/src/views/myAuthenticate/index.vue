@@ -24,13 +24,10 @@
       </el-form-item>
       <el-button type="primary" @click="getList()">查询</el-button>
       <el-button @click="resetData">重置</el-button>
-      <el-button type="primary" @click="addAuthenticate">添加</el-button>
-      <el-button type="danger" :disabled="ids.length === 0" @click="batchDelete"> 删除</el-button>
     </el-form>
     <el-table
       :data="tableData"
       style="width: 100%"
-      @selection-change="handleSelectionChange"
     >
       <el-table-column
         type="selection"
@@ -124,8 +121,7 @@
         min-width="200"
       >
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="updateClick(scope.row)">编辑</el-button>
-          <el-button type="text" size="small" @click="handleClick(scope.row)">删除</el-button>
+          <el-button type="text" size="small" @click="updateClick(scope.row)">鉴定</el-button>
           <el-button type="text" size="small" @click="viewClick(scope.row)">图片预览</el-button>
         </template>
       </el-table-column>
@@ -142,7 +138,7 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    <addAuthenticate :dialog-form-visible.sync="dialogFormVisible" :authenticate="Authenticate" :options="options" @getList="getList" />
+    <authenticate :dialog-form-visible.sync="dialogFormVisible" :authenticate="Authenticate" :options="options" @getList="getList" />
     <el-dialog
       title="商品图片预览"
       :visible.sync="viewVisible"
@@ -161,16 +157,16 @@
 </template>
 
 <script>
-import { getListByCondition, batchDelete, deleteById } from '@/api/authenticate'
+import { getListByCondition } from '@/api/authenticate'
 import { getSelectTree } from '@/api/type'
-import addAuthenticate from './addAuthenticate'
+import authenticate from './authenticate'
 // // import the component
 // import Treeselect from '@riophae/vue-treeselect'
 // // import the styles
 // import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
   components: {
-    addAuthenticate
+    authenticate
   },
   data() {
     return {
@@ -225,57 +221,9 @@ export default {
       this.pageIndex = val
       this.getList()
     },
-    handleClick(row) {
-      this.$confirm('您确定要删除该条数据吗?', '警告', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        deleteById(row.authenticateId).then(response => {
-          const res = response
-          if (res.code === 1) {
-            this.$message({
-              message: '删除成功！',
-              type: 'success'
-            })
-            this.getList()
-          } else {
-            this.$message({
-              message: '删除失败！',
-              type: 'error'
-            })
-          }
-        })
-      })
-    },
-    delPicture(row) {
-
-    },
     viewhandleClose() {
       this.viewVisible = false
       this.imgOptions = []
-    },
-    addAuthenticate() {
-      this.Authenticate = {
-        authenticateId: null,
-        ownerId: null,
-        ownerName: '',
-        imgAddress: [],
-        treasureName: '',
-        treasureCode: '',
-        typeId: null,
-        typeName: '',
-        texture: '',
-        weight: '',
-        formCity: '',
-        authUserId: '',
-        authUserName: '',
-        result: '',
-        createTime: '',
-        successTime: '',
-        status: '0'
-      }
-      this.dialogFormVisible = true
     },
     updateClick(row) {
       this.Authenticate = { ...row }
@@ -291,37 +239,10 @@ export default {
       this.viewVisible = true
     },
     getList() {
-      if (!this.form.departmentId) this.form.departmentId = this.$store.getters.deptId
+      this.form.authUserId = this.$store.getters.userId
       getListByCondition(this.form, this.pageIndex, this.pageSize).then(resp => {
         this.tableData = resp.data.list
         this.total = resp.data.total
-      })
-    },
-    handleSelectionChange(val) {
-      this.ids = val.map(item => item.authenticateId)
-    },
-    batchDelete() {
-      this.$confirm('您确定要批量删除已选定的数据项?', '警告', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        var ids = this.ids.toString()
-        batchDelete(ids).then(response => {
-          const res = response
-          if (res.code === 1) {
-            this.$message({
-              message: '删除成功！',
-              type: 'success'
-            })
-            this.getList()
-          } else {
-            this.$message({
-              message: '删除失败！',
-              type: 'error'
-            })
-          }
-        })
       })
     }
   }

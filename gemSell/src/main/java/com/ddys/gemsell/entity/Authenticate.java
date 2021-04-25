@@ -104,6 +104,13 @@ public class Authenticate implements Serializable {
     @TableField("result")
     private String result;
 
+
+    /**
+     * 鉴定状态
+     */
+    @TableField("status")
+    private String status;
+
     /**
      * 申请时间
      */

@@ -5,6 +5,7 @@ import Type from '@/views/type/index'
 import Goods from '@/views/goods/index'
 import Order from '@/views/order/index'
 import Authenticate from '@/views/authenticate/index'
+import MyAuthenticate from '@/views/myAuthenticate/index'
 Vue.use(Router)
 
 /* Layout */
@@ -110,7 +111,19 @@ export const constantRoutes = [
       }
     ]
   },
-
+  {
+    path: '/myAuthenticate',
+    component: Layout,
+    redirect: '/myAuthenticate/myAuthenticate',
+    children: [
+      {
+        path: 'myAuthenticate',
+        name: '鉴定管理',
+        component: MyAuthenticate,
+        meta: { title: '我的鉴定', icon: 'el-icon-s-cooperation' }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

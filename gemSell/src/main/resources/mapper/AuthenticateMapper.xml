@@ -19,11 +19,12 @@
                     <result column="result" property="result"/>
                     <result column="create_time" property="createTime"/>
                     <result column="success_time" property="successTime"/>
+                    <result column="status" property="status"/>
         </resultMap>
 
     <sql id="selectVo">
         select
-        authenticate_id, owner_id, owner_name, img_address, treasure_name, treasure_code, type_id, type_name, texture, weight, form_city, auth_user_id, auth_user_name, result, create_time, success_time
+        authenticate_id, owner_id, owner_name, img_address, treasure_name, treasure_code, type_id, type_name, texture, weight, form_city, auth_user_id, auth_user_name, result, create_time, success_time,status
        from authenticate a
     </sql>
     <select id="getListByCondition" parameterType="com.ddys.gemsell.entity.Authenticate" resultMap="BaseResultMap">
@@ -40,6 +41,9 @@
         </if>
         <if test="authUserId!=null and authUserId!=''">
             and a.auth_user_id = #{authUserId}
+        </if>
+        <if test="status!=null and status!=''">
+            and a.status = #{status}
         </if>
     </select>
 

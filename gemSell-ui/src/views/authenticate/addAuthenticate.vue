@@ -96,6 +96,26 @@
           </el-upload>
         </el-form-item>
         <el-row>
+          <el-col :span="12">
+            <el-form-item
+              prop="status"
+              label="鉴定状态"
+            >
+              <el-select v-model="authenticate.status" placeholder="鉴定状态">
+                <el-option
+                  label="未鉴定"
+                  value="0"
+                />
+                <el-option
+                  label="已鉴定"
+                  value="1"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
           <el-col :span="24">
             <el-form-item label="鉴定结果" prop="result">
               <el-input

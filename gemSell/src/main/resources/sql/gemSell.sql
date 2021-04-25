@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 25/04/2021 10:20:42
+ Date: 25/04/2021 13:21:10
 */
 
 SET NAMES utf8mb4;
@@ -60,6 +60,7 @@ CREATE TABLE `authenticate`  (
   `result` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '鉴定结果',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '申请时间',
   `success_time` datetime(0) NULL DEFAULT NULL COMMENT '鉴定时间',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '鉴定状态 0待鉴定1已鉴定',
   PRIMARY KEY (`authenticate_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '鉴定表' ROW_FORMAT = Dynamic;
 
@@ -631,6 +632,8 @@ INSERT INTO `type` VALUES (56, '海蓝宝石', 5);
 INSERT INTO `type` VALUES (57, '金绿宝石', 5);
 INSERT INTO `type` VALUES (58, '碧玺', 5);
 INSERT INTO `type` VALUES (59, '金水菩提', 5);
+INSERT INTO `type` VALUES (60, '石榴石', 5);
+INSERT INTO `type` VALUES (61, '大钻石', 4);
 
 -- ----------------------------
 -- Table structure for user
