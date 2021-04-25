@@ -100,7 +100,7 @@ export default {
     },
     methods: {
         layout() {
-            this.$store.dispatch('user/logout')
+            this.$store.dispatch('logout')
         },
         userExit() {
             this.$axios.get('/site/account/logout').then(response => {

@@ -306,10 +306,11 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          
           this.message.forEach(item=>{
             item.status = '1'
             item.addressId  = this.tableRadio
-            item.payTime = new Date().Format("yyyy-MM-dd hh:mm:ss")
+            item.payTime = this.Format(new Date())
           })
           batchUpdate(this.message).then(resp=>{
             if(resp.code === 1){

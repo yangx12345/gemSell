@@ -98,13 +98,13 @@ export default {
                     // 显示进度条
                     this.$Loading.start();
 
-                    this.$store.dispatch('login', this.loginForm).then(() => {
+                    this.$store.dispatch('login', this.loginForm).then(async () => {
                         this.$Notice.success({
                             title:'提示',
                             desc:'登录成功'
                         })
-                        this.$store.dispatch('getInfo')
                         this.$router.go(-1);
+                        console.log(this.$store.state)
                         var userId = this.$store.state.currentUser.userId
                         var data = {
                             userId: userId
@@ -132,7 +132,7 @@ export default {
                         if(resp.code === 1){
                                 this.$Notice.success({
                                     title:'提示',
-                                    desc:response.msg
+                                    desc:'  注册成功'
                                 })
                                 var loginForm  = {
                                     userName: this.registerForm.userName,
@@ -140,14 +140,6 @@ export default {
                                 }
                                 this.$store.dispatch('login', loginForm).then(() => {
                                 this.$store.dispatch('getInfo')
-                                var userId = this.$store.state.currentUser.userId
-                                var data = {
-                                    userId: userId
-                                }
-                                //调用接口
-                                getListByCondition(data,1,10).then(response => {
-                                    this.$store.commit('updateGoodsNum',response.data.total)
-                                })
                                 this.$router.go(-1);
                             })
                         }else {

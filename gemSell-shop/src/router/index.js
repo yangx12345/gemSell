@@ -24,6 +24,10 @@ import OrderDetail from '../components/orderDetail'
 
 import GoodsList from '../components/goodsList'
 
+import changeMessage from '../components/changeMessage'
+
+import userInfo from '../components/userInfo'
+
 import axios from 'axios';
 //基础地址
 //让ajax携带cookie
@@ -53,6 +57,11 @@ let routes = [{
     //详情页
     path: '/detail',
     component: Detail
+  },
+  {
+    //详情页
+    path: '/userInfo',
+    component: userInfo
   },
   {
     //购物车
@@ -92,6 +101,14 @@ let routes = [{
     //订单列表
     path: '/orderlist',
     component: OrderList,
+    meta: {
+      checkLogin: true
+    }
+  },
+  {
+    //订单列表
+    path: '/changeMessage',
+    component: changeMessage,
     meta: {
       checkLogin: true
     }

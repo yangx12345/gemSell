@@ -28,8 +28,14 @@
                       </h2>
                       <div class="list">
                         <p>
-                          <a class="router-link-exact-active ">
-                          <i class="iconfont icon-arrow-right"></i>交易订单</a>
+                          <router-link to="/orderList">
+                            <i class="iconfont icon-arrow-right"></i>交易订单
+                          </router-link>
+                        </p>
+                        <p>
+                          <router-link to="/orderList">
+                            <i class="iconfont icon-arrow-right"></i>鉴定申请
+                          </router-link>
                         </p>
                       </div>
                     </li>
@@ -40,16 +46,14 @@
                       </h2>
                       <div class="list">
                         <p>
-                          <a class="">
-                            <i class="iconfont icon-arrow-right"></i>账户资料</a>
+                          <router-link to="/userInfo">
+                            <i class="iconfont icon-arrow-right"></i>账户资料
+                          </router-link>
                         </p>
                         <p>
-                          <a class="">
-                            <i clrouter-linkss="iconfont icon-router-linkrrow-right"></i>头像设置</a>
-                        </p>
-                        <p>
-                          <a class="">
-                            <i class="iconfont icon-arrow-right"></i>修改密码</a>
+                          <router-link to="/changeMessage">
+                            <i class="iconfont icon-arrow-right"></i>修改密码
+                          </router-link>
                         </p>
                       </div>
                     </li>
@@ -82,7 +86,7 @@
                         <th width="10%">状态</th>
                         <th width="24%">操作</th>
                       </tr>
-                      <tr v-for="(item, index) in message" :key="item.id">
+                      <tr v-for="(item, index) in orderList" :key="item.orderId">
                          <td>{{index+1}}</td>
                         <td>{{item.orderId}}</td>
                         <!-- 三元表达式 -->
@@ -121,7 +125,7 @@ export default {
     return {
       pageIndex: 1,
       pageSize: 5,
-      message: [],
+      orderList: [],
       totalCount: 0,
     }
 
@@ -156,7 +160,7 @@ export default {
         userId: this.$store.state.currentUser.userId
       }
       getListByCondition(data,this.pageIndex,this.pageSize).then(response => {
-        this.message = response.data.list;
+        this.$set(this,'orderList',response.data.list)
         this.totalCount = response.data.total;
       })
     },
@@ -177,8 +181,8 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          row.getTime = new Date().Format("yyyy-MM-dd hh:mm:ss")
-          row.status = '4'
+          row.status = 4
+          row.getTime = this.Format(new Date())
           update(row).then(resp=>{
             if(resp.code === 1){
               this.$message({
@@ -203,8 +207,8 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          row.cancalTime = new Date().Format("yyyy-MM-dd hh:mm:ss")
-          row.status = '5'
+          row.status = 5
+          row.cancalTime = this.Format(new Date())
           update(row).then(resp=>{
             if(resp.code === 1){
               this.$message({

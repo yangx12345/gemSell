@@ -4,6 +4,14 @@ import { login, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 Vue.use(Vuex)
 //创建一个 store
+const getDefaultState = ()=>{
+  return {
+    cartDate: 0,
+    pathFrom: '',
+    currentUser: '',
+    token: getToken()
+  }
+}
 const store = new Vuex.Store({
   state: {
     cartDate: 0,

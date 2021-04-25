@@ -11,9 +11,10 @@ import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 //导入moment.js
 import moment from 'moment';
-import {Format} from './utils/time'
 // 导入 懒加载 vue插件
 import VueLazyload from 'vue-lazyload';
+import { Format } from './utils/time'
+Vue.prototype.Format = Format
 Vue.use(VueLazyload,{
     preLoad:1.3,
     loading:require('../static/images/loading.gif'),
@@ -27,7 +28,6 @@ Vue.filter('filterDate', function(val) {
 
 //注册element
 Vue.use(ElementUI);
-Vue.use(Format)
 Vue.use(iView);
 //注册productZoomer
 Vue.use(ProductZoomer);

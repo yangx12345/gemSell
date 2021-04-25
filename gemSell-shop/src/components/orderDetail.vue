@@ -40,16 +40,14 @@
                         </h2>
                         <div class="list">
                           <p>
-                            <a href="#/site/member/center" class="">
-                            <i class="iconfont icon-arrow-right"></i>账户资料</a>
+                            <router-link to="/userInfo">
+                            <i class="iconfont icon-arrow-right"></i>账户资料
+                            </router-link>
                           </p>
                           <p>
-                            <a href="#/site/member/center" class="">
-                            <i class="iconfont icon-arrow-right"></i>修改密码</a>
-                          </p>
-                          <p>
-                            <a href="javascript:void(0)">
-                            <i class="iconfont icon-arrow-right"></i>退出登录</a>
+                            <router-link to="/changeMessage">
+                            <i class="iconfont icon-arrow-right"></i>修改密码
+                            </router-link>
                           </p>
                         </div>
                       </li>
@@ -74,16 +72,16 @@
                         <div class="progress">下单</div>
                         <div class="info">{{goodsList[0].createTime}}</div>
                       </li>
-                      <li class="last">
+                      <li class="second" :class="goodsList[0].payTime?'active':''">
                         <div class="progress">支付成功</div>
                         <div class="info">{{goodsList[0].payTime}}</div>
                       </li>
 
-                      <li class="first active">
+                      <li class="third" :class="goodsList[0].getTime?'active':''">
                         <div class="progress">收货</div>
                         <div class="info">{{goodsList[0].getTime}}</div>
                       </li>
-                      <li class="last">
+                      <li class="last" :class="goodsList[0].successTime?'active':''">
                         <div class="progress">已完成</div>
                         <div class="info">{{goodsList[0].successTime}}</div>
                       </li>

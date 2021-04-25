@@ -41,7 +41,7 @@ export function update(data) {
   return request({
     url: '/order/update',
     method: 'put',
-    data: data
+    data
   })
 }
 
