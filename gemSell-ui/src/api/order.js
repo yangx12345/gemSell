@@ -52,3 +52,10 @@ export function batchDelete(ids) {
     }
   })
 }
+export function audit(data) {
+  return request({
+    url: '/order/audit',
+    method: 'post',
+    data
+  })
+}

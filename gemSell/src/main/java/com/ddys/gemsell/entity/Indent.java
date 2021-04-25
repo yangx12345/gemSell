@@ -123,7 +123,7 @@ public class Indent implements Serializable {
     private String imgAddress;
 
     /**
-     * 商品图片
+     * 商品地址
      */
     @TableField("address_id")
     private String addressId;

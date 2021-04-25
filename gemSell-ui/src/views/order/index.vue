@@ -12,8 +12,10 @@
           <el-option label="待付款" :value="'0'" />
           <el-option label="已付代发" :value="'1'" />
           <el-option label="已发" :value="'2'" />
-          <el-option label="取消" :value="'3'" />
+          <el-option label="已取消" :value="'3'" />
           <el-option label="完成" :value="'4'" />
+          <el-option label="审核中" :value="'5'" />
+          <el-option label="已拒绝" value="6" />
         </el-select>
       </el-form-item>
       <el-button type="primary" @click="getList()">查询</el-button>
@@ -87,6 +89,24 @@
         align="center"
       />
       <el-table-column
+        prop="getTime"
+        label="收货时间"
+        min-width="160"
+        align="center"
+      />
+      <el-table-column
+        prop="payTime"
+        label="支付时间"
+        min-width="160"
+        align="center"
+      />
+      <el-table-column
+        prop="cancalTime"
+        label="取消时间"
+        min-width="160"
+        align="center"
+      />
+      <el-table-column
         fixed="right"
         label="操作"
         align="center"
@@ -95,6 +115,7 @@
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="updateClick(scope.row)">编辑</el-button>
           <el-button type="text" size="small" @click="handleClick(scope.row)">删除</el-button>
+          <el-button v-if="scope.row.status === '5'" type="text" size="small" @click="auditClick(scope.row)">审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -111,12 +132,30 @@
       />
     </div>
     <addOrder :dialog-form-visible.sync="dialogFormVisible" :order="order" @getList="getList" />
+    <el-dialog
+      title="审核要取消的订单"
+      :visible.sync="auditVisible"
+      width="40%"
+    >
+      <el-form :model="form">
+        <el-form-item label="审核订单" label-width="120">
+          <el-radio-group v-model="status">
+            <el-radio :label="3">同意</el-radio>
+            <el-radio :label="6">拒绝</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="auditVisible = false">取 消</el-button>
+        <el-button type="primary" @click="audit()">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 
 </template>
 
 <script>
-import { getListByCondition, batchDelete, deleteById } from '@/api/order'
+import { getListByCondition, batchDelete, deleteById, audit } from '@/api/order'
 import addOrder from './addOrder'
 export default {
   components: {
@@ -147,20 +186,44 @@ export default {
       },
       options: [],
       viewVisible: false,
-      imgOptions: []
+      imgOptions: [],
+      auditVisible: false,
+      status: 3,
+      auditData: {}
     }
   },
   mounted() {
     this.getList()
   },
   methods: {
+    auditClick(row) {
+      this.auditData = { ...row }
+      this.auditVisible = true
+    },
+    audit() {
+      this.auditData.status = this.status
+      audit(this.auditData).then((resp) => {
+        if (resp.code === 1) {
+          this.$message({
+            type: 'success',
+            message: resp.msg
+          })
+          this.auditData = {}
+          this.status = 3
+          this.auditVisible = false
+          this.getList()
+        }
+      })
+    },
     // 角色翻译
     statusFormatter(row) {
       if (row.status === '0') return '待付款'
       if (row.status === '1') return '已付代发'
       if (row.status === '2') return '已发'
-      if (row.status === '3') return '取消'
+      if (row.status === '3') return '已取消'
       if (row.status === '4') return '完成'
+      if (row.status === '5') return '审核中'
+      if (row.status === '6') return '已拒绝'
     },
     handleSizeChange(val) {
       this.pagesize = val

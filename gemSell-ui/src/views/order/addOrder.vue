@@ -58,8 +58,10 @@
                 <el-option label="待付款" value="0" />
                 <el-option label="已付代发" value="1" />
                 <el-option label="已发" value="2" />
-                <el-option label="取消" value="3" />
+                <el-option label="已取消" value="3" />
                 <el-option label="完成" value="4" />
+                <el-option label="审核中" value="5" />
+                <el-option label="已拒绝" value="6" />
               </el-select>
             </el-form-item>
           </el-col>

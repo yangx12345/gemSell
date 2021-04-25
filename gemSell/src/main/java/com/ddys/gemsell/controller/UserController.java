@@ -19,6 +19,7 @@ import com.ddys.gemsell.service.UserService;
 import com.ddys.gemsell.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +73,7 @@ public class UserController {
         {
             return ResultUtil.error("用户名已存在");
         }
+        entity.setCreateTime(LocalDateTime.now());
         entity.setPassword(SecureUtil.md5(entity.getPassword()));
         return ResultUtil.judgmentResult(userService.saveEntity(entity));
     }
@@ -86,6 +88,7 @@ public class UserController {
         if(entity==null){
 		return ResultUtil.parameterError();
         }
+        entity.setUpdateTime(LocalDateTime.now());
         return ResultUtil.judgmentResult(userService.updateEntity(entity));
     }
 
@@ -179,6 +182,7 @@ public class UserController {
         {
             return ResultUtil.error("用户名已存在");
         }
+        user.setCreateTime(LocalDateTime.now());
         user.setPassword(SecureUtil.md5(user.getPassword()));
         return ResultUtil.judgmentResult(userService.saveEntity(user));
     }
@@ -196,6 +200,8 @@ public class UserController {
             return ResultUtil.error("原密码错误");
         }
         user.setPassword(SecureUtil.md5(newPassword));
+        user.setUpdateBy(userName);
+        user.setUpdateTime(LocalDateTime.now());
         return ResultUtil.judgmentResult(userService.updateEntity(user));
     }
 

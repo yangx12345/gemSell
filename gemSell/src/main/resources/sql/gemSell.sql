@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : yang
+ Source Server         : localhost
  Source Server Type    : MySQL
  Source Server Version : 50728
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 24/04/2021 21:39:43
+ Date: 25/04/2021 10:20:42
 */
 
 SET NAMES utf8mb4;
@@ -110,7 +110,7 @@ CREATE TABLE `goods`  (
 -- ----------------------------
 -- Records of goods
 -- ----------------------------
-INSERT INTO `goods` VALUES (2, '南非钻石', 4, '钻石', '南非钻石的故事可以追溯到 1870 年当时一个名为阿德里安·范·维克 Adriann van Wyk的农夫在北开普省金伯利Kimberley附近拥有一个农场 当他发现自己的孩子正在玩弄几颗钻石时一切便从此开始了。', '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', 140.00, 120.00, 1, 1, 1);
+INSERT INTO `goods` VALUES (2, '南非钻石', 4, '钻石', '南非钻石的故事可以追溯到 1870 年当时一个名为阿德里安·范·维克 Adriann van Wyk的农夫在北开普省金伯利Kimberley附近拥有一个农场 当他发现自己的孩子正在玩弄几颗钻石时一切便从此开始了。', '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', 140.00, 120.00, 1, 1, 2);
 
 -- ----------------------------
 -- Table structure for indent
@@ -123,7 +123,7 @@ CREATE TABLE `indent`  (
   `good_id` int(11) NOT NULL COMMENT '商品id',
   `good_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
   `price` decimal(10, 2) NOT NULL COMMENT '单价',
-  `status` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '状态，0待付款，1已付代发，2已发，3取消，4完成，5审核中',
+  `status` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '状态，0待付款，1已付代发，2已发，3取消，4完成，5审核中，6拒绝',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `success_time` datetime(0) NULL DEFAULT NULL COMMENT '完成时间',
   `get_time` datetime(0) NULL DEFAULT NULL COMMENT '收货时间',
@@ -154,8 +154,8 @@ INSERT INTO `indent` VALUES (13, 1, 'admin', 2, '南非钻石', 140.00, '0', '20
 INSERT INTO `indent` VALUES (14, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-24 16:37:26', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
 INSERT INTO `indent` VALUES (15, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-24 16:47:19', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
 INSERT INTO `indent` VALUES (16, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-24 18:42:23', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
-INSERT INTO `indent` VALUES (17, 1, 'admin', 2, '南非钻石', 140.00, '0', '2021-04-24 18:45:34', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
-INSERT INTO `indent` VALUES (18, 1, 'admin', 2, '南非钻石', 140.00, '1', '2021-04-24 18:49:03', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, 1);
+INSERT INTO `indent` VALUES (17, 1, 'admin', 2, '南非钻石', 140.00, '6', '2021-04-24 18:45:34', NULL, NULL, NULL, NULL, 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, NULL);
+INSERT INTO `indent` VALUES (18, 1, 'admin', 2, '南非钻石', 140.00, '3', '2021-04-24 18:49:03', NULL, NULL, NULL, '2021-04-25 10:15:45', 1, 140.00, '[{\"url\": \"http://localhost:8088/gemsell-api/imgs/defaultImg.jpg\", \"name\": \"defaultImg.jpg\"}]', NULL, 1);
 
 -- ----------------------------
 -- Table structure for tb_city
@@ -631,8 +631,6 @@ INSERT INTO `type` VALUES (56, '海蓝宝石', 5);
 INSERT INTO `type` VALUES (57, '金绿宝石', 5);
 INSERT INTO `type` VALUES (58, '碧玺', 5);
 INSERT INTO `type` VALUES (59, '金水菩提', 5);
-INSERT INTO `type` VALUES (60, '石榴石', 5);
-INSERT INTO `type` VALUES (61, '大钻石', 4);
 
 -- ----------------------------
 -- Table structure for user
@@ -651,13 +649,14 @@ CREATE TABLE `user`  (
   `update_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES (1, 'admin', '96e79218965eb72c92a549dd5a330112', 'admin', '0', '15133185689', '男', '2021-04-16 13:43:35', '', '', '2021-02-16 15:28:37');
-INSERT INTO `user` VALUES (4, 'user1', 'e10adc3949ba59abbe56e057f20f883e', 'user1', '2', '', '男', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (4, 'user1', 'e10adc3949ba59abbe56e057f20f883e', 'user1', '2', '15100257355', '男', NULL, NULL, 'admin', '2021-04-25 09:24:40');
 INSERT INTO `user` VALUES (5, 'auth1', 'e10adc3949ba59abbe56e057f20f883e', 'auh1', '1', '', '男', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (6, 'user2', '96e79218965eb72c92a549dd5a330112', 'test', '2', '', '男', '2021-04-25 09:20:22', 'admin', NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

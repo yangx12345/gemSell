@@ -4,7 +4,9 @@ package com.ddys.gemsell.controller;
 import com.ddys.gemsell.common.result.Result;
 import com.ddys.gemsell.common.result.ResultUtil;
 import com.ddys.gemsell.common.utils.StringUtils;
+import com.ddys.gemsell.entity.Goods;
 import com.ddys.gemsell.entity.Indent;
+import com.ddys.gemsell.service.GoodsService;
 import com.ddys.gemsell.service.IndentService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -21,6 +23,9 @@ import java.util.List;
 public class IndentController {
     @Autowired
     private IndentService indentService;
+
+    @Autowired
+    private GoodsService goodsService;
 
     /**
     * 根据id查询实体
@@ -164,6 +169,28 @@ public class IndentController {
             return ResultUtil.parameterError();
         }
         return ResultUtil.judgmentResult(indentService.batchUpdate(Indents));
+    }
+
+    @PostMapping("audit")
+    public Result audit(@RequestBody Indent entity)
+    {
+        if (entity == null)
+        {
+            return ResultUtil.parameterError();
+        }
+        if ("3".equals(entity.getStatus()))
+        {
+            Goods goods = goodsService.getEntityById(entity.getGoodId());
+            if (goods == null)
+            {
+                return ResultUtil.error("该订单商品不存在");
+            }
+            goods.setRemainNumber(goods.getRemainNumber()+1);
+            entity.setCancalTime(LocalDateTime.now());
+            goodsService.updateEntity(goods);
+        }
+        indentService.updateEntity(entity);
+        return ResultUtil.success("审核成功");
     }
 }
 
