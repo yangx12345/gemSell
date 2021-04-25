@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { add, update } from '@/api/userManage.js'
 export default {
   props: {
@@ -64,6 +65,11 @@ export default {
       type: ''
     }
   },
+  computed: {
+    ...mapGetters([
+      'userName'
+    ])
+  },
   methods: {
     onCancel() {
       if (this.$refs['currentUser']) {
@@ -76,6 +82,7 @@ export default {
       this.$refs['currentUser'].validate((valid) => {
         if (valid) {
           if (!this.currentUser.userId) {
+            this.currentUser.createBy = this.userName
             add(this.currentUser).then(resp => {
               if (resp.code === 1) {
                 this.$message({
@@ -87,6 +94,7 @@ export default {
               }
             })
           } else {
+            this.currentUser.updateBy = this.userName
             update(this.currentUser).then((result) => {
               if (result.code === 1) {
                 this.$message({

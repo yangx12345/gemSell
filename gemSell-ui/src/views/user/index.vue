@@ -67,6 +67,31 @@
         align="center"
       />
       <el-table-column
+        prop="createBy"
+        label="创建者"
+        min-width="120"
+        align="center"
+      />
+      <el-table-column
+        prop="createTime"
+        label="创建时间"
+        min-width="160"
+        align="center"
+      />
+      <el-table-column
+        prop="updateBy"
+        label="更新者"
+        min-width="120"
+        align="center"
+      />
+      <el-table-column
+        prop="updateTime"
+        label="更新时间"
+        min-width="160"
+        align="center"
+      />
+      <el-table-column
+        fixed="right"
         label="操作"
         align="center"
         min-width="220"
