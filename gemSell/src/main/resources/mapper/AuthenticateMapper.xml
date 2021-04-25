@@ -38,6 +38,9 @@
         <if test="authUserName!=null and authUserName!=''">
             and a.auth_user_name like "%" #{authUserName} "%"
         </if>
+        <if test="authUserId!=null and authUserId!=''">
+            and a.auth_user_id = #{authUserId}
+        </if>
     </select>
 
 </mapper>
