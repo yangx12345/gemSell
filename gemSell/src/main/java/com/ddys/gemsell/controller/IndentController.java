@@ -156,7 +156,8 @@ public class IndentController {
         {
             return ResultUtil.parameterError();
         }
-       boolean flag = indentService.batchAdd(Indents);
+        Indents.forEach(indent -> indent.setCreateTime(LocalDateTime.now()));
+        boolean flag = indentService.batchAdd(Indents);
         if (flag) {
             List<Integer> ids = Indents.stream().map(Indent::getOrderId).collect(Collectors.toList());
             return ResultUtil.success(ids);
