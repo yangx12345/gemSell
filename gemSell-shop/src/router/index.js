@@ -28,6 +28,8 @@ import changeMessage from '../components/changeMessage'
 
 import userInfo from '../components/userInfo'
 
+import treasure from '../components/authenticate'
+
 import axios from 'axios';
 //基础地址
 //让ajax携带cookie
@@ -93,6 +95,14 @@ let routes = [{
     //订单成功
     path: '/paySuccess',
     component: paySuccess,
+    meta: {
+      checkLogin: true
+    }
+  },
+  {
+    //  鉴品列表
+    path: '/treasure',
+    component: treasure,
     meta: {
       checkLogin: true
     }

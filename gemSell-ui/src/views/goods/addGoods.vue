@@ -49,7 +49,6 @@
           </el-col>
         </el-row>
         <el-form-item
-          v-if="currentgood.goodId"
           label="商品图片"
         >
           <el-upload

@@ -8,7 +8,7 @@
               <span>当前位置：</span>
               <a href="/index.html">首页</a> &gt;
               <a class="">会员中心</a>&gt;
-              <a href="#/site/member/orderlist" class="router-link-exact-active ">我的订单</a>
+              <a href="#/site/member/treasureList" class="router-link-exact-active ">我的订单</a>
             </div>
           </div>
           <div class="section clearfix">
@@ -32,6 +32,11 @@
                               <i class="iconfont icon-arrow-right"></i>交易订单
                             </router-link>
                           </p>
+                          <p>
+                          <router-link to="/treasure">
+                            <i class="iconfont icon-arrow-right"></i>鉴定申请
+                          </router-link>
+                        </p>
                         </div>
                       </li>
                       <li>
@@ -59,31 +64,96 @@
             <div class="right-auto">
               <div class="bg-wrap" style="min-height: 765px;">
                 <div class="sub-tit">
+                   <a class="add" @click="back">
+                     <i class="iconfont icon-reply"></i>返回</a>
+                    <a class="add" @click="addTreasure">
+                     <i class="el-icon-plus"></i>申请</a>
                   <ul>
                     <li class="selected">
                       <a>账户资料</a>
                     </li>
                   </ul>
                 </div>
-                <div class="table-wrap">
-                  <el-form :model="currentUser" status-icon ref="currentUser" label-width="100px" class="demo-currentUser">
-                    <el-form-item label="用户名" prop="userName">
-                      <el-input v-model="currentUser.userName" :disabled="true"></el-input>
+                <div class="table-wrap" v-if="showList">
+                  <div class="page-foot">
+                    <el-pagination background @size-change="SizeChange" @current-change="CurrentChange" :page-sizes="[5, 8, 10, 15]" :page-size="pageSize" :current-page="pageIndex" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
+                    </el-pagination>
+                  </div>
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ftable">
+                    <tbody>
+                      <tr>
+                        <th width="5%" align="left">序号</th>
+                        <th width="7%" align="left">鉴品编号</th>
+                        <th width="10%">鉴品名称</th>
+                        <th width="10%">鉴品分类</th>
+                        <th width="7%">鉴定结果</th>
+                        <th width="10%">鉴品图片</th>
+                        <th width="24%">操作</th>
+                      </tr>
+                      <tr v-for="(item, index) in treasureList" :key="item.orderId">
+                         <td>{{index+1}}</td>
+                        <td>{{item.treasureCode}}</td>
+                        <!-- 三元表达式 -->
+                        <td align="left">{{item.treasureName}}</td>
+                        <td align="left">
+                          {{ item.typeName }}
+                        </td>
+                        <td align="left">{{item.result?item.result:'待鉴定'}}</td>
+                        <td align="left">
+                          <el-image
+                            style="width: 100px; height: 100px"
+                            :src="JSON.parse(item.imgAddress)[0].url"
+                            fit="contain"></el-image>
+                        </td>
+                        <td align="left">
+                          <el-button @click="getInfo(item)" type="text">查看详情</el-button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div v-else class="table-wrap">
+                  <el-form :model="treasure" status-icon ref="treasure" label-width="100px" class="demo-treasure">
+                    <el-form-item label="鉴品名称" prop="treasureName">
+                      <el-input v-model="treasure.treasureName" :disabled="treasure.authenticateId? true: false"></el-input>
                     </el-form-item>
-                    <el-form-item label="昵称" prop="name">
-                        <el-input v-model="currentUser.name"></el-input>
+                    <el-form-item label="产地" prop="formCity">
+                        <el-input v-model="treasure.formCity" :disabled="treasure.authenticateId? true: false"></el-input>
                     </el-form-item>
-                    <el-form-item label="手机号" prop="phone">
-                        <el-input v-model="currentUser.phone"></el-input>
+                    <el-form-item label="类型" prop="typeId">
+                        <treeselect v-model="treasure.typeId" :options="options" style="width: 240px" :disabled="treasure.authenticateId? true: false" />
                     </el-form-item>
-                    <el-form-item label="性别" prop="sex">
-                        <el-select v-model="currentUser.sex" placeholder="请选择性别">
-                        <el-option label="男" value="男"></el-option>
-                        <el-option label="女" value="女"></el-option>
-                        </el-select>
+                    <el-form-item label="质地" prop="texture">
+                        <el-input v-model="treasure.texture" :disabled="treasure.authenticateId? true: false"></el-input>
+                    </el-form-item>
+                    <el-form-item label="重量" prop="weight">
+                        <el-input v-model="treasure.weight" type="number" :disabled="treasure.authenticateId? true: false"></el-input>(克)
                     </el-form-item>
                     <el-form-item>
-                      <el-button type="primary" @click="submitForm('currentUser')">提交</el-button> 
+                      <el-upload
+                        :on-success="handleSuccess"
+                        :on-error="handleError"
+                        :on-remove="handleRemove"
+                        :before-upload="handleUpload"
+                        :limit="5"
+                        multiple
+                        :headers="head"
+                        :data="data"
+                        :file-list="fileList"
+                        accept=".jpg,.jpeg,.png"
+                        class="upload-demo"
+                        list-type="picture"
+                        action="http://localhost:8088/gemsell-api/goods/goodsImageUpload"
+                      >
+                        <el-button
+                          size="small"
+                          type="primary"
+                        >点击上传</el-button>
+                        <div slot="tip" class="el-upload__tip">一个鉴品最多五张图片</div>
+                        </el-upload>
+                    </el-form-item>
+                    <el-form-item>
+                      <el-button type="primary" @click="submitForm('treasure')">提交</el-button> 
                     </el-form-item>
                   </el-form>
                 </div>
@@ -96,36 +166,144 @@
   </div>
 </template>
 <script>
-import { update } from '@/api/userManage'
-
+import { update, add, getListByCondition } from '@/api/authenticate'
+// import the component
+import Treeselect from '@riophae/vue-treeselect'
+// import the styles
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import { getTypeSelect} from '@/api/type'
 export default {
-  name: 'orderList',
+  name: 'treasureList',
+  components: {
+    Treeselect
+  },
   data() {
       return {
-        currentUser: {}
+        // 鉴品对象
+        treasure: {},
+        // 分类数组
+        options: [],
+        // 是否显示列表
+        showList: true,
+        // 鉴品列表
+        treasureList:[],
+        pageIndex: 1,
+        pageSize: 5,
+        totalCount: 0,
+        fileList: [],
+        data: { authenticateId: null },
+        head: { token: '' }
       }
   },
   mounted(){
-    this.currentUser = this.$store.state.currentUser
+    getTypeSelect()
+    .then(response => {
+        this.options = response.data;
+    })
+    this.getTreasureList()
   },
   methods: {
+    handleUpload() {
+      if (this.fileList.length > 4) {
+        this.$message({
+          message: '一个商品最多上传五张图片',
+          type: 'info'
+        })
+        return false
+      }
+      this.head.token = this.token
+    },
+    handleSuccess(response) {
+      if (response.code === 1) {
+        if (this.treasure.imgAddress[0].name === 'defaultImg.jpg') {
+          this.treasure.imgAddress = []
+          this.treasure.imgAddress.push(response.data)
+        } else {
+          this.treasure.imgAddress.push(response.data)
+        }
+        this.$message({
+          message: '上传成功！',
+          type: 'success'
+        })
+      }
+    },
+    handleRemove(file, fileList) {
+      if (fileList.length !== 0) {
+        var list = []
+        fileList.forEach((item) => {
+          var o = {
+            name: item.name,
+            url: item.url
+          }
+          list.push(o)
+        })
+        this.treasure.imgAddress = list
+      } else {
+        this.treasure.imgAddress = [{ name: 'defaultImg.jpg', url: 'http://localhost:8088/gemsell-api/imgs/defaultImg.jpg' }]
+      }
+    },
+    handleError() {
+      this.$message({
+        message: '上传失败！',
+        type: 'error'
+      })
+    },
+    SizeChange(size) {
+      this.pageIndex = 1;
+      this.pageSize = size;
+      this.getTreasureList();
+    },
+    CurrentChange(index) {
+      this.pageIndex = index;
+      this.getTreasureList();
+    },
+    getTreasureList(){
+      var data = {
+        ownerId: this.$store.state.currentUser.userId
+      }
+      getListByCondition(data, this.pageIndex, this.pageSize).then(resp=>{
+        this.$set(this,'treasureList',resp.data.list)
+        this.totalCount = resp.data.total;
+      })
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          update(this.currentUser).then(resp=>{
-            if(resp.code === 1){
-              this.$message.success('修改成功')
-            }
-          })
+          this.treasure.ownerId = this.$store.state.currentUser.userId
+          this.treasure.ownerName = this.$store.state.currentUser.username
+            add(this.treasure).then(resp=>{
+              if(resp.code === 1){
+                this.$message.success('申请成功')
+              }
+            })
         } else {
           console.log('error submit!!');
           return false;
         }
       });
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
-    }
+    // 查看鉴品详情
+    getInfo(row){
+      this.showList = false,
+      this.treasure = { ...row }
+    },
+    // 鉴品详情返回鉴品列表
+    back(){
+      this.showList = true
+    },
+    // 添加申请
+    addTreasure(){
+      this.showList = false
+      this.treasure = {
+        authenticateId: '',
+        treasureName: '',
+        formCity: '',
+        typeId: '',
+        texture: '',
+        weight: '',
+        imgAddress: []
+      }
+    },
   }
 }
 

@@ -32,6 +32,11 @@
                               <i class="iconfont icon-arrow-right"></i>交易订单
                             </router-link>
                           </p>
+                          <p>
+                          <router-link to="/treasure">
+                            <i class="iconfont icon-arrow-right"></i>鉴定申请
+                          </router-link>
+                        </p>
                         </div>
                       </li>
                       <li>

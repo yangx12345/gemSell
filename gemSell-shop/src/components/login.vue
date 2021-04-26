@@ -103,8 +103,8 @@ export default {
                             title:'提示',
                             desc:'登录成功'
                         })
+                        await this.$store.dispatch('getInfo')
                         this.$router.go(-1);
-                        console.log(this.$store.state)
                         var userId = this.$store.state.currentUser.userId
                         var data = {
                             userId: userId

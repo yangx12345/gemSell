@@ -16,7 +16,7 @@
               <div class="bg-wrap">
                 <div class="avatar-box">
                   <h3>
-                      {{ $store.state.treasure.userName }}
+                      {{ $store.state.currentUser.userName }}
                   </h3>
                 </div>
                 <div class="center-nav">
@@ -30,6 +30,11 @@
                           <p>
                             <router-link to="/orderList">
                               <i class="iconfont icon-arrow-right"></i>交易订单
+                            </router-link>
+                          </p>
+                          <p>
+                            <router-link to="/treasure">
+                              <i class="iconfont icon-arrow-right"></i>鉴定申请
                             </router-link>
                           </p>
                         </div>
@@ -66,24 +71,24 @@
                   </ul>
                 </div>
                 <div class="table-wrap">
-                  <el-form :model="treasure" status-icon ref="treasure" label-width="100px" class="demo-treasure">
-                    <el-form-item label="鉴品名称" prop="treasureName">
-                      <el-input v-model="treasure.treasureName" :disabled="true"></el-input>
+                  <el-form :model="currentUser" status-icon ref="currentUser" label-width="100px" class="demo-currentUser">
+                    <el-form-item label="用户名" prop="userName">
+                      <el-input v-model="currentUser.userName" :disabled="true"></el-input>
                     </el-form-item>
                     <el-form-item label="昵称" prop="name">
-                        <el-input v-model="treasure.name"></el-input>
+                        <el-input v-model="currentUser.name"></el-input>
                     </el-form-item>
                     <el-form-item label="手机号" prop="phone">
-                        <el-input v-model="treasure.phone"></el-input>
+                        <el-input v-model="currentUser.phone"></el-input>
                     </el-form-item>
                     <el-form-item label="性别" prop="sex">
-                        <el-select v-model="treasure.sex" placeholder="请选择性别">
+                        <el-select v-model="currentUser.sex" placeholder="请选择性别">
                         <el-option label="男" value="男"></el-option>
                         <el-option label="女" value="女"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item>
-                      <el-button type="primary" @click="submitForm('treasure')">提交</el-button> 
+                      <el-button type="primary" @click="submitForm('currentUser')">提交</el-button> 
                     </el-form-item>
                   </el-form>
                 </div>
@@ -102,17 +107,17 @@ export default {
   name: 'orderList',
   data() {
       return {
-        treasure: {}
+        currentUser: {}
       }
   },
   mounted(){
-    this.treasure = this.$store.state.treasure
+    this.currentUser = this.$store.state.currentUser
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          update(this.treasure).then(resp=>{
+          update(this.currentUser).then(resp=>{
             if(resp.code === 1){
               this.$message.success('修改成功')
             }
