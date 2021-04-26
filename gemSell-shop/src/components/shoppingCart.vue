@@ -108,11 +108,13 @@
 <script>
 import { Loading } from "element-ui";
 import { getListByCondition, update,deleteById } from '@/api/cart'
+import { batchAdd } from '@/api/order'
 export default {
     name: "shoppingCart",
     data() {
         return {
             message: [],
+            orderList: []
         }
     },
     //生命周期函数
@@ -161,15 +163,41 @@ export default {
             this.$store.commmit('updateGoodsNum',this.$store.state.cartDate - 1)
         },
         Submit() {
+            if(this.totalNum === 0){
+                this.$message.error('您没有选择任何商品！')
+                return 
+            }
+
             let ids = '';
+            this.orderList = []
             this.message.forEach(v=>{
                 if (v.selected == true) {
                     ids +=v.cartId;
                     ids += ",";
+                    var order = {
+                        goodId: v.goodId,
+                        goodName: v.goodName,
+                        price: v.price,
+                        num: v.number,
+                        userId: this.$store.state.currentUser.userId,
+                        userName: this.$store.state.currentUser.userName,
+                        status: 0,
+                        totalPrice: v.number * v.price,
+                        imgAddress: v.imgAddress
+                    }
+                    this.orderList.push(order)
                 }
             })
-            ids = ids.slice(0, -1)
-            this.$router.push(`/order/${ids}`);
+            batchAdd(this.orderList).then(resp=>{
+                var data = resp.data
+                data.forEach(v=>{
+                    ids +=v;
+                    ids += ",";
+                })
+                // ids = ids.slice(0, -1)
+                this.$router.push(`/order/${ids}`);
+            })
+            
         }
     }
 }

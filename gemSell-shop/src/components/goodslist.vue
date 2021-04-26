@@ -117,6 +117,7 @@ export default {
 .goods-item {
     margin-right: 20px;
     width: 220px;
+    display: inline-block;
     background: #fff;
     border: 1px solid #ccc;
     padding: 38px 9px 10px;
