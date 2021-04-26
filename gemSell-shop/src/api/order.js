@@ -45,6 +45,14 @@ export function update(data) {
   })
 }
 
+export function batchAdd(data) {
+  return request({
+    url: '/order/batchAdd',
+    method: 'post',
+    data
+  })
+}
+
 export function deleteById(id) {
   return request({
     url: `/order/delete/${id}`,

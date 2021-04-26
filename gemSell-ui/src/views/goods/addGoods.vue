@@ -125,7 +125,7 @@ export default {
   data() {
     return {
       goodsRules: {
-        goodName: [{ required: true, trigger: 'blur', message: '请输入商品名称' }, { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }],
+        goodName: [{ required: true, trigger: 'blur', message: '请输入商品名称' }, { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }],
         typeId: [{ required: true, trigger: 'blur', message: '请选择分类' }],
         purchasePrice: [{ required: true, trigger: 'blur', message: '请输入进价' }],
         price: [{ required: true, trigger: 'blur', message: '请输入售价' }]

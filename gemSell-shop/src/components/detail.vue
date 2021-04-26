@@ -261,7 +261,7 @@ watch: {
 }
 
 .pic-box {
-    width: 395px;
+    width: 365px;
     .control-box .thumb-list {
         display: flex;
         justify-content: center;

@@ -106,8 +106,8 @@
                         </td>
                         <td align="left">
                           <router-link :to="'/orderDetail/'+item.orderId">查看订单</router-link>
-                          <el-button v-if="item.status != '4'&&item.status != '3'" @click="cancalGoods(item)" type="text">取消订单</el-button>
-                          <el-button v-if="item.status = '2'"  @click="getGoods(item)" type="text">点击收货</el-button>
+                          <el-button v-if="item.status !== '4'&&item.status != '3'" @click="cancalGoods(item)" type="text">取消订单</el-button>
+                          <el-button v-if="item.status === '2'"  @click="getGoods(item)" type="text">点击收货</el-button>
                         </td>
                       </tr>
                     </tbody>
@@ -165,7 +165,9 @@ export default {
         userId: this.$store.state.currentUser.userId
       }
       getListByCondition(data,this.pageIndex,this.pageSize).then(response => {
-        this.$set(this,'orderList',response.data.list)
+        this.orderList  = response.data.list
+        console.log(response)
+        console.log(this.orderList)
         this.totalCount = response.data.total;
       })
     },

@@ -87,13 +87,13 @@
                   <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ftable">
                     <tbody>
                       <tr>
-                        <th width="10%" align="left">序号</th>
-                        <th width="7%" align="left">省份</th>
-                        <th width="7%">城市</th>
-                        <th width="8%">地区</th>
-                        <th width="10%">收货人姓名</th>
+                        <th width="7%" align="left">序号</th>
+                        <th width="10%" align="left">省份</th>
+                        <th width="10%">城市</th>
+                        <th width="10%">地区</th>
+                        <th width="10%">收货人</th>
                         <th width="10%">手机号</th>
-                        <th width="24%">详细地址</th>
+                        <th width="14%">详细地址</th>
                         <th width="7%">操作</th>
                       </tr>
                       <tr v-for="(item, index) in addressList" :key="item.orderId">
@@ -163,6 +163,13 @@ export default {
           callback()
         }
       }
+      var validatorAllAddress = function (rule, value, callback) {
+        if (this.allAddress === '') {
+          callback(new Error('手机号不能为空'))
+        }  else {
+          callback()
+        }
+      }
       return {
         // 鉴品对象
         address: {},
@@ -183,7 +190,7 @@ export default {
             { min: 1, max: 20, message: '长度在 1 到 15 个字符', trigger: 'blur' }
           ],
           allAddress: [
-            { required: true, message: '请选择地址', trigger: 'change' }
+            { validator:validatorAllAddress, trigger: 'change' }
           ],
           detailed: [
             { required: true, message: '请输入详细地址', trigger: 'change' }
@@ -253,6 +260,7 @@ export default {
     getInfo(row){
       this.showList = false,
       this.address = { ...row }
+      this.allAddress = this.address.province + this.address.city + this.address.area
     },
     // 鉴品详情返回鉴品列表
     back(){

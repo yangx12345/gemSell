@@ -8,7 +8,7 @@ const getDefaultState = ()=>{
   return {
     cartDate: 0,
     pathFrom: '',
-    currentUser: '',
+    currentUser: JSON.parse(sessionStorage.getItem('currentUser')) ,
     token: getToken()
   }
 }
@@ -25,6 +25,7 @@ const store = new Vuex.Store({
     },
     setCurrentUser:(state,data)=>{
       state.currentUser = data
+      sessionStorage.setItem('currentUser', JSON.stringify(data));
     },
     SET_TOKEN: (state, token) => {
       state.token = token
@@ -72,6 +73,8 @@ const store = new Vuex.Store({
       return new Promise((resolve, reject) => {
         removeToken() // must remove  token  first
         commit('RESET_STATE')
+        commit('setCurrentUser',{})
+        sessionStorage.clear()
         resolve()
       })
     },

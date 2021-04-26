@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -155,7 +156,12 @@ public class IndentController {
         {
             return ResultUtil.parameterError();
         }
-        return ResultUtil.judgmentResult(indentService.batchAdd(Indents));
+       boolean flag = indentService.batchAdd(Indents);
+        if (flag) {
+            List<Integer> ids = Indents.stream().map(Indent::getOrderId).collect(Collectors.toList());
+            return ResultUtil.success(ids);
+        }
+        return ResultUtil.error("批量增加失败");
     }
 
     /**

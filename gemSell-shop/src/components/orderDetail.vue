@@ -205,9 +205,11 @@ import { getAddressById} from '@/api/address.js'
      getById(this.$route.params.id)
         .then(response => {
           this.goodsList.push(response.data)
-          getAddressById(response.data.addressId).then(resp=>{
-            this.addressData = resp.data
-          })
+          if(response.data.addressId){
+            getAddressById(response.data.addressId).then(resp=>{
+              this.addressData = resp.data
+            })
+          }
         });
     },
     signExpress() {

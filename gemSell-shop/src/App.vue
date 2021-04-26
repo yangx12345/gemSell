@@ -98,9 +98,16 @@ export default {
             isShow: false
         }
     },
+    mounted(){
+        if (sessionStorage.getItem("currentUser") ) {
+            this.$store.commit('setCurrentUser',JSON.parse(sessionStorage.getItem("currentUser")))
+        }
+    },
     methods: {
-        layout() {
-            this.$store.dispatch('logout')
+        async layout() {
+            await this.$store.dispatch('logout')
+            this.$message.success('退出成功！')
+            this.$router.push('/')
         },
         userExit() {
             this.$axios.get('/site/account/logout').then(response => {

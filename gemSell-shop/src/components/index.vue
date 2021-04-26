@@ -139,11 +139,11 @@ export default {
 
 .bannerImg {
     width: 705px;
-    height: 341px;
+    height: 341px !important;
 }
 
 .el-carousel .el-carousel__container {
-    height: 341px;
+    height: 341px  !important;
 }
 
 body {
