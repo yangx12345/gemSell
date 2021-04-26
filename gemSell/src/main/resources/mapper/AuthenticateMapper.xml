@@ -42,6 +42,9 @@
         <if test="authUserId!=null and authUserId!=''">
             and a.auth_user_id = #{authUserId}
         </if>
+        <if test="ownerId!=null and ownerId!=''">
+            and a.owner_id = #{ownerId}
+        </if>
         <if test="status!=null and status!=''">
             and a.status = #{status}
         </if>
