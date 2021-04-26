@@ -149,12 +149,13 @@
       width="60%"
       :before-close="viewhandleClose"
     >
-      <el-carousel height="450px">
-        <el-carousel-item v-for="item in imgOptions" :key="item.id">
-          <img :src="item.url">
-        </el-carousel-item>
-      </el-carousel>
-
+      <div align="center">
+        <el-carousel indicator-position="outside" trigger="click" height="50vh">
+          <el-carousel-item v-for="item in imgOptions" :key="item.id">
+            <img :src="item.url">
+          </el-carousel-item>
+        </el-carousel>
+      </div>
     </el-dialog>
   </div>
 
@@ -328,9 +329,20 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .container{
   padding: 20px;
+}
+
+.el-carousel__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .carousel-image {
+    max-width: 100%;
+    max-height: 100%;
+  }
 }
 </style>
 
