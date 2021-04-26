@@ -57,7 +57,7 @@
                     <div class="left-705">
                         <el-carousel trigger="click">
                             <el-carousel-item v-for="(item, index) in sliderList" :key="index">
-                                <a href="#">
+                                <a @click="gotoDetail(item)">
                                 <img :src="JSON.parse(item.imgAddress)[0].url" alt="" class="bannerImg">
                                 </a>
                             </el-carousel-item>
@@ -66,7 +66,7 @@
                     <!--/幻灯片-->
                     <div class="left-220">
                         <ul class="side-img-list">
-                            <li v-for="(item,index) in topList.slice(0,3)" :key="item.id">
+                            <li v-for="(item,index) in topList.slice(0,3)" :key="item.id" @click="gotoDetail(item)">
                                 <div class="img-box">
                                     <label>{{index+1}}</label>
                                     <img :src="JSON.parse(item.imgAddress)[0].url">
@@ -115,6 +115,14 @@ export default {
         });
     },
     methods: {
+        gotoDetail(row){
+             this.$router.push({
+                path:'/detail',
+                query: {
+                    id: row.goodId
+                }
+            })
+        },
         gotoList(typeId){
             this.$router.push({
                 path:'/goodslist',

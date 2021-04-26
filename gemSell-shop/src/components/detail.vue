@@ -71,7 +71,7 @@
                             <div class="sidebar-box">
                                 <h4>推荐商品</h4>
                                 <ul class="side-img-list">
-                                    <li v-for="items in hotList" :key="items.goodId">
+                                    <li v-for="items in hotList" :key="items.goodId" @click="gotoDetail(item)">
                                         <div class="img-box">
                                             <!-- <a href="#/site/goodsinfo/90" class=""> -->
                                             <router-link :to="'/detail/'+items.goodId">
@@ -186,6 +186,15 @@ export default {
                     this.$router.push({
                         path: `/order/${resp.data}`
                     })
+                }
+            })
+        },
+        // 跳转推荐商品
+        gotoDetail(row){
+             this.$router.push({
+                path:'/detail',
+                query: {
+                    id: row.goodId
                 }
             })
         },

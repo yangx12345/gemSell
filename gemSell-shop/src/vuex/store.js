@@ -93,9 +93,7 @@ const store = new Vuex.Store({
   userId: state => {
     return state.currentUser.userId
   },
-  token: state => {
-    return state.token
-  }
+  token: state => state.token
 })
 
 //暴露出去

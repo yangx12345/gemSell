@@ -70,7 +70,7 @@
                      <i class="el-icon-plus"></i>申请</a>
                   <ul>
                     <li class="selected">
-                      <a>账户资料</a>
+                      <a>鉴定申请</a>
                     </li>
                   </ul>
                 </div>
@@ -121,7 +121,7 @@
                         <el-input v-model="treasure.formCity" :disabled="treasure.authenticateId? true: false"></el-input>
                     </el-form-item>
                     <el-form-item label="类型" prop="typeId">
-                        <treeselect v-model="treasure.typeId" :options="options" style="width: 240px" :disabled="treasure.authenticateId? true: false" />
+                        <treeselect v-model="treasure.typeId" :options="options" style="width: 240px" :disabled="treasure.authenticateId? true: false" @input="changeType" />
                     </el-form-item>
                     <el-form-item label="质地" prop="texture">
                         <el-input v-model="treasure.texture" :disabled="treasure.authenticateId? true: false"></el-input>
@@ -129,21 +129,29 @@
                     <el-form-item label="重量" prop="weight">
                         <el-input v-model="treasure.weight" type="number" :disabled="treasure.authenticateId? true: false"></el-input>(克)
                     </el-form-item>
-                    <el-form-item>
+                    <el-form-item v-if="treasure.authenticateId" label="状态" prop="status">
+                        {{treasure.status === '1'?'已鉴定':'待鉴定'}}
+                    </el-form-item>
+                    <el-form-item v-if="treasure.authenticateId" label="鉴定评价" prop="status">
+                        {{treasure.remark}}
+                    </el-form-item>
+                    <el-form-item v-if="treasure.authenticateId" label="鉴定结果" prop="status">
+                        {{treasure.result}}
+                    </el-form-item>
+                    <el-form-item v-if="!treasure.authenticateId">
                       <el-upload
                         :on-success="handleSuccess"
                         :on-error="handleError"
                         :on-remove="handleRemove"
                         :before-upload="handleUpload"
                         :limit="5"
-                        multiple
+                         multiple
                         :headers="head"
-                        :data="data"
                         :file-list="fileList"
                         accept=".jpg,.jpeg,.png"
                         class="upload-demo"
                         list-type="picture"
-                        action="http://localhost:8088/gemsell-api/goods/goodsImageUpload"
+                        action="http://localhost:8088/gemsell-api/authenticate/imageUpload"
                       >
                         <el-button
                           size="small"
@@ -152,7 +160,7 @@
                         <div slot="tip" class="el-upload__tip">一个鉴品最多五张图片</div>
                         </el-upload>
                     </el-form-item>
-                    <el-form-item>
+                    <el-form-item v-if="!treasure.authenticateId">
                       <el-button type="primary" @click="submitForm('treasure')">提交</el-button> 
                     </el-form-item>
                   </el-form>
@@ -191,7 +199,6 @@ export default {
         pageSize: 5,
         totalCount: 0,
         fileList: [],
-        data: { authenticateId: null },
         head: { token: '' }
       }
   },
@@ -211,11 +218,11 @@ export default {
         })
         return false
       }
-      this.head.token = this.token
+      this.head.token = this.$store.state.token
     },
     handleSuccess(response) {
       if (response.code === 1) {
-        if (this.treasure.imgAddress[0].name === 'defaultImg.jpg') {
+        if (this.treasure.imgAddress.length>0&&this.treasure.imgAddress[0].name === 'defaultImg.jpg') {
           this.treasure.imgAddress = []
           this.treasure.imgAddress.push(response.data)
         } else {
@@ -271,9 +278,14 @@ export default {
         if (valid) {
           this.treasure.ownerId = this.$store.state.currentUser.userId
           this.treasure.ownerName = this.$store.state.currentUser.username
+          this.treasure.imgAddress = JSON.stringify(this.treasure.imgAddress)
+          var date = new Date()
+          // 鉴品编号由年月日分类ID和用户ID组成
+          this.treasure.treasureCode = date.getFullYear() + + (date.getMonth() + 1) + date.getDate() + this.treasure.typeId +this.$store.state.currentUser.userId
             add(this.treasure).then(resp=>{
               if(resp.code === 1){
                 this.$message.success('申请成功')
+                this.back()
               }
             })
         } else {
@@ -282,14 +294,30 @@ export default {
         }
       });
     },
+    changeType(value,options){
+      for(var  i=0; i<this.options.length ; i++){
+        if(this.options[i].id === value) this.treasure.typeName = this.options[i].label
+        else if(this.options[i].children.length >0) {
+          var result = this.changeTypeChild(value, this.options[i].children)
+          if(result) this.treasure.typeName = result
+        }
+      }
+    },
+    changeTypeChild(value,options){
+      for(var  i=0; i<options.length ; i++){
+        if(options[i].id === value) return options[i].label
+      }
+    },
     // 查看鉴品详情
     getInfo(row){
       this.showList = false,
       this.treasure = { ...row }
+      this.fileList = JSON.parse(this.treasure.imgAddress)
     },
     // 鉴品详情返回鉴品列表
     back(){
       this.showList = true
+      this.getTreasureList()
     },
     // 添加申请
     addTreasure(){
