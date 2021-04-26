@@ -55,6 +55,11 @@
                             <i class="iconfont icon-arrow-right"></i>修改密码
                           </router-link>
                         </p>
+                        <p>
+                          <router-link to="/address">
+                          <i class="iconfont icon-arrow-right"></i>地址管理
+                          </router-link>
+                        </p>
                       </div>
                     </li>
                   </ul>

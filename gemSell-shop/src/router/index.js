@@ -30,6 +30,8 @@ import userInfo from '../components/userInfo'
 
 import treasure from '../components/authenticate'
 
+import Address from '../components/address'
+
 import axios from 'axios';
 //基础地址
 //让ajax携带cookie
@@ -111,6 +113,14 @@ let routes = [{
     //订单列表
     path: '/orderlist',
     component: OrderList,
+    meta: {
+      checkLogin: true
+    }
+  },
+  {
+    //订单列表
+    path: '/address',
+    component: Address,
     meta: {
       checkLogin: true
     }

@@ -45,8 +45,6 @@
                             <h2 class="slide-tit">
                                 <span>1、收货地址</span>
                             </h2>
-                            
-                            
                             <div  id="addressForm" name="addressForm" url="">
                               <div v-if="!isNew">
                                 <el-table ref="multipleTable" :data="addressList" tooltip-effect="dark" height="255" style="width: 100%" @current-change="clickChange">
@@ -174,7 +172,7 @@ export default {
           // 正确的时候干的事情
           callback();
         } else {
-          callback(new Error("你的手机号不对"));
+          callback(new Error("手机号格式错误"));
         }
       }, 500);
     };
@@ -248,7 +246,7 @@ export default {
         detailed: [
           {
             required: true,
-            message: "请输入地址,没有我送给谁呀",
+            message: "请输入地址",
             trigger: "blur"
           }
         ],

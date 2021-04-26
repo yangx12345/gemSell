@@ -55,6 +55,11 @@
                             <i class="iconfont icon-arrow-right"></i>修改密码
                             </router-link>
                           </p>
+                          <p>
+                            <router-link to="/address">
+                            <i class="iconfont icon-arrow-right"></i>地址管理
+                            </router-link>
+                          </p>
                         </div>
                       </li>
                   </ul>
@@ -64,7 +69,7 @@
             <div class="right-auto">
               <div class="bg-wrap" style="min-height: 765px;">
                 <div class="sub-tit">
-                   <a class="add" @click="back">
+                   <a class="add" @click="back"  v-if="!showList">
                      <i class="iconfont icon-reply"></i>返回</a>
                     <a class="add" @click="addTreasure">
                      <i class="el-icon-plus"></i>申请</a>
@@ -83,12 +88,12 @@
                     <tbody>
                       <tr>
                         <th width="5%" align="left">序号</th>
-                        <th width="7%" align="left">鉴品编号</th>
+                        <th width="17%" align="left">鉴品编号</th>
                         <th width="10%">鉴品名称</th>
                         <th width="10%">鉴品分类</th>
-                        <th width="7%">鉴定结果</th>
+                        <th width="10%">鉴定结果</th>
                         <th width="10%">鉴品图片</th>
-                        <th width="24%">操作</th>
+                        <th width="11%">操作</th>
                       </tr>
                       <tr v-for="(item, index) in treasureList" :key="item.orderId">
                          <td>{{index+1}}</td>
@@ -113,7 +118,7 @@
                   </table>
                 </div>
                 <div v-else class="table-wrap">
-                  <el-form :model="treasure" status-icon ref="treasure" label-width="100px" class="demo-treasure">
+                  <el-form :model="treasure" :rules="rules" status-icon ref="treasure" label-width="100px" class="demo-treasure">
                     <el-form-item label="鉴品名称" prop="treasureName">
                       <el-input v-model="treasure.treasureName" :disabled="treasure.authenticateId? true: false"></el-input>
                     </el-form-item>
@@ -138,7 +143,7 @@
                     <el-form-item v-if="treasure.authenticateId" label="鉴定结果" prop="status">
                         {{treasure.result}}
                     </el-form-item>
-                    <el-form-item v-if="!treasure.authenticateId">
+                    <el-form-item v-if="!treasure.authenticateId" prop="imgAddress">
                       <el-upload
                         :on-success="handleSuccess"
                         :on-error="handleError"
@@ -199,7 +204,15 @@ export default {
         pageSize: 5,
         totalCount: 0,
         fileList: [],
-        head: { token: '' }
+        head: { token: '' },
+        rules: {
+          treasureName: [
+            { required: true, message: '请输入鉴品名称', trigger: 'blur' }
+          ],
+          imgAddress: [
+            { required: true, message: '请输入至少上传一张鉴品图片', trigger: 'blur' }
+          ]
+        }
       }
   },
   mounted(){
@@ -281,7 +294,7 @@ export default {
           this.treasure.imgAddress = JSON.stringify(this.treasure.imgAddress)
           var date = new Date()
           // 鉴品编号由年月日分类ID和用户ID组成
-          this.treasure.treasureCode = date.getFullYear() + + (date.getMonth() + 1) + date.getDate() + this.treasure.typeId +this.$store.state.currentUser.userId
+          this.treasure.treasureCode = date.getFullYear() + date.getMonth() + date.getDate() + this.treasure.typeId +this.$store.state.currentUser.userId
             add(this.treasure).then(resp=>{
               if(resp.code === 1){
                 this.$message.success('申请成功')
