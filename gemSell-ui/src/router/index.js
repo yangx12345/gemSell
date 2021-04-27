@@ -6,6 +6,7 @@ import Goods from '@/views/goods/index'
 import Order from '@/views/order/index'
 import Authenticate from '@/views/authenticate/index'
 import MyAuthenticate from '@/views/myAuthenticate/index'
+import Index from '@/views/index'
 Vue.use(Router)
 
 /* Layout */
@@ -48,7 +49,18 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/',
+    path:'/',
+    component: Layout,
+    children: [{
+      path: '/',
+      name: '首页',
+      component: Index,
+      meta: { title: '首页', icon: 'el-icon-user-solid' }
+     }
+    ]
+  },
+  {
+    path: '/user',
     component: Layout,
     redirect: '/user',
     children: [

@@ -31,7 +31,12 @@ export default {
       'sidebar'
     ]),
     routes() {
-      return this.$router.options.routes
+      var routeOptions = []
+      this.$router.options.routes.forEach(item => {
+        if((this.$store.getters.role === '1' && item.path === '/myAuthenticate')||(this.$store.getters.role === '0' && item.path !== '/myAuthenticate'))
+        routeOptions.push(item)
+      });
+      return routeOptions
     },
     activeMenu() {
       const route = this.$route
