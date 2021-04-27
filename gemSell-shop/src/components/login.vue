@@ -64,12 +64,31 @@ import { getListByCondition } from '@/api/cart'
 export default {
     name: 'login',
     data() {
+        var checkMobile = (rule, value, callback) => {
+        setTimeout(() => {
+
+            // 定义正则规则
+            let exec = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
+            if (exec.test(value) == true) {
+            // 正确的时候干的事情
+            callback();
+            } else {
+            callback(new Error("手机号格式错误"));
+            }
+        }, 500);
+        };
         return {
             username: 'admin',
             password: '123',
             selected: 'login',
             registerForm: {},
-            loginForm: {},
+            loginForm: {
+                userName: '',
+                password: '',
+                phone: '',
+                sex: '',
+                name: ''
+            },
             rules: {
                 userName: [
                     { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -77,7 +96,9 @@ export default {
                 ],
                 password: [
                     { required: true, message: '请输入密码', trigger: 'change' }
-                ]
+                ],
+                // 手机号验证
+                phone: [{ validator: checkMobile, trigger: "change" }]
             }
         }
 

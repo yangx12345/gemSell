@@ -71,7 +71,7 @@
                             <div class="sidebar-box">
                                 <h4>推荐商品</h4>
                                 <ul class="side-img-list">
-                                    <li v-for="items in hotList" :key="items.goodId" @click="gotoDetail(item)">
+                                    <li v-for="items in hotList" :key="items.goodId" @click="gotoDetail(items)">
                                         <div class="img-box">
                                             <!-- <a href="#/site/goodsinfo/90" class=""> -->
                                             <router-link :to="'/detail/'+items.goodId">
@@ -123,7 +123,9 @@ export default {
             // 轮播图用的图片 默认的数据格式 不支持
             // 这里的数据 需要在接口调用完毕之后 才能够获取
             images: {
-                normal_size: []
+                normal_size: [],
+                large_size: [],
+                thumbs: []
             },
             pageNum: 1, //页码
             pageSize: 5, //页容量
@@ -148,12 +150,14 @@ export default {
                     // 循环处理数据
                     _this.imgList.forEach((v, i) => {
                         temArr.push({
-                            id: v.id,
+                            id: i,
                             url: v.url
                         })
                     })
                     // 临时数组
                     _this.images.normal_size = temArr;
+                    _this.images.large_size = temArr;
+                    _this.images.thumbs = temArr;
                      _this.buyCount = 1;
                 });
                 var data= {
@@ -231,6 +235,8 @@ watch: {
         $route(val, oldVal) {
             // 数组长度为0 直接销毁
             this.images.normal_size = [];
+            this.images.large_size = [];
+            this.images.thumbs = [];
             // 回调函数中重新复制 再次 生成
             this.getProductDatil();
         }

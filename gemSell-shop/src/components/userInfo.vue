@@ -76,7 +76,7 @@
                   </ul>
                 </div>
                 <div class="table-wrap">
-                  <el-form :model="currentUser" status-icon ref="currentUser" label-width="100px" class="demo-currentUser">
+                  <el-form :model="currentUser" :rules="rules" status-icon ref="currentUser" label-width="100px" class="demo-currentUser">
                     <el-form-item label="用户名" prop="userName">
                       <el-input v-model="currentUser.userName" :disabled="true"></el-input>
                     </el-form-item>
@@ -111,8 +111,32 @@ import { update } from '@/api/userManage'
 export default {
   name: 'orderList',
   data() {
+      var checkMobile = (rule, value, callback) => {
+        setTimeout(() => {
+
+          // 定义正则规则
+          let exec = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
+          if (exec.test(value) == true) {
+            // 正确的时候干的事情
+            callback();
+          } else {
+            callback(new Error("手机号格式错误"));
+          }
+        }, 500);
+      };
       return {
-        currentUser: {}
+        currentUser: {},
+        rules: {
+            userName: [
+                { required: true, message: '请输入用户名', trigger: 'blur' },
+                { min: 3, max: 13, message: '长度在 3 到 13 个字符', trigger: 'blur' }
+            ],
+            password: [
+                { required: true, message: '请输入密码', trigger: 'change' }
+            ],
+            // 手机号验证
+            phone: [{ validator: checkMobile, trigger: "change" }]
+        }
       }
   },
   mounted(){
